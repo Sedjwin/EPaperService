@@ -51,7 +51,8 @@ button{cursor:pointer;border:none;border-radius:6px;font-size:12px;font-weight:5
 .tab-pane.active{display:flex;flex-direction:column;gap:12px}
 
 /* ── Canvas shared ── */
-.canvas-wrap{position:relative;background:#1a1a2e;border-radius:8px;overflow:hidden;border:1px solid #1f2937;line-height:0}
+/* max-width = available-height × (600/400) so canvas never overflows vertically */
+.canvas-wrap{position:relative;background:#1a1a2e;border-radius:8px;overflow:hidden;border:1px solid #1f2937;line-height:0;max-width:min(100%, calc((100vh - 168px) * 1.5))}
 canvas{display:block;width:100%;height:auto;cursor:crosshair}
 .canvas-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#4b5563;font-size:14px;pointer-events:none;background:#111}
 
