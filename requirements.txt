@@ -1,0 +1,7 @@
+fastapi
+uvicorn[standard]
+pydantic-settings
+pillow
+psutil
+RPi.GPIO
+spidev

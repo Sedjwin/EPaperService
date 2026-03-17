@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EPaperService Admin</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:#0a0a0f;color:#e2e8f0;min-height:100vh;display:flex;flex-direction:column}
+header{background:#111827;border-bottom:1px solid #1f2937;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+header h1{font-size:15px;font-weight:700;color:#f9fafb;letter-spacing:-.3px}
+header h1 span{color:#f59e0b;margin-right:6px}
+#status-bar{font-size:12px;color:#6b7280;display:flex;gap:16px;align-items:center}
+#status-bar b{color:#f3f4f6}
+#sim-badge{background:#dc2626;color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;letter-spacing:.5px}
+
+.layout{display:flex;flex:1;gap:0;overflow:hidden}
+
+/* ── Left panel ── */
+.left{width:280px;flex-shrink:0;display:flex;flex-direction:column;gap:0;border-right:1px solid #1f2937;background:#111827}
+.panel-section{padding:14px 16px;border-bottom:1px solid #1f2937}
+.section-label{font-size:10px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
+
+.preview-wrap{background:#000;border-radius:8px;overflow:hidden;cursor:pointer;position:relative;line-height:0}
+.preview-wrap img{width:100%;height:auto;display:block;transition:opacity .2s}
+.preview-wrap:hover img{opacity:.9}
+.preview-wrap .preview-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;color:#fff;font-size:12px;pointer-events:none;background:rgba(0,0,0,.4)}
+.preview-wrap:hover .preview-hint{opacity:1}
+.no-image{width:100%;aspect-ratio:3/2;background:#1f2937;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#374151;font-size:12px}
+
+.meta{font-size:11px;color:#6b7280;margin-top:8px;line-height:1.6}
+.meta b{color:#9ca3af}
+
+.btn-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+button{cursor:pointer;border:none;border-radius:6px;font-size:12px;font-weight:500;padding:6px 12px;transition:all .15s}
+.btn-ghost{background:#1f2937;color:#9ca3af}
+.btn-ghost:hover{background:#374151;color:#f3f4f6}
+.btn-primary{background:#f59e0b;color:#000;font-weight:700}
+.btn-primary:hover{background:#fbbf24}
+.btn-danger{background:#7f1d1d;color:#fca5a5}
+.btn-danger:hover{background:#991b1b}
+.btn-sm{padding:4px 10px;font-size:11px}
+
+/* ── Right panel ── */
+.right{flex:1;display:flex;flex-direction:column;min-width:0}
+.tabs-bar{display:flex;gap:0;border-bottom:1px solid #1f2937;background:#111827;flex-shrink:0}
+.tab-btn{padding:12px 20px;font-size:13px;font-weight:500;color:#6b7280;background:none;border-radius:0;border-bottom:2px solid transparent}
+.tab-btn:hover{color:#d1d5db;background:#1f2937}
+.tab-btn.active{color:#f59e0b;border-bottom-color:#f59e0b}
+.tab-pane{display:none;flex:1;overflow:auto;padding:16px}
+.tab-pane.active{display:flex;flex-direction:column;gap:12px}
+
+/* ── Canvas shared ── */
+.canvas-wrap{position:relative;background:#1a1a2e;border-radius:8px;overflow:hidden;border:1px solid #1f2937;line-height:0}
+canvas{display:block;width:100%;height:auto;cursor:crosshair}
+.canvas-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#4b5563;font-size:14px;pointer-events:none;background:#111}
+
+/* ── Upload tab ── */
+.upload-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.file-label{background:#1f2937;border:1px dashed #374151;color:#9ca3af;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:500}
+.file-label:hover{border-color:#6b7280;color:#d1d5db}
+#file-input{display:none}
+#file-name{font-size:12px;color:#4b5563}
+.edit-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.edit-controls label{font-size:12px;color:#6b7280;display:flex;align-items:center;gap:6px}
+.edit-controls input[type=range]{accent-color:#f59e0b;width:90px}
+
+/* ── Draw tab ── */
+.palette{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.swatch{width:32px;height:32px;border-radius:6px;cursor:pointer;border:3px solid transparent;transition:all .15s;flex-shrink:0}
+.swatch.active{border-color:#f59e0b;transform:scale(1.15)}
+.swatch[data-color="#ffffff"]{border-color:#374151}
+.swatch[data-color="#ffffff"].active{border-color:#f59e0b}
+.draw-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.draw-controls label{font-size:12px;color:#6b7280;display:flex;align-items:center;gap:6px}
+.draw-controls input[type=range]{accent-color:#f59e0b;width:80px}
+.eraser-active{background:#4b5563 !important;color:#f9fafb !important}
+
+/* ── History tab ── */
+.hist-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.hist-card{background:#111827;border:1px solid #1f2937;border-radius:8px;overflow:hidden;display:flex;flex-direction:column}
+.hist-card img{width:100%;aspect-ratio:3/2;object-fit:cover;cursor:pointer;display:block}
+.hist-card img:hover{opacity:.85}
+.hist-info{padding:8px;flex:1}
+.hist-time{font-size:11px;color:#6b7280}
+.hist-desc{font-size:12px;color:#9ca3af;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hist-actions{padding:6px 8px;border-top:1px solid #1f2937;display:flex;gap:6px}
+.empty{color:#4b5563;font-size:13px;text-align:center;padding:40px}
+
+/* ── Modal ── */
+#modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999;align-items:center;justify-content:center;cursor:zoom-out}
+#modal.open{display:flex}
+#modal img{max-width:90vw;max-height:90vh;border-radius:8px;box-shadow:0 25px 60px rgba(0,0,0,.8)}
+
+/* ── Toast ── */
+#toast{position:fixed;bottom:24px;right:24px;background:#065f46;color:#6ee7b7;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:500;opacity:0;pointer-events:none;transition:opacity .3s;z-index:1000}
+#toast.show{opacity:1}
+</style>
+</head>
+<body>
+
+<header>
+  <h1><span>📺</span>EPaperService Admin</h1>
+  <div id="status-bar">
+    <div>Mode: <b id="s-mode">—</b></div>
+    <div id="s-agent-wrap" style="display:none">Agent: <b id="s-agent"></b></div>
+    <div>Updated: <b id="s-updated">—</b></div>
+    <div id="s-next-wrap">Next: <b id="s-next">—</b></div>
+    <div id="sim-badge" style="display:none">SIMULATION</div>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- ── Left: preview + actions ── -->
+  <div class="left">
+    <div class="panel-section">
+      <div class="section-label">Current Display</div>
+      <div class="preview-wrap" onclick="openModal('/api/preview?t='+Date.now())">
+        <img id="preview-img" src="/api/preview" alt="" onerror="this.style.display='none';document.getElementById('no-img').style.display='flex'" onload="this.style.display='';document.getElementById('no-img').style.display='none'" />
+        <div id="no-img" class="no-image" style="display:none">No image yet</div>
+        <div class="preview-hint">Click to expand</div>
+      </div>
+      <div class="meta" id="display-meta">—</div>
+    </div>
+
+    <div class="panel-section">
+      <div class="section-label">Actions</div>
+      <div class="btn-row">
+        <button class="btn-ghost" onclick="doAction('/api/refresh','POST')">↺ Refresh Stats</button>
+        <button class="btn-ghost" onclick="doAction('/api/release','POST')">⊘ Release Agent</button>
+      </div>
+      <div class="btn-row" style="margin-top:6px">
+        <a href="/docs" target="_blank" style="text-decoration:none">
+          <button class="btn-ghost btn-sm">API Docs ↗</button>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Right: tabs ── -->
+  <div class="right">
+    <div class="tabs-bar">
+      <button class="tab-btn active" onclick="showTab('upload')">📁 Upload</button>
+      <button class="tab-btn" onclick="showTab('draw')">✏️ Draw</button>
+      <button class="tab-btn" onclick="showTab('history')" id="hist-tab-btn">🕐 History</button>
+    </div>
+
+    <!-- Upload -->
+    <div id="tab-upload" class="tab-pane active">
+      <div class="upload-top">
+        <label class="file-label" for="file-input">📁 Choose Image</label>
+        <input type="file" id="file-input" accept="image/*" onchange="loadFile(event)">
+        <span id="file-name" style="color:#4b5563;font-size:12px">No file chosen</span>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="upload-canvas" width="600" height="400"></canvas>
+        <div id="upload-overlay" class="canvas-overlay">Choose an image to edit</div>
+      </div>
+      <div class="edit-controls" id="edit-controls" style="display:none">
+        <button class="btn-ghost" onclick="rotateUpload(-90)">↺ Rotate L</button>
+        <button class="btn-ghost" onclick="rotateUpload(90)">↻ Rotate R</button>
+        <label>Scale<input type="range" id="scale-slider" min="10" max="300" value="100" oninput="onScale(this.value)"><span id="scale-val">100%</span></label>
+        <button class="btn-ghost" onclick="fitUpload()">⤢ Fit</button>
+        <button class="btn-ghost" onclick="resetUpload()">↺ Reset</button>
+        <button class="btn-primary" onclick="sendUpload()">📺 Send to Display</button>
+      </div>
+    </div>
+
+    <!-- Draw -->
+    <div id="tab-draw" class="tab-pane">
+      <div class="palette" id="palette"></div>
+      <div class="draw-controls">
+        <label>Size<input type="range" id="brush-size" min="2" max="80" value="8"></label>
+        <button class="btn-ghost" id="eraser-btn" onclick="toggleEraser()">✏ Brush</button>
+        <button class="btn-ghost" onclick="undoDraw()">↩ Undo</button>
+        <button class="btn-ghost" onclick="fillCanvas()">⬛ Fill</button>
+        <button class="btn-ghost" onclick="clearDraw()">□ Clear</button>
+        <button class="btn-primary" onclick="sendDrawing()">📺 Send to Display</button>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="draw-canvas" width="600" height="400"></canvas>
+      </div>
+    </div>
+
+    <!-- History -->
+    <div id="tab-history" class="tab-pane">
+      <div id="history-grid" class="hist-grid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="modal" onclick="closeModal()"><img id="modal-img" alt=""></div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script>
+// ── E-ink palette ──────────────────────────────────────────────────────────
+const PALETTE = [
+  { name:'Black',  hex:'#000000' },
+  { name:'White',  hex:'#ffffff' },
+  { name:'Yellow', hex:'#ffd700' },
+  { name:'Red',    hex:'#c81e1e' },
+  { name:'Blue',   hex:'#1e64c8' },
+  { name:'Green',  hex:'#1e9632' },
+]
+
+// ── State ──────────────────────────────────────────────────────────────────
+let uploadImg = null, uploadRotation = 0, uploadScale = 1, uploadOffsetX = 0, uploadOffsetY = 0
+let isDragging = false, dragStart = null, dragOffset = null
+let isDrawing = false, lastPt = null
+let drawColor = '#000000', brushSize = 8, eraserOn = false
+const undoStack = []
+
+// ── Tabs ───────────────────────────────────────────────────────────────────
+function showTab(name) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'))
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'))
+  document.getElementById('tab-' + name).classList.add('active')
+  event.currentTarget.classList.add('active')
+  if (name === 'history') loadHistory()
+}
+
+// ── Status polling ─────────────────────────────────────────────────────────
+async function pollStatus() {
+  try {
+    const r = await fetch('/api/status')
+    const s = await r.json()
+    document.getElementById('s-mode').textContent = s.mode
+    document.getElementById('s-updated').textContent = new Date(s.last_updated * 1000).toLocaleTimeString()
+    const agW = document.getElementById('s-agent-wrap')
+    if (s.agent_name) { agW.style.display=''; document.getElementById('s-agent').textContent = s.agent_name }
+    else agW.style.display = 'none'
+    const nxW = document.getElementById('s-next-wrap')
+    if (s.next_refresh) { nxW.style.display=''; document.getElementById('s-next').textContent = new Date(s.next_refresh*1000).toLocaleTimeString() }
+    else nxW.style.display = 'none'
+    if (s.simulation) document.getElementById('sim-badge').style.display = ''
+    document.getElementById('display-meta').innerHTML =
+      `<b>${s.mode}</b>${s.agent_name ? ' · ' + s.agent_name : ''}<br>Updated ${new Date(s.last_updated*1000).toLocaleTimeString()}`
+  } catch(e) {}
+}
+
+// ── Preview refresh ────────────────────────────────────────────────────────
+function refreshPreview() {
+  const img = document.getElementById('preview-img')
+  img.src = '/api/preview?t=' + Date.now()
+}
+
+// ── Actions ────────────────────────────────────────────────────────────────
+async function doAction(url, method='POST') {
+  try {
+    await fetch(url, { method })
+    toast('Done')
+    setTimeout(refreshPreview, 1000)
+  } catch(e) { toast('Error: ' + e.message) }
+}
+
+// ── Modal ──────────────────────────────────────────────────────────────────
+function openModal(src) {
+  document.getElementById('modal-img').src = src
+  document.getElementById('modal').classList.add('open')
+}
+function closeModal() { document.getElementById('modal').classList.remove('open') }
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal() })
+
+// ── Toast ──────────────────────────────────────────────────────────────────
+function toast(msg) {
+  const t = document.getElementById('toast')
+  t.textContent = msg; t.classList.add('show')
+  setTimeout(() => t.classList.remove('show'), 2500)
+}
+
+// ── Canvas utils ───────────────────────────────────────────────────────────
+function coords(canvas, e) {
+  const r = canvas.getBoundingClientRect()
+  return { x: (e.clientX - r.left) * canvas.width / r.width,
+           y: (e.clientY - r.top)  * canvas.height / r.height }
+}
+
+// ── UPLOAD TAB ─────────────────────────────────────────────────────────────
+function loadFile(ev) {
+  const file = ev.target.files[0]; if (!file) return
+  document.getElementById('file-name').textContent = file.name
+  const reader = new FileReader()
+  reader.onload = e => {
+    const img = new Image()
+    img.onload = () => {
+      uploadImg = img; uploadRotation = 0; uploadScale = 1; uploadOffsetX = 0; uploadOffsetY = 0
+      fitUpload()
+      document.getElementById('edit-controls').style.display = 'flex'
+      document.getElementById('upload-overlay').style.display = 'none'
+    }
+    img.src = e.target.result
+  }
+  reader.readAsDataURL(file)
+}
+
+function getRotatedCanvas() {
+  const r90 = uploadRotation % 180 !== 0
+  const oc = document.createElement('canvas')
+  oc.width  = r90 ? uploadImg.naturalHeight : uploadImg.naturalWidth
+  oc.height = r90 ? uploadImg.naturalWidth  : uploadImg.naturalHeight
+  const ctx = oc.getContext('2d')
+  ctx.translate(oc.width/2, oc.height/2)
+  ctx.rotate(uploadRotation * Math.PI / 180)
+  ctx.drawImage(uploadImg, -uploadImg.naturalWidth/2, -uploadImg.naturalHeight/2)
+  return oc
+}
+
+function drawUpload() {
+  if (!uploadImg) return
+  const c = document.getElementById('upload-canvas')
+  const ctx = c.getContext('2d')
+  ctx.fillStyle = '#cccccc'; ctx.fillRect(0,0,600,400)
+  const src = getRotatedCanvas()
+  ctx.drawImage(src, uploadOffsetX, uploadOffsetY, src.width*uploadScale, src.height*uploadScale)
+}
+
+function fitUpload() {
+  if (!uploadImg) return
+  const src = getRotatedCanvas()
+  uploadScale = Math.min(600/src.width, 400/src.height)
+  uploadOffsetX = (600 - src.width*uploadScale)/2
+  uploadOffsetY = (400 - src.height*uploadScale)/2
+  document.getElementById('scale-slider').value = Math.round(uploadScale*100)
+  document.getElementById('scale-val').textContent = Math.round(uploadScale*100)+'%'
+  drawUpload()
+}
+
+function rotateUpload(deg) {
+  uploadRotation = (uploadRotation + deg + 360) % 360
+  fitUpload()
+}
+
+function onScale(v) {
+  const src = getRotatedCanvas()
+  const oldScale = uploadScale; uploadScale = v/100
+  // Scale around center
+  const cx = uploadOffsetX + src.width*oldScale/2
+  const cy = uploadOffsetY + src.height*oldScale/2
+  uploadOffsetX = cx - src.width*uploadScale/2
+  uploadOffsetY = cy - src.height*uploadScale/2
+  document.getElementById('scale-val').textContent = v+'%'
+  drawUpload()
+}
+
+function resetUpload() {
+  uploadRotation = 0; uploadScale = 1; uploadOffsetX = 0; uploadOffsetY = 0
+  document.getElementById('scale-slider').value = 100
+  document.getElementById('scale-val').textContent = '100%'
+  drawUpload()
+}
+
+// Drag to pan
+const uc = document.getElementById('upload-canvas')
+uc.addEventListener('mousedown', e => {
+  isDragging = true
+  const p = coords(uc, e); dragStart = p
+  dragOffset = { x: uploadOffsetX, y: uploadOffsetY }
+})
+uc.addEventListener('mousemove', e => {
+  if (!isDragging || !dragStart) return
+  const p = coords(uc, e)
+  uploadOffsetX = dragOffset.x + (p.x - dragStart.x)
+  uploadOffsetY = dragOffset.y + (p.y - dragStart.y)
+  drawUpload()
+})
+uc.addEventListener('mouseup', () => isDragging = false)
+uc.addEventListener('mouseleave', () => isDragging = false)
+
+async function sendUpload() {
+  const c = document.getElementById('upload-canvas')
+  // Render white background + image to final 600x400
+  const final = document.createElement('canvas'); final.width=600; final.height=400
+  const ctx = final.getContext('2d')
+  ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,600,400)
+  ctx.drawImage(c, 0,0)
+  const b64 = final.toDataURL('image/png').split(',')[1]
+  const r = await fetch('/api/display-image', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ image_b64: b64, description: 'upload' })
+  })
+  if (r.ok) { toast('Sent to display!'); setTimeout(refreshPreview, 2000) }
+  else toast('Error sending')
+}
+
+// ── DRAW TAB ───────────────────────────────────────────────────────────────
+function buildPalette() {
+  const wrap = document.getElementById('palette')
+  PALETTE.forEach(c => {
+    const s = document.createElement('div')
+    s.className = 'swatch' + (c.hex === drawColor ? ' active' : '')
+    s.dataset.color = c.hex
+    s.title = c.name
+    s.style.background = c.hex
+    s.onclick = () => {
+      document.querySelectorAll('.swatch').forEach(x => x.classList.remove('active'))
+      s.classList.add('active')
+      drawColor = c.hex; eraserOn = false
+      document.getElementById('eraser-btn').textContent = '✏ Brush'
+      document.getElementById('eraser-btn').classList.remove('eraser-active')
+    }
+    wrap.appendChild(s)
+  })
+}
+
+function toggleEraser() {
+  eraserOn = !eraserOn
+  const btn = document.getElementById('eraser-btn')
+  btn.textContent = eraserOn ? '⬜ Eraser' : '✏ Brush'
+  btn.classList.toggle('eraser-active', eraserOn)
+}
+
+function initDrawCanvas() {
+  const dc = document.getElementById('draw-canvas')
+  const ctx = dc.getContext('2d')
+  ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,600,400)
+
+  const snap = () => {
+    if (undoStack.length >= 30) undoStack.shift()
+    undoStack.push(ctx.getImageData(0,0,600,400))
+  }
+
+  dc.addEventListener('mousedown', e => {
+    snap(); isDrawing = true
+    const p = coords(dc, e); lastPt = p
+    ctx.beginPath(); ctx.arc(p.x, p.y, getBrushR(), 0, Math.PI*2)
+    ctx.fillStyle = eraserOn ? '#ffffff' : drawColor; ctx.fill()
+  })
+  dc.addEventListener('mousemove', e => {
+    if (!isDrawing) return
+    const p = coords(dc, e)
+    ctx.beginPath(); ctx.moveTo(lastPt.x, lastPt.y); ctx.lineTo(p.x, p.y)
+    ctx.strokeStyle = eraserOn ? '#ffffff' : drawColor
+    ctx.lineWidth = getBrushR()*2; ctx.lineCap = 'round'; ctx.lineJoin = 'round'
+    ctx.stroke(); lastPt = p
+  })
+  dc.addEventListener('mouseup', () => isDrawing = false)
+  dc.addEventListener('mouseleave', () => isDrawing = false)
+
+  // Touch
+  const tc = (e, fn) => { e.preventDefault(); fn(e.touches[0]) }
+  dc.addEventListener('touchstart', e => tc(e, ev => dc.dispatchEvent(new MouseEvent('mousedown', {clientX:ev.clientX,clientY:ev.clientY}))))
+  dc.addEventListener('touchmove',  e => tc(e, ev => dc.dispatchEvent(new MouseEvent('mousemove', {clientX:ev.clientX,clientY:ev.clientY}))))
+  dc.addEventListener('touchend',   e => { e.preventDefault(); isDrawing = false })
+}
+
+function getBrushR() { return parseInt(document.getElementById('brush-size').value)/2 }
+
+function undoDraw() {
+  if (!undoStack.length) return
+  const dc = document.getElementById('draw-canvas')
+  dc.getContext('2d').putImageData(undoStack.pop(), 0, 0)
+}
+
+function fillCanvas() {
+  const dc = document.getElementById('draw-canvas')
+  const ctx = dc.getContext('2d')
+  if (undoStack.length >= 30) undoStack.shift()
+  undoStack.push(ctx.getImageData(0,0,600,400))
+  ctx.fillStyle = eraserOn ? '#ffffff' : drawColor
+  ctx.fillRect(0,0,600,400)
+}
+
+function clearDraw() {
+  const dc = document.getElementById('draw-canvas')
+  const ctx = dc.getContext('2d')
+  if (undoStack.length >= 30) undoStack.shift()
+  undoStack.push(ctx.getImageData(0,0,600,400))
+  ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,600,400)
+}
+
+async function sendDrawing() {
+  const dc = document.getElementById('draw-canvas')
+  const b64 = dc.toDataURL('image/png').split(',')[1]
+  const r = await fetch('/api/display-image', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ image_b64: b64, description: 'drawing' })
+  })
+  if (r.ok) { toast('Drawing sent!'); setTimeout(refreshPreview, 2000) }
+  else toast('Error sending')
+}
+
+// ── HISTORY TAB ────────────────────────────────────────────────────────────
+async function loadHistory() {
+  const grid = document.getElementById('history-grid')
+  grid.innerHTML = '<p class="empty">Loading…</p>'
+  try {
+    const entries = await (await fetch('/api/history')).json()
+    if (!entries.length) { grid.innerHTML = '<p class="empty">No history yet.</p>'; return }
+    grid.innerHTML = entries.map(e => `
+      <div class="hist-card">
+        <img src="/api/history/${e.id}/image" loading="lazy"
+             onclick="openModal('/api/history/${e.id}/image')" alt="">
+        <div class="hist-info">
+          <div class="hist-time">${new Date(e.timestamp*1000).toLocaleString()}</div>
+          <div class="hist-desc">${e.description}</div>
+        </div>
+        <div class="hist-actions">
+          <button class="btn-ghost btn-sm" onclick="redisplay('${e.id}')">📺 Show</button>
+          <button class="btn-danger btn-sm" onclick="deleteEntry('${e.id}',this)">🗑</button>
+        </div>
+      </div>
+    `).join('')
+  } catch(e) { grid.innerHTML = '<p class="empty">Error loading history.</p>' }
+}
+
+async function redisplay(id) {
+  const r = await fetch(`/api/history/${id}/image`)
+  const blob = await r.blob()
+  const b64 = await new Promise(res => {
+    const rd = new FileReader(); rd.onload = e => res(e.target.result.split(',')[1]); rd.readAsDataURL(blob)
+  })
+  await fetch('/api/display-image', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ image_b64: b64, description: 'redisplay from history' })
+  })
+  toast('Sent to display!'); setTimeout(refreshPreview, 2000)
+}
+
+async function deleteEntry(id, btn) {
+  await fetch(`/api/history/${id}`, { method:'DELETE' })
+  btn.closest('.hist-card').remove()
+  toast('Deleted')
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────
+buildPalette()
+initDrawCanvas()
+pollStatus()
+setInterval(pollStatus, 5000)
+setInterval(refreshPreview, 10000)
+</script>
+</body>
+</html>
