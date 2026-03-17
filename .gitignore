@@ -1,0 +1,4 @@
+data/*.png
+data/history.json
+__pycache__/
+.venv/
