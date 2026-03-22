@@ -151,34 +151,67 @@ def _widget_services(draw: ImageDraw.ImageDraw, y: int, services: list[dict]) ->
 
 # ── quote widget ──────────────────────────────────────────────────────────────
 
+def _wrap_pixels(draw: ImageDraw.ImageDraw, text: str, font,
+                 max_w: int) -> list[str]:
+    """Word-wrap text using actual pixel measurements."""
+    words = text.split()
+    lines, current, current_w = [], [], 0
+    space_w = _text_w(draw, " ", font)
+    for word in words:
+        ww = _text_w(draw, word, font)
+        if current and current_w + space_w + ww > max_w:
+            lines.append(" ".join(current))
+            current, current_w = [word], ww
+        else:
+            current_w = ww if not current else current_w + space_w + ww
+            current.append(word)
+    if current:
+        lines.append(" ".join(current))
+    return lines
+
+
 def _widget_quote(draw: ImageDraw.ImageDraw, y_start: int, quote: str,
                   available_h: int, quote_index: int = 0) -> None:
-    """Render a quote centred in the available vertical space using a rotating script font."""
-    if available_h < 24 or not quote:
+    """Render a quote filling the available space using a rotating script font.
+
+    Binary-searches for the largest font size where the pixel-wrapped text
+    fits within available_h, so short quotes render large and long quotes
+    shrink to fit rather than being cut off.
+    """
+    if available_h < 20 or not quote:
         return
 
-    # Find the largest font that fits within available_h
-    for size in [36, 32, 28, 24, 20, 18, 16, 14]:
-        font = _quote_font(size, quote_index)
-        avg_char_w = max(1, _text_w(draw, "m", font))
-        chars = max(12, (WIDTH - 60) // avg_char_w)
-        lines = textwrap.wrap(quote, width=chars)
-        line_h = size + 8
-        total_h = len(lines) * line_h
-        if total_h <= available_h - 10:
-            sy = y_start + (available_h - total_h) // 2
-            for line in lines:
-                lw = _text_w(draw, line, font)
-                draw.text(((WIDTH - lw) // 2, sy), line, font=font,
-                          fill=(80, 80, 80))
-                sy += line_h
-            return
+    margin = 30
+    max_w  = WIDTH - 2 * margin
 
-    # Fallback: smallest size
-    font = _quote_font(14, quote_index)
-    for line in textwrap.wrap(quote, width=52)[:3]:
-        draw.text((20, y_start + 4), line, font=font, fill=(80, 80, 80))
-        y_start += 20
+    def measure(size: int):
+        font   = _quote_font(size, quote_index)
+        lines  = _wrap_pixels(draw, quote, font, max_w)
+        bb     = draw.textbbox((0, 0), "Ag", font=font)
+        line_h = (bb[3] - bb[1]) + max(4, size // 5)
+        return font, lines, line_h, len(lines) * line_h
+
+    # Binary search: largest size whose total height fits in available_h
+    lo, hi, best = 10, 90, None
+    while lo <= hi:
+        mid = (lo + hi) // 2
+        font, lines, line_h, total_h = measure(mid)
+        if total_h <= available_h - 8:
+            best = (mid, font, lines, line_h, total_h)
+            lo = mid + 1
+        else:
+            hi = mid - 1
+
+    if best is None:
+        _, font, lines, line_h, total_h = measure(10)
+    else:
+        _, font, lines, line_h, total_h = best
+
+    sy = y_start + (available_h - total_h) // 2
+    for line in lines:
+        lw = _text_w(draw, line, font)
+        draw.text(((WIDTH - lw) // 2, sy), line, font=font, fill=(80, 80, 80))
+        sy += line_h
 
 
 # ── AUTO idle renderer ────────────────────────────────────────────────────────
