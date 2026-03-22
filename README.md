@@ -1,215 +1,217 @@
 # EPaperService
 
-Controls a Waveshare 3.6" e-Paper HAT+ (E) 6-colour display (600×400 pixels) attached to the Raspberry Pi 5. Two operating modes: **idle** (auto-refreshes system stats) and **agent** (displays content pushed by an AI agent, with optional auto-expiry). Includes a full browser-based admin panel.
+Controls a Waveshare 3.6" e-Paper HAT+ (E) 6-colour display (600×400 px) on the Raspberry Pi 5. Two operating modes: **idle** (auto-refreshes a configurable stats/widget screen) and **booked** (displays content pushed via the booking schedule). Includes a full browser-based admin panel.
 
-**Ports:** `8004` (internal) / `13375` (external, HTTPS via Caddy)
+**Ports:** `8004` (internal) · `13375` (external HTTPS via Caddy)
 
 ---
 
 ## Overview
 
-- **Idle mode**: Refreshes system stats (CPU, RAM, temp, uptime) at configurable intervals (default every 20 min, aligned to :00/:20/:40)
-- **Agent mode**: Any service can push a message, list, or raw image to the display; optionally expires after a duration
-- **History**: Stores the last 50 display frames (metadata + PNG) on disk
-- **Simulation mode**: Falls back to an in-memory renderer if GPIO/SPI hardware is unavailable
-- **Admin panel**: Browser UI for manual control, history browsing, and live preview
+- **Idle mode** — renders a widget dashboard (CPU, RAM, temp, weather, quotes, etc.) at a configurable interval
+- **Booking mode** — any authenticated principal (human or agent) can reserve a time slot and push markdown, SVG, or image content
+- **Scheduling** — conflict-detected calendar with start/end times; bookings activate and expire automatically
+- **Idle screen config** — fully configurable via UI or API; changes take effect immediately
+- **Admin panel** — browser UI at `/` for bookings, history, idle screen config, and live preview
+- **Simulation mode** — falls back gracefully if GPIO/SPI hardware is unavailable
 
 ---
 
 ## Configuration
 
-Set via environment variables or `.env` file:
+Set via environment variables or `.env`:
 
-| Variable             | Default       | Description                             |
-|----------------------|---------------|-----------------------------------------|
-| `HOST`               | `127.0.0.1`   | Listen address (loopback by default)    |
-| `PORT`               | `8004`        | Listen port                             |
-| `IDLE_INTERVAL_MIN`  | `20`          | Stats refresh interval (minutes)        |
+| Variable            | Default           | Description                              |
+|---------------------|-------------------|------------------------------------------|
+| `HOST`              | `127.0.0.1`       | Listen address                           |
+| `PORT`              | `8004`            | Listen port                              |
+| `SECRET_KEY`        | *(required)*      | JWT signing key (shared with UserManager)|
+| `USERMANAGER_URL`   | `http://localhost:8005` | UserManager base URL             |
+
+Persistent idle screen settings are stored in `data/idle_config.json` (auto-created on first run).
+
+---
+
+## Authentication
+
+Endpoints marked **Auth** accept:
+
+- **JWT Bearer** — `Authorization: Bearer <token>` (issued by UserManager `/auth/login`)
+- **API key** — `X-API-Key: <key>` (issued by AgentManager for agent principals)
+
+Both are validated against UserManager and produce the same unified `principal` object. The booking owner and admin-only cancel rules apply to both.
 
 ---
 
 ## API Reference
 
-### Status
+### Status & Preview
 
-| Method | Path           | Auth | Description                             |
-|--------|----------------|------|-----------------------------------------|
-| GET    | `/api/status`  | None | Current display mode and state          |
+| Method | Path           | Auth | Description                                    |
+|--------|----------------|------|------------------------------------------------|
+| GET    | `/api/status`  | None | Current mode, active booking, last updated     |
+| GET    | `/api/preview` | None | Current display frame as PNG (`204` if none)   |
 
-**Response:**
+**`/api/status` response:**
 ```json
 {
   "mode": "idle",
-  "agent_name": null,
-  "last_updated": 1710676800,
-  "simulation": false,
-  "next_refresh": 1710677400
+  "current_booking": null,
+  "last_updated": 1710676800.0,
+  "simulation": false
 }
 ```
 
-| Field          | Type    | Description                                      |
-|----------------|---------|--------------------------------------------------|
-| `mode`         | string  | `idle` or `agent`                                |
-| `agent_name`   | string  | Name of the agent that took over (nullable)      |
-| `last_updated` | number  | Unix timestamp of last display update            |
-| `simulation`   | bool    | True if running without physical e-ink hardware  |
-| `next_refresh` | number  | Unix timestamp of next idle refresh (idle mode only) |
+`mode` is `"idle"` or `"booked"`. `current_booking` is a full booking object or `null`.
 
 ---
 
-### Preview
+### Bookings
 
-| Method | Path            | Auth | Description                          |
-|--------|-----------------|------|--------------------------------------|
-| GET    | `/api/preview`  | None | Current frame as PNG image           |
+#### Create a booking
 
-Returns `204 No Content` if nothing has been displayed yet, otherwise `image/png`.
+| Method | Path       | Auth | Description                        |
+|--------|------------|------|------------------------------------|
+| POST   | `/api/book`| Yes  | Reserve a display time slot        |
 
-Used by the Dashboard to show a live thumbnail of the display.
-
----
-
-### Display Control
-
-#### Show message or list
-
-| Method | Path        | Auth | Description                                  |
-|--------|-------------|------|----------------------------------------------|
-| POST   | `/api/show` | None | Push content to the display (agent mode)     |
-
-**Request (`ShowRequest`):**
+**Request:**
 ```json
 {
-  "type": "message",
-  "agent": "ATLAS",
-  "title": "Reminder",
-  "body": "Meeting in 5 minutes.",
-  "color": "blue",
-  "duration": 300000
+  "content_type": "markdown",
+  "content": "# Hello\n\nThis is my slot.",
+  "start_time": "2026-03-22T14:00:00Z",
+  "end_time":   "2026-03-22T14:30:00Z",
+  "description": "My booking"
 }
 ```
 
-| Field      | Type    | Description                                            |
-|------------|---------|--------------------------------------------------------|
-| `type`     | string  | `message` (title + body) or `list` (title + lines)    |
-| `agent`    | string  | Agent name shown on display                            |
-| `title`    | string  | Header text                                            |
-| `body`     | string  | Body text (for `message` type)                         |
-| `lines`    | array   | List of strings (for `list` type)                      |
-| `color`    | string  | Accent colour: `blue`, `red`, `green`, `yellow`, etc.  |
-| `duration` | number  | Auto-release after N milliseconds (optional)           |
+| Field          | Type   | Required | Description                                                    |
+|----------------|--------|----------|----------------------------------------------------------------|
+| `content_type` | string | Yes      | `markdown`, `svg`, or `image`                                  |
+| `content`      | string | Yes      | Markdown/SVG text, or base64-encoded PNG for `image`           |
+| `start_time`   | string | No       | ISO 8601 UTC. Defaults to **now**                              |
+| `end_time`     | string | No       | ISO 8601 UTC. Defaults to computed from **apply-now config**   |
+| `description`  | string | No       | Human-readable label for the calendar                          |
 
-**Response:** `{ "status": "accepted" }` (non-blocking, renders async)
+Returns `201` with the created booking object, or `409` with conflict details.
 
----
+**Apply-now modes** (used when `end_time` is omitted):
 
-#### Display raw image
+| Mode      | Behaviour                                                             |
+|-----------|-----------------------------------------------------------------------|
+| `fixed`   | `start + N minutes` (configurable, default 30)                       |
+| `snap`    | Next X-minute clock boundary, e.g. :00/:20/:40 (default, 20 min)    |
+| `retain`  | Far future — slot holds until displaced by a later booking           |
 
-| Method | Path                   | Auth | Description                             |
-|--------|------------------------|------|-----------------------------------------|
-| POST   | `/api/display-image`   | None | Push a base64-encoded PNG to the display |
+#### Cancel a booking
 
-**Request (`DisplayImageRequest`):**
+| Method | Path                    | Auth | Description                             |
+|--------|-------------------------|------|-----------------------------------------|
+| DELETE | `/api/book/{booking_id}`| Yes  | Cancel a booking (owner or admin only)  |
+
+#### Schedule & History
+
+| Method | Path                              | Auth | Description                                 |
+|--------|-----------------------------------|------|---------------------------------------------|
+| GET    | `/api/schedule`                   | None | Active + upcoming bookings (not cancelled)  |
+| GET    | `/api/history`                    | None | All bookings newest-first (`limit`, `offset` params) |
+| GET    | `/api/history/{booking_id}/image` | None | PNG rendered for a past booking             |
+
+**Booking object:**
 ```json
 {
-  "image_b64": "<base64-encoded PNG>",
-  "description": "Dashboard screenshot",
-  "agent": "Dashboard",
-  "duration": 60000
+  "booking_id":     "06293a6c-...",
+  "principal_id":   1,
+  "principal_name": "ATLAS",
+  "principal_type": "agent",
+  "content_type":   "markdown",
+  "start_time":     "2026-03-22T14:00:00Z",
+  "end_time":       "2026-03-22T14:30:00Z",
+  "description":    "Status update",
+  "cancelled":      false,
+  "created_at":     "2026-03-22T13:55:00Z"
 }
 ```
 
-Image is resized to 600×400 before rendering.
+---
+
+### Idle Screen Config
+
+| Method | Path                | Auth | Description                                          |
+|--------|---------------------|------|------------------------------------------------------|
+| GET    | `/api/idle-config`  | None | Return current idle config (image replaced with sentinel) |
+| POST   | `/api/idle-config`  | Yes  | Save config and **immediately** refresh the display  |
+| POST   | `/api/idle-preview` | None | Render a preview PNG for any config (no auth needed) |
+
+**Config fields:**
+
+| Field                  | Default                          | Description                                        |
+|------------------------|----------------------------------|----------------------------------------------------|
+| `mode`                 | `"auto"`                         | `auto`, `markdown`, `svg`, or `image`              |
+| `auto_widgets`         | `["cpu","ram","temp","disk","weather","next_booking","quote"]` | Ordered list of active widgets |
+| `weather_location`     | `"Abingdon, UK"`                 | Location string for wttr.in                        |
+| `custom_text`          | `""`                             | Text shown by the `custom_text` widget             |
+| `services_to_check`    | *(5 local services)*             | Array of `{name, url}` for service health checks   |
+| `content`              | `""`                             | Markdown or SVG content (for non-auto modes)       |
+| `image_b64`            | `""`                             | Base64 PNG (for image mode). GET returns `"__has_image__"` if set |
+| `apply_now_mode`       | `"snap"`                         | `fixed`, `snap`, or `retain`                       |
+| `apply_now_fixed_mins` | `30`                             | Duration for `fixed` mode                          |
+| `apply_now_snap_mins`  | `20`                             | Snap interval in minutes                           |
+| `idle_interval_mins`   | `20`                             | How often to auto-refresh the idle screen          |
+
+**Available widgets** (listed in render order):
+`cpu`, `ram`, `temp`, `disk`, `weather`, `uptime`, `ip`, `active_services`, `next_booking`, `booking_count`, `custom_text`, `quote`
+
+The `quote` widget fills all remaining vertical space below other widgets, auto-sizing its font to maximise the text. 50 rotating parody inspirational quotes; font style rotates across Dancing Script, Kaushan Script, Kristi, and Lobster.
+
+**`/api/idle-preview` request:** any valid config dict (or `{}` to preview the saved config).
+Returns `image/png` at 600×400.
 
 ---
 
-#### Release / Refresh
+### Auth Proxy
 
-| Method | Path            | Auth | Description                                          |
-|--------|-----------------|------|------------------------------------------------------|
-| POST   | `/api/release`  | None | Return to idle mode (triggers immediate stats refresh) |
-| POST   | `/api/refresh`  | None | Force an idle stats refresh without changing mode    |
-
-Both return `{ "status": "released" }` or `{ "status": "refreshing" }`.
-
----
-
-### History
-
-| Method | Path                          | Auth | Description                        |
-|--------|-------------------------------|------|------------------------------------|
-| GET    | `/api/history`                | None | List history entries (newest first) |
-| GET    | `/api/history/{id}/image`     | None | Retrieve PNG for a history entry   |
-| DELETE | `/api/history/{id}`           | None | Delete a history entry             |
-
-**History list response:**
-```json
-[
-  {
-    "id": "2025-03-17T12-00-00",
-    "timestamp": "2025-03-17T12:00:00",
-    "mode": "agent",
-    "agent": "ATLAS",
-    "description": "Reminder: Meeting in 5 minutes."
-  },
-  ...
-]
-```
-
-Up to 50 entries are retained. Stored as `data/history.json` + PNG files on disk.
+| Method | Path               | Auth | Description                                   |
+|--------|--------------------|------|-----------------------------------------------|
+| POST   | `/api/auth/login`  | None | Proxies login to UserManager (for admin panel) |
 
 ---
 
 ### Health
 
-| Method | Path      | Auth | Description            |
-|--------|-----------|------|------------------------|
-| GET    | `/health` | None | Service health check   |
+| Method | Path      | Auth | Description          |
+|--------|-----------|------|----------------------|
+| GET    | `/health` | None | Service health check |
 
-**Response:**
 ```json
-{
-  "status": "ok",
-  "service": "EPaperService",
-  "simulation": false,
-  "display_mode": "idle"
-}
+{ "status": "ok", "service": "EPaperService", "simulation": false, "display_mode": "idle", "current_booking": null }
 ```
 
 ---
 
 ## Admin Panel
 
-The web admin panel is served at `https://<host>:13375/admin` (static `admin.html`).
+Served at `/` (static `admin.html`).
 
-Features:
-- Live preview of the current display (with zoom)
-- Send a message or list to the display
-- Upload an image to display
-- Browse and restore history frames
-- Force refresh / release to idle
-- Status indicator (mode, last updated, next refresh)
+| Tab              | Features                                                                 |
+|------------------|--------------------------------------------------------------------------|
+| **Dashboard**    | Live display preview, current status, active booking                     |
+| **Schedule**     | 7-day calendar view of upcoming bookings                                 |
+| **Book Slot**    | Create a booking with live 600×400 canvas preview for all content types; drag-drop/paste image upload |
+| **History**      | All bookings with inline rendered PNG thumbnails; Apply Again dialog to re-book with custom or apply-now timing |
+| **Idle Screen**  | Widget checklist with up/down reorder, weather location, custom text, service list, server-rendered live preview; apply-now mode settings |
 
 ---
 
-## State Machine
+## Display Loop
 
-```
-          boot
-            │
-            ▼
-     ┌─── IDLE ───┐
-     │             │
-  POST /api/show  POST /api/refresh
-  POST /api/       │
-  display-image    └──► (re-renders stats)
-     │
-     ▼
-   AGENT
-     │
-     ├──► auto-expires after `duration` ms
-     └──► POST /api/release
-```
+The service polls every 30 seconds:
+
+1. If an active booking exists and has changed → render and push it
+2. If a booking just expired → revert to idle immediately
+3. If idle and `idle_interval_mins` has elapsed → refresh stats
+
+Saving idle config via API or admin panel triggers an immediate refresh outside the loop.
 
 ---
 
@@ -217,11 +219,11 @@ Features:
 
 - **Device**: Waveshare 3.6" e-Paper HAT+ (E)
 - **Resolution**: 600 × 400 px
-- **Colours**: 6 (black, white, red, green, blue, yellow)
+- **Colours**: 6 (black, white, red, green, blue, yellow — Spectra 6 palette)
 - **Interface**: SPI via Raspberry Pi GPIO
-- **Refresh time**: ~15 seconds (full refresh)
+- **Refresh time**: ~15 s (full refresh)
 
-When `simulation=true`, the service renders to memory only (useful for development without the HAT).
+`simulation=true` is set automatically if `/dev/spidev` is unavailable; the service renders to memory only.
 
 ---
 
@@ -233,4 +235,8 @@ pip install -r requirements.txt
 uvicorn app.main:app --host 127.0.0.1 --port 8004
 ```
 
-For full hardware support, run as a user with SPI/GPIO access (or as root). The `SIMULATION` environment variable or lack of `/dev/spidev` will automatically enable simulation mode.
+Requires SPI/GPIO access for hardware mode. Run via systemd for production:
+
+```bash
+sudo systemctl start epaperservice.service
+```
