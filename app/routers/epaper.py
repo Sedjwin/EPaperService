@@ -268,13 +268,15 @@ async def set_idle_config(
     body: dict,
     principal: dict = Depends(get_principal),
 ):
-    """Save the idle screen configuration. Auth required."""
+    """Save the idle screen configuration and immediately refresh the display. Auth required."""
     from app import idle_config
+    from app.main import refresh_stats
     cfg = idle_config.load()
     # Preserve quote_index unless explicitly sent
     body.setdefault("quote_index", cfg.get("quote_index", 0))
     idle_config.save(body)
-    logger.info("Idle config updated by %s", principal["username"])
+    logger.info("Idle config updated by %s — triggering immediate refresh", principal["username"])
+    asyncio.create_task(refresh_stats())
     return {"ok": True}
 
 

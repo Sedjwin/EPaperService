@@ -33,6 +33,14 @@ _FONT_PATHS = [
     "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
 ]
 
+# Cursive/script fonts for quote widget — rotated by quote index
+_QUOTE_FONT_PATHS = [
+    "/usr/share/fonts/opentype/dancingscript/DancingScript-Bold.otf",   # bouncy cursive
+    "/usr/share/fonts/opentype/kaushanscript/KaushanScript-Regular.otf", # brushed ink
+    "/usr/share/fonts/truetype/kristi/Kristi.ttf",                       # felt-tip casual
+    "/usr/share/fonts/opentype/lobster/lobster.otf",                      # bold decorative
+]
+
 def _font(size: int) -> ImageFont.FreeTypeFont:
     for path in _FONT_PATHS:
         try:
@@ -40,6 +48,14 @@ def _font(size: int) -> ImageFont.FreeTypeFont:
         except OSError:
             pass
     return ImageFont.load_default()
+
+
+def _quote_font(size: int, quote_index: int) -> ImageFont.FreeTypeFont:
+    path = _QUOTE_FONT_PATHS[quote_index % len(_QUOTE_FONT_PATHS)]
+    try:
+        return ImageFont.truetype(path, size)
+    except OSError:
+        return _font(size)
 
 
 def _text_w(draw: ImageDraw.ImageDraw, text: str, font) -> int:
@@ -136,22 +152,20 @@ def _widget_services(draw: ImageDraw.ImageDraw, y: int, services: list[dict]) ->
 # ── quote widget ──────────────────────────────────────────────────────────────
 
 def _widget_quote(draw: ImageDraw.ImageDraw, y_start: int, quote: str,
-                  available_h: int) -> None:
-    """Render a quote centred in the available vertical space."""
+                  available_h: int, quote_index: int = 0) -> None:
+    """Render a quote centred in the available vertical space using a rotating script font."""
     if available_h < 24 or not quote:
         return
 
     # Find the largest font that fits within available_h
-    for size in [32, 28, 24, 20, 18, 16, 14]:
-        font = _font(size)
-        # Estimate chars per line from pixel width
+    for size in [36, 32, 28, 24, 20, 18, 16, 14]:
+        font = _quote_font(size, quote_index)
         avg_char_w = max(1, _text_w(draw, "m", font))
-        chars = max(12, (WIDTH - 40) // avg_char_w)
+        chars = max(12, (WIDTH - 60) // avg_char_w)
         lines = textwrap.wrap(quote, width=chars)
-        line_h = size + 6
+        line_h = size + 8
         total_h = len(lines) * line_h
         if total_h <= available_h - 10:
-            # Center vertically
             sy = y_start + (available_h - total_h) // 2
             for line in lines:
                 lw = _text_w(draw, line, font)
@@ -160,8 +174,8 @@ def _widget_quote(draw: ImageDraw.ImageDraw, y_start: int, quote: str,
                 sy += line_h
             return
 
-    # Fallback: just draw at smallest size
-    font = _font(14)
+    # Fallback: smallest size
+    font = _quote_font(14, quote_index)
     for line in textwrap.wrap(quote, width=52)[:3]:
         draw.text((20, y_start + 4), line, font=font, fill=(80, 80, 80))
         y_start += 20
@@ -275,7 +289,8 @@ def _render_idle_auto(cfg: dict, ext: dict) -> Image.Image:
     # Quote fills remaining space
     if has_quote and ext.get("quote"):
         available = HEIGHT - y - 6
-        _widget_quote(draw, y, ext["quote"], available)
+        _widget_quote(draw, y, ext["quote"], available,
+                      quote_index=cfg.get("quote_index", 0))
 
     return img
 
