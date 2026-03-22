@@ -7,31 +7,40 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:system-ui,sans-serif;background:#0a0a0f;color:#e2e8f0;min-height:100vh;display:flex;flex-direction:column}
-header{background:#111827;border-bottom:1px solid #1f2937;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+header{background:#111827;border-bottom:1px solid #1f2937;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 header h1{font-size:15px;font-weight:700;color:#f9fafb;letter-spacing:-.3px}
 header h1 span{color:#f59e0b;margin-right:6px}
-#status-bar{font-size:12px;color:#6b7280;display:flex;gap:16px;align-items:center}
+#status-bar{font-size:12px;color:#6b7280;display:flex;gap:14px;align-items:center}
 #status-bar b{color:#f3f4f6}
 #sim-badge{background:#dc2626;color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;letter-spacing:.5px}
+#auth-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;letter-spacing:.5px}
+#auth-badge.authed{background:#065f46;color:#6ee7b7}
+#auth-badge.anon{background:#374151;color:#9ca3af}
 
-.layout{display:flex;flex:1;gap:0;overflow:hidden}
+.layout{display:flex;flex:1;overflow:hidden}
 
 /* ── Left panel ── */
-.left{width:280px;flex-shrink:0;display:flex;flex-direction:column;gap:0;border-right:1px solid #1f2937;background:#111827}
-.panel-section{padding:14px 16px;border-bottom:1px solid #1f2937}
-.section-label{font-size:10px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
+.left{width:270px;flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid #1f2937;background:#111827;overflow-y:auto}
+.panel-section{padding:12px 14px;border-bottom:1px solid #1f2937}
+.section-label{font-size:10px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
 
-.preview-wrap{background:#000;border-radius:8px;overflow:hidden;cursor:pointer;position:relative;line-height:0}
+.preview-wrap{background:#000;border-radius:6px;overflow:hidden;cursor:pointer;position:relative;line-height:0}
 .preview-wrap img{width:100%;height:auto;display:block;transition:opacity .2s}
 .preview-wrap:hover img{opacity:.9}
-.preview-wrap .preview-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;color:#fff;font-size:12px;pointer-events:none;background:rgba(0,0,0,.4)}
+.preview-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;color:#fff;font-size:11px;pointer-events:none;background:rgba(0,0,0,.4)}
 .preview-wrap:hover .preview-hint{opacity:1}
-.no-image{width:100%;aspect-ratio:3/2;background:#1f2937;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#374151;font-size:12px}
+.no-image{width:100%;aspect-ratio:3/2;background:#1f2937;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#374151;font-size:12px}
 
-.meta{font-size:11px;color:#6b7280;margin-top:8px;line-height:1.6}
+.meta{font-size:11px;color:#6b7280;margin-top:6px;line-height:1.6}
 .meta b{color:#9ca3af}
 
-.btn-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.active-booking-box{background:#1a1a2e;border:1px solid #1f2937;border-radius:6px;padding:8px;font-size:11px;color:#9ca3af;line-height:1.7}
+.active-booking-box .booking-title{font-size:12px;font-weight:600;color:#f3f4f6;margin-bottom:4px}
+.active-booking-box .booking-tag{font-size:10px;padding:1px 6px;border-radius:99px;font-weight:600;margin-left:4px}
+.tag-human{background:#1e3a5f;color:#60a5fa}
+.tag-agent{background:#1e3040;color:#a78bfa}
+.tag-cancelled{background:#450a0a;color:#fca5a5}
+
 button{cursor:pointer;border:none;border-radius:6px;font-size:12px;font-weight:500;padding:6px 12px;transition:all .15s}
 .btn-ghost{background:#1f2937;color:#9ca3af}
 .btn-ghost:hover{background:#374151;color:#f3f4f6}
@@ -40,499 +49,800 @@ button{cursor:pointer;border:none;border-radius:6px;font-size:12px;font-weight:5
 .btn-danger{background:#7f1d1d;color:#fca5a5}
 .btn-danger:hover{background:#991b1b}
 .btn-sm{padding:4px 10px;font-size:11px}
+.btn-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+
+/* ── Auth form ── */
+.auth-form input{width:100%;background:#1f2937;border:1px solid #374151;border-radius:5px;padding:5px 8px;color:#f3f4f6;font-size:12px;margin-bottom:6px}
+.auth-form input:focus{outline:none;border-color:#f59e0b}
+.auth-info{font-size:11px;color:#6b7280;margin-top:6px}
+.auth-info b{color:#d1d5db}
 
 /* ── Right panel ── */
 .right{flex:1;display:flex;flex-direction:column;min-width:0}
 .tabs-bar{display:flex;gap:0;border-bottom:1px solid #1f2937;background:#111827;flex-shrink:0}
-.tab-btn{padding:12px 20px;font-size:13px;font-weight:500;color:#6b7280;background:none;border-radius:0;border-bottom:2px solid transparent}
+.tab-btn{padding:11px 18px;font-size:13px;font-weight:500;color:#6b7280;background:none;border-radius:0;border-bottom:2px solid transparent}
 .tab-btn:hover{color:#d1d5db;background:#1f2937}
 .tab-btn.active{color:#f59e0b;border-bottom-color:#f59e0b}
 .tab-pane{display:none;flex:1;overflow:auto;padding:16px}
 .tab-pane.active{display:flex;flex-direction:column;gap:12px}
 
-/* ── Canvas shared ── */
-/* max-width = available-height × (600/400) so canvas never overflows vertically */
-.canvas-wrap{position:relative;background:#1a1a2e;border-radius:8px;overflow:hidden;border:1px solid #1f2937;line-height:0;max-width:min(100%, calc((100vh - 168px) * 1.5))}
-canvas{display:block;width:100%;height:auto;cursor:crosshair}
-.canvas-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#4b5563;font-size:14px;pointer-events:none;background:#111}
+/* ── Calendar tab ── */
+.cal-nav{display:flex;align-items:center;gap:10px}
+.cal-nav h2{font-size:14px;font-weight:600;color:#f3f4f6;flex:1}
+.cal-grid{position:relative;overflow-x:auto}
+.cal-header{display:flex;border-bottom:1px solid #1f2937;margin-bottom:2px}
+.cal-header-time{width:52px;flex-shrink:0}
+.cal-header-day{flex:1;min-width:80px;text-align:center;padding:4px 0;font-size:11px;color:#6b7280;border-left:1px solid #1f2937}
+.cal-header-day.today{color:#f59e0b;font-weight:700}
+.cal-body{display:flex;position:relative}
+.cal-time-col{width:52px;flex-shrink:0;position:relative}
+.cal-time-label{position:absolute;right:6px;font-size:10px;color:#4b5563;transform:translateY(-6px)}
+.cal-day-col{flex:1;min-width:80px;border-left:1px solid #1f2937;position:relative}
+.cal-hour-line{position:absolute;left:0;right:0;border-top:1px solid #1f2937}
+.cal-booking-block{position:absolute;left:2px;right:2px;border-radius:4px;padding:2px 4px;font-size:10px;font-weight:600;overflow:hidden;cursor:pointer;opacity:.9;line-height:1.3}
+.cal-booking-block:hover{opacity:1;z-index:10}
+.cal-booking-block.human{background:#1e3a5f;color:#93c5fd;border-left:3px solid #3b82f6}
+.cal-booking-block.agent{background:#2e1a5f;color:#c4b5fd;border-left:3px solid #8b5cf6}
+.cal-booking-block.expired{opacity:.4}
+.cal-now-line{position:absolute;left:0;right:0;border-top:2px solid #ef4444;pointer-events:none;z-index:5}
+.cal-now-line::before{content:'';position:absolute;left:-4px;top:-4px;width:8px;height:8px;background:#ef4444;border-radius:50%}
 
-/* ── Upload tab ── */
-.upload-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.file-label{background:#1f2937;border:1px dashed #374151;color:#9ca3af;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:500}
-.file-label:hover{border-color:#6b7280;color:#d1d5db}
-#file-input{display:none}
-#file-name{font-size:12px;color:#4b5563}
-.edit-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.edit-controls label{font-size:12px;color:#6b7280;display:flex;align-items:center;gap:6px}
-.edit-controls input[type=range]{accent-color:#f59e0b;width:90px}
+/* ── List tab ── */
+.list-filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.list-filters input,.list-filters select{background:#1f2937;border:1px solid #374151;border-radius:5px;padding:5px 8px;color:#f3f4f6;font-size:12px}
+.list-filters input:focus,.list-filters select:focus{outline:none;border-color:#f59e0b}
+.booking-row{background:#111827;border:1px solid #1f2937;border-radius:8px;padding:10px 12px;display:flex;align-items:flex-start;gap:10px}
+.booking-row.cancelled{opacity:.5}
+.booking-row-left{flex:1;min-width:0}
+.booking-row-title{font-size:13px;font-weight:600;color:#f3f4f6;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.booking-row-meta{font-size:11px;color:#6b7280;margin-top:3px;line-height:1.6}
+.booking-row-actions{display:flex;gap:6px;flex-shrink:0;align-items:flex-start;margin-top:2px}
+.content-preview{font-size:11px;color:#4b5563;margin-top:4px;font-family:monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:500px}
+.pagination{display:flex;gap:8px;align-items:center;justify-content:center;padding:8px 0}
+.pagination span{font-size:12px;color:#6b7280}
 
-/* ── Draw tab ── */
-.palette{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.swatch{width:32px;height:32px;border-radius:6px;cursor:pointer;border:3px solid transparent;transition:all .15s;flex-shrink:0}
-.swatch.active{border-color:#f59e0b;transform:scale(1.15)}
-.swatch[data-color="#ffffff"]{border-color:#374151}
-.swatch[data-color="#ffffff"].active{border-color:#f59e0b}
-.draw-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.draw-controls label{font-size:12px;color:#6b7280;display:flex;align-items:center;gap:6px}
-.draw-controls input[type=range]{accent-color:#f59e0b;width:80px}
-.eraser-active{background:#4b5563 !important;color:#f9fafb !important}
+/* ── Book Slot tab ── */
+.book-form{max-width:600px;display:flex;flex-direction:column;gap:14px}
+.form-group{display:flex;flex-direction:column;gap:4px}
+.form-group label{font-size:12px;color:#9ca3af;font-weight:500}
+.form-group input,.form-group select,.form-group textarea{background:#1f2937;border:1px solid #374151;border-radius:6px;padding:8px 10px;color:#f3f4f6;font-size:13px;font-family:inherit}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:#f59e0b}
+.form-group textarea{min-height:120px;resize:vertical}
+.form-row{display:flex;gap:10px}
+.form-row .form-group{flex:1}
+.form-hint{font-size:11px;color:#4b5563;margin-top:2px}
+.content-type-tabs{display:flex;gap:0;border:1px solid #374151;border-radius:6px;overflow:hidden}
+.ct-btn{flex:1;padding:6px 0;font-size:12px;font-weight:500;background:#1f2937;color:#6b7280;border-radius:0}
+.ct-btn:hover{background:#374151;color:#d1d5db}
+.ct-btn.active{background:#f59e0b;color:#000}
 
-/* ── History tab ── */
-.hist-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
-.hist-card{background:#111827;border:1px solid #1f2937;border-radius:8px;overflow:hidden;display:flex;flex-direction:column}
-.hist-card img{width:100%;aspect-ratio:3/2;object-fit:cover;cursor:pointer;display:block}
-.hist-card img:hover{opacity:.85}
-.hist-info{padding:8px;flex:1}
-.hist-time{font-size:11px;color:#6b7280}
-.hist-desc{font-size:12px;color:#9ca3af;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.hist-actions{padding:6px 8px;border-top:1px solid #1f2937;display:flex;gap:6px}
-.empty{color:#4b5563;font-size:13px;text-align:center;padding:40px}
+/* ── Detail modal ── */
+#detail-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999;align-items:center;justify-content:center}
+#detail-modal.open{display:flex}
+.detail-box{background:#111827;border:1px solid #374151;border-radius:12px;padding:24px;max-width:520px;width:90%;max-height:90vh;overflow-y:auto}
+.detail-box h2{font-size:15px;font-weight:700;color:#f9fafb;margin-bottom:14px}
+.detail-row{display:flex;gap:8px;font-size:12px;color:#6b7280;margin-bottom:6px}
+.detail-row b{color:#d1d5db;min-width:110px;flex-shrink:0}
+.detail-content{background:#0a0a0f;border:1px solid #1f2937;border-radius:6px;padding:10px;font-size:11px;font-family:monospace;color:#9ca3af;max-height:160px;overflow:auto;margin-top:8px;white-space:pre-wrap;word-break:break-all}
+.detail-img{width:100%;border-radius:6px;margin-top:10px;cursor:zoom-in}
 
-/* ── Modal ── */
-#modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999;align-items:center;justify-content:center;cursor:zoom-out}
-#modal.open{display:flex}
-#modal img{max-width:90vw;max-height:90vh;border-radius:8px;box-shadow:0 25px 60px rgba(0,0,0,.8)}
+/* ── Img modal ── */
+#img-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:1000;align-items:center;justify-content:center;cursor:zoom-out}
+#img-modal.open{display:flex}
+#img-modal img{max-width:90vw;max-height:90vh;border-radius:8px}
 
 /* ── Toast ── */
-#toast{position:fixed;bottom:24px;right:24px;background:#065f46;color:#6ee7b7;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:500;opacity:0;pointer-events:none;transition:opacity .3s;z-index:1000}
+#toast{position:fixed;bottom:20px;right:20px;background:#065f46;color:#6ee7b7;padding:9px 16px;border-radius:8px;font-size:13px;font-weight:500;opacity:0;pointer-events:none;transition:opacity .3s;z-index:2000}
+#toast.err{background:#7f1d1d;color:#fca5a5}
 #toast.show{opacity:1}
 </style>
 </head>
 <body>
 
 <header>
-  <h1><span>📺</span>EPaperService Admin</h1>
+  <h1><span>🖥</span>EPaperService</h1>
   <div id="status-bar">
     <div>Mode: <b id="s-mode">—</b></div>
-    <div id="s-agent-wrap" style="display:none">Agent: <b id="s-agent"></b></div>
+    <div id="s-booking-wrap" style="display:none">Booking: <b id="s-booking">—</b></div>
     <div>Updated: <b id="s-updated">—</b></div>
-    <div id="s-next-wrap">Next: <b id="s-next">—</b></div>
     <div id="sim-badge" style="display:none">SIMULATION</div>
+    <div id="auth-badge" class="anon">NOT LOGGED IN</div>
   </div>
 </header>
 
 <div class="layout">
 
-  <!-- ── Left: preview + actions ── -->
+  <!-- ── Left ── -->
   <div class="left">
+
     <div class="panel-section">
       <div class="section-label">Current Display</div>
-      <div class="preview-wrap" onclick="openModal('/api/preview?t='+Date.now())">
-        <img id="preview-img" src="/api/preview" alt="" onerror="this.style.display='none';document.getElementById('no-img').style.display='flex'" onload="this.style.display='';document.getElementById('no-img').style.display='none'" />
-        <div id="no-img" class="no-image" style="display:none">No image yet</div>
+      <div class="preview-wrap" id="preview-wrap" onclick="openImgModal('/api/preview?t='+Date.now())">
+        <img id="preview-img" src="" alt="" style="display:none"
+             onload="this.style.display='';document.getElementById('no-img').style.display='none'"
+             onerror="this.style.display='none';document.getElementById('no-img').style.display='flex'">
+        <div id="no-img" class="no-image">No image yet</div>
         <div class="preview-hint">Click to expand</div>
       </div>
-      <div class="meta" id="display-meta">—</div>
+      <div class="meta" id="display-meta"></div>
+    </div>
+
+    <div class="panel-section" id="active-booking-section" style="display:none">
+      <div class="section-label">Active Booking</div>
+      <div id="active-booking-box" class="active-booking-box"></div>
+      <div class="btn-row">
+        <button class="btn-danger btn-sm" id="cancel-active-btn" onclick="cancelActiveBooking()">Cancel Booking</button>
+      </div>
     </div>
 
     <div class="panel-section">
-      <div class="section-label">Actions</div>
-      <div class="btn-row">
-        <button class="btn-ghost" onclick="doAction('/api/refresh','POST')">↺ Refresh Stats</button>
-        <button class="btn-ghost" onclick="doAction('/api/release','POST')">⊘ Release Agent</button>
+      <div class="section-label">Auth</div>
+      <div id="auth-logged-in" style="display:none">
+        <div class="auth-info">Logged in as <b id="auth-username">—</b></div>
+        <div class="btn-row"><button class="btn-ghost btn-sm" onclick="logout()">Log out</button></div>
       </div>
-      <div class="btn-row" style="margin-top:6px">
+      <div id="auth-form-wrap">
+        <div class="auth-form">
+          <input type="text" id="login-user" placeholder="Username" autocomplete="username">
+          <input type="password" id="login-pass" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+          <button class="btn-primary" style="width:100%" onclick="doLogin()">Log In</button>
+        </div>
+        <div class="auth-info" style="margin-top:6px">Login to book or cancel slots</div>
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="btn-row">
         <a href="/docs" target="_blank" style="text-decoration:none">
           <button class="btn-ghost btn-sm">API Docs ↗</button>
         </a>
       </div>
     </div>
+
   </div>
 
-  <!-- ── Right: tabs ── -->
+  <!-- ── Right ── -->
   <div class="right">
     <div class="tabs-bar">
-      <button class="tab-btn active" onclick="showTab('upload')">📁 Upload</button>
-      <button class="tab-btn" onclick="showTab('draw')">✏️ Draw</button>
-      <button class="tab-btn" onclick="showTab('history')" id="hist-tab-btn">🕐 History</button>
+      <button class="tab-btn active" onclick="showTab('calendar',this)">Calendar</button>
+      <button class="tab-btn" onclick="showTab('list',this)">Schedule / History</button>
+      <button class="tab-btn" onclick="showTab('book',this)">Book Slot</button>
     </div>
 
-    <!-- Upload -->
-    <div id="tab-upload" class="tab-pane active">
-      <div class="upload-top">
-        <label class="file-label" for="file-input">📁 Choose Image</label>
-        <input type="file" id="file-input" accept="image/*" onchange="loadFile(event)">
-        <span id="file-name" style="color:#4b5563;font-size:12px">No file chosen</span>
+    <!-- CALENDAR -->
+    <div id="tab-calendar" class="tab-pane active">
+      <div class="cal-nav">
+        <button class="btn-ghost btn-sm" onclick="calShift(-7)">&#8592; Prev week</button>
+        <h2 id="cal-title"></h2>
+        <button class="btn-ghost btn-sm" onclick="calShift(7)">Next week &#8594;</button>
+        <button class="btn-ghost btn-sm" onclick="calGoToday()">Today</button>
       </div>
-      <div class="canvas-wrap">
-        <canvas id="upload-canvas" width="600" height="400"></canvas>
-        <div id="upload-overlay" class="canvas-overlay">Choose an image to edit</div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+
+    <!-- LIST -->
+    <div id="tab-list" class="tab-pane">
+      <div class="list-filters">
+        <input type="text" id="filter-text" placeholder="Search…" oninput="renderList()" style="flex:1;min-width:140px">
+        <select id="filter-status" onchange="renderList()">
+          <option value="all">All</option>
+          <option value="upcoming">Upcoming</option>
+          <option value="active">Active</option>
+          <option value="past">Past</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+        <select id="filter-type" onchange="renderList()">
+          <option value="">Any type</option>
+          <option value="human">Human</option>
+          <option value="agent">Agent</option>
+        </select>
       </div>
-      <div class="edit-controls" id="edit-controls" style="display:none">
-        <button class="btn-ghost" onclick="rotateUpload(-90)">↺ Rotate L</button>
-        <button class="btn-ghost" onclick="rotateUpload(90)">↻ Rotate R</button>
-        <label>Scale<input type="range" id="scale-slider" min="10" max="300" value="100" oninput="onScale(this.value)"><span id="scale-val">100%</span></label>
-        <button class="btn-ghost" onclick="fitUpload()">⤢ Fit</button>
-        <button class="btn-ghost" onclick="resetUpload()">↺ Reset</button>
-        <button class="btn-primary" onclick="sendUpload()">📺 Send to Display</button>
+      <div id="list-body" style="display:flex;flex-direction:column;gap:8px"></div>
+      <div class="pagination" id="list-pagination"></div>
+    </div>
+
+    <!-- BOOK SLOT -->
+    <div id="tab-book" class="tab-pane">
+      <div class="book-form">
+        <div id="book-auth-warn" style="background:#1a1a0a;border:1px solid #78350f;border-radius:6px;padding:10px;font-size:12px;color:#fbbf24;display:none">
+          You must be logged in to book a slot.
+        </div>
+
+        <div class="form-group">
+          <label>Content Type</label>
+          <div class="content-type-tabs">
+            <button class="ct-btn active" onclick="setContentType('markdown',this)">Markdown</button>
+            <button class="ct-btn" onclick="setContentType('svg',this)">SVG</button>
+            <button class="ct-btn" onclick="setContentType('image',this)">Image (base64)</button>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Start Time</label>
+            <input type="datetime-local" id="book-start">
+          </div>
+          <div class="form-group">
+            <label>End Time</label>
+            <input type="datetime-local" id="book-end">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Description <span style="color:#4b5563">(optional)</span></label>
+          <input type="text" id="book-desc" placeholder="Short description of this slot">
+        </div>
+
+        <div class="form-group">
+          <label>Content</label>
+          <textarea id="book-content" placeholder="Enter markdown, SVG, or base64 image data…"></textarea>
+          <div class="form-hint" id="content-hint">Markdown: use # headings, - bullets, **bold**</div>
+        </div>
+
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn-primary" onclick="submitBooking()">Book Slot</button>
+          <button class="btn-ghost" onclick="clearBookForm()">Clear</button>
+        </div>
+
+        <div id="book-conflict" style="display:none;background:#1a0a0a;border:1px solid #991b1b;border-radius:6px;padding:10px;font-size:12px;color:#fca5a5"></div>
       </div>
     </div>
 
-    <!-- Draw -->
-    <div id="tab-draw" class="tab-pane">
-      <div class="palette" id="palette"></div>
-      <div class="draw-controls">
-        <label>Size<input type="range" id="brush-size" min="2" max="80" value="8"></label>
-        <button class="btn-ghost" id="eraser-btn" onclick="toggleEraser()">✏ Brush</button>
-        <button class="btn-ghost" onclick="undoDraw()">↩ Undo</button>
-        <button class="btn-ghost" onclick="fillCanvas()">⬛ Fill</button>
-        <button class="btn-ghost" onclick="clearDraw()">□ Clear</button>
-        <button class="btn-primary" onclick="sendDrawing()">📺 Send to Display</button>
-      </div>
-      <div class="canvas-wrap">
-        <canvas id="draw-canvas" width="600" height="400"></canvas>
-      </div>
-    </div>
+  </div>
+</div>
 
-    <!-- History -->
-    <div id="tab-history" class="tab-pane">
-      <div id="history-grid" class="hist-grid"></div>
+<!-- Detail modal -->
+<div id="detail-modal" onclick="if(event.target===this)closeDetail()">
+  <div class="detail-box">
+    <h2 id="dm-title"></h2>
+    <div id="dm-rows"></div>
+    <div id="dm-content-wrap" style="display:none">
+      <div style="font-size:11px;color:#4b5563;margin-top:10px;margin-bottom:4px">Content:</div>
+      <div class="detail-content" id="dm-content"></div>
+    </div>
+    <img id="dm-img" class="detail-img" style="display:none" onclick="openImgModal(this.src)" alt="">
+    <div class="btn-row" style="margin-top:14px">
+      <button class="btn-ghost btn-sm" id="dm-cancel-btn" style="display:none" onclick="cancelFromDetail()">Cancel Booking</button>
+      <button class="btn-ghost btn-sm" onclick="closeDetail()">Close</button>
     </div>
   </div>
 </div>
 
-<!-- Modal -->
-<div id="modal" onclick="closeModal()"><img id="modal-img" alt=""></div>
+<!-- Image zoom modal -->
+<div id="img-modal" onclick="closeImgModal()">
+  <img id="img-modal-src" alt="">
+</div>
 
-<!-- Toast -->
 <div id="toast"></div>
 
 <script>
-// ── E-ink palette ──────────────────────────────────────────────────────────
-const PALETTE = [
-  { name:'Black',  hex:'#000000' },
-  { name:'White',  hex:'#ffffff' },
-  { name:'Yellow', hex:'#ffd700' },
-  { name:'Red',    hex:'#c81e1e' },
-  { name:'Blue',   hex:'#1e64c8' },
-  { name:'Green',  hex:'#1e9632' },
-]
-
 // ── State ──────────────────────────────────────────────────────────────────
-let uploadImg = null, uploadRotation = 0, uploadScale = 1, uploadOffsetX = 0, uploadOffsetY = 0
-let isDragging = false, dragStart = null, dragOffset = null
-let isDrawing = false, lastPt = null
-let drawColor = '#000000', brushSize = 8, eraserOn = false
-const undoStack = []
+let authToken = localStorage.getItem('epaper_token') || null
+let authUser  = localStorage.getItem('epaper_user')  || null
+let calOffset = 0          // days from today (start of week view)
+let allBookings = []       // cache from /api/history
+let listPage = 0
+const PAGE_SIZE = 20
+let currentContentType = 'markdown'
+let detailBookingId = null
+let activeBookingId = null
 
 // ── Tabs ───────────────────────────────────────────────────────────────────
-function showTab(name) {
+function showTab(name, btn) {
   document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'))
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'))
   document.getElementById('tab-' + name).classList.add('active')
-  event.currentTarget.classList.add('active')
-  if (name === 'history') loadHistory()
+  if (btn) btn.classList.add('active')
+  if (name === 'calendar') renderCalendar()
+  if (name === 'list') { listPage = 0; renderList() }
+  if (name === 'book') updateBookAuthWarn()
+}
+
+// ── Auth ───────────────────────────────────────────────────────────────────
+function updateAuthUI() {
+  const badge = document.getElementById('auth-badge')
+  const loggedIn = document.getElementById('auth-logged-in')
+  const formWrap = document.getElementById('auth-form-wrap')
+  if (authToken) {
+    badge.textContent = authUser || 'Logged in'
+    badge.className = 'authed'
+    loggedIn.style.display = ''
+    formWrap.style.display = 'none'
+    document.getElementById('auth-username').textContent = authUser || '—'
+  } else {
+    badge.textContent = 'NOT LOGGED IN'
+    badge.className = 'anon'
+    loggedIn.style.display = 'none'
+    formWrap.style.display = ''
+  }
+}
+
+async function doLogin() {
+  const user = document.getElementById('login-user').value.trim()
+  const pass = document.getElementById('login-pass').value
+  if (!user || !pass) { toast('Enter username and password', true); return }
+  try {
+    const r = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: user, password: pass })
+    })
+    const data = await r.json()
+    if (!r.ok || !data.access_token) {
+      toast(data.detail || 'Login failed', true); return
+    }
+    authToken = data.access_token
+    authUser  = user
+    localStorage.setItem('epaper_token', authToken)
+    localStorage.setItem('epaper_user', authUser)
+    updateAuthUI()
+    toast('Logged in as ' + user)
+    document.getElementById('login-pass').value = ''
+  } catch(e) { toast('Login error: ' + e.message, true) }
+}
+
+function logout() {
+  authToken = null; authUser = null
+  localStorage.removeItem('epaper_token')
+  localStorage.removeItem('epaper_user')
+  updateAuthUI()
+  toast('Logged out')
+}
+
+function authHeaders() {
+  return authToken ? { 'Authorization': 'Bearer ' + authToken, 'Content-Type': 'application/json' }
+                   : { 'Content-Type': 'application/json' }
 }
 
 // ── Status polling ─────────────────────────────────────────────────────────
 async function pollStatus() {
   try {
     const r = await fetch('/api/status')
+    if (!r.ok) return
     const s = await r.json()
     document.getElementById('s-mode').textContent = s.mode
-    document.getElementById('s-updated').textContent = new Date(s.last_updated * 1000).toLocaleTimeString()
-    const agW = document.getElementById('s-agent-wrap')
-    if (s.agent_name) { agW.style.display=''; document.getElementById('s-agent').textContent = s.agent_name }
-    else agW.style.display = 'none'
-    const nxW = document.getElementById('s-next-wrap')
-    if (s.next_refresh) { nxW.style.display=''; document.getElementById('s-next').textContent = new Date(s.next_refresh*1000).toLocaleTimeString() }
-    else nxW.style.display = 'none'
+    document.getElementById('s-updated').textContent = s.last_updated
+      ? new Date(s.last_updated * 1000).toLocaleTimeString() : '—'
     if (s.simulation) document.getElementById('sim-badge').style.display = ''
+
+    const bWrap = document.getElementById('s-booking-wrap')
+    if (s.current_booking) {
+      bWrap.style.display = ''
+      document.getElementById('s-booking').textContent = s.current_booking.principal_name
+    } else { bWrap.style.display = 'none' }
+
+    activeBookingId = s.current_booking ? s.current_booking.booking_id : null
+
+    // Active booking panel
+    const abSection = document.getElementById('active-booking-section')
+    if (s.current_booking) {
+      abSection.style.display = ''
+      const b = s.current_booking
+      const tag = `<span class="booking-tag tag-${b.principal_type}">${b.principal_type}</span>`
+      document.getElementById('active-booking-box').innerHTML =
+        `<div class="booking-title">${esc(b.description || b.principal_name)} ${tag}</div>
+         <div>${esc(b.principal_name)}</div>
+         <div>${fmtDt(b.start_time)} – ${fmtTime(b.end_time)}</div>`
+    } else { abSection.style.display = 'none' }
+
     document.getElementById('display-meta').innerHTML =
-      `<b>${s.mode}</b>${s.agent_name ? ' · ' + s.agent_name : ''}<br>Updated ${new Date(s.last_updated*1000).toLocaleTimeString()}`
+      `<b>${s.mode}</b>${s.current_booking ? ' · ' + esc(s.current_booking.principal_name) : ''}`
   } catch(e) {}
 }
 
-// ── Preview refresh ────────────────────────────────────────────────────────
 function refreshPreview() {
   const img = document.getElementById('preview-img')
-  img.src = '/api/preview?t=' + Date.now()
+  const newSrc = '/api/preview?t=' + Date.now()
+  const tmp = new Image()
+  tmp.onload = () => { img.src = newSrc }
+  tmp.onerror = () => {}
+  tmp.src = newSrc
 }
 
-// ── Actions ────────────────────────────────────────────────────────────────
-async function doAction(url, method='POST') {
+// ── Cancel active booking ──────────────────────────────────────────────────
+async function cancelActiveBooking() {
+  if (!activeBookingId) return
+  if (!authToken) { toast('Log in first', true); return }
+  if (!confirm('Cancel the current active booking?')) return
   try {
-    await fetch(url, { method })
-    toast('Done')
-    setTimeout(refreshPreview, 1000)
-  } catch(e) { toast('Error: ' + e.message) }
+    const r = await fetch('/api/book/' + activeBookingId, {
+      method: 'DELETE', headers: authHeaders()
+    })
+    if (r.status === 204) {
+      toast('Booking cancelled'); await fetchBookings()
+      renderCalendar(); renderList()
+    } else {
+      const d = await r.json()
+      toast((d.detail || 'Error'), true)
+    }
+  } catch(e) { toast(e.message, true) }
 }
 
-// ── Modal ──────────────────────────────────────────────────────────────────
-function openModal(src) {
-  document.getElementById('modal-img').src = src
-  document.getElementById('modal').classList.add('open')
+// ── Fetch all bookings ─────────────────────────────────────────────────────
+async function fetchBookings() {
+  try {
+    const r = await fetch('/api/history?limit=500')
+    if (r.ok) allBookings = await r.json()
+  } catch(e) {}
 }
-function closeModal() { document.getElementById('modal').classList.remove('open') }
-document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal() })
+
+// ── CALENDAR ───────────────────────────────────────────────────────────────
+const CAL_START_H = 0   // show all 24h
+const CAL_END_H   = 24
+const CAL_H       = 600 // px height for the day body
+const PX_PER_H    = CAL_H / (CAL_END_H - CAL_START_H)
+
+function calShift(days) { calOffset += days; renderCalendar() }
+function calGoToday()   { calOffset = 0;     renderCalendar() }
+
+function renderCalendar() {
+  const today = new Date(); today.setHours(0,0,0,0)
+  const start = new Date(today); start.setDate(start.getDate() + calOffset)
+  const end   = new Date(start); end.setDate(end.getDate() + 7)
+
+  // Title
+  const opts = { month:'short', day:'numeric' }
+  document.getElementById('cal-title').textContent =
+    start.toLocaleDateString(undefined, opts) + ' – ' + new Date(end.getTime()-1).toLocaleDateString(undefined, opts)
+
+  const days = []
+  for (let i=0;i<7;i++) {
+    const d = new Date(start); d.setDate(d.getDate() + i)
+    days.push(d)
+  }
+
+  // Build header
+  const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
+  let headerHtml = `<div class="cal-header"><div class="cal-header-time"></div>`
+  days.forEach(d => {
+    const isToday = d.toDateString() === today.toDateString()
+    headerHtml += `<div class="cal-header-day${isToday?' today':''}">${dayNames[d.getDay()]} ${d.getDate()}</div>`
+  })
+  headerHtml += `</div>`
+
+  // Build body
+  let bodyHtml = `<div class="cal-body">`
+  // Time column
+  bodyHtml += `<div class="cal-time-col" style="height:${CAL_H}px;position:relative">`
+  for (let h=CAL_START_H; h<=CAL_END_H; h++) {
+    const y = (h - CAL_START_H) * PX_PER_H
+    const label = h === 24 ? '' : (h === 0 ? '12am' : h < 12 ? h+'am' : h===12 ? '12pm' : (h-12)+'pm')
+    bodyHtml += `<div class="cal-time-label" style="top:${y}px">${label}</div>`
+  }
+  bodyHtml += `</div>`
+
+  // Day columns
+  days.forEach(d => {
+    bodyHtml += `<div class="cal-day-col" style="height:${CAL_H}px;position:relative">`
+    // Hour lines
+    for (let h=CAL_START_H; h<=CAL_END_H; h++) {
+      const y = (h - CAL_START_H) * PX_PER_H
+      bodyHtml += `<div class="cal-hour-line" style="top:${y}px"></div>`
+    }
+    // Bookings for this day
+    const dayStart = d.getTime()
+    const dayEnd   = dayStart + 86400000
+    const relevant = allBookings.filter(b => {
+      const bs = new Date(b.start_time).getTime()
+      const be = new Date(b.end_time).getTime()
+      return bs < dayEnd && be > dayStart
+    })
+    relevant.forEach(b => {
+      const bs = new Date(b.start_time)
+      const be = new Date(b.end_time)
+      const startH = Math.max(bs.getHours() + bs.getMinutes()/60, CAL_START_H)
+      const endH   = Math.min(be.getHours() + be.getMinutes()/60 + (be.getDate() !== bs.getDate() ? 24 : 0), CAL_END_H)
+      const top    = (startH - CAL_START_H) * PX_PER_H
+      const height = Math.max((endH - startH) * PX_PER_H, 14)
+      const now    = Date.now()
+      const expired = be.getTime() < now || b.cancelled
+      const cls = `cal-booking-block ${b.principal_type}${expired?' expired':''}`
+      const label = esc(b.description || b.principal_name)
+      bodyHtml += `<div class="${cls}" style="top:${top}px;height:${height}px" title="${label}" onclick="openDetail('${b.booking_id}')">${label}</div>`
+    })
+    bodyHtml += `</div>`
+  })
+  bodyHtml += `</div>`
+
+  // Now line
+  const nowDate = new Date()
+  const nowDayIdx = days.findIndex(d => d.toDateString() === nowDate.toDateString())
+  if (nowDayIdx >= 0) {
+    const nowH = nowDate.getHours() + nowDate.getMinutes()/60
+    if (nowH >= CAL_START_H && nowH <= CAL_END_H) {
+      // inject now-line after render
+    }
+  }
+
+  document.getElementById('cal-grid').innerHTML = headerHtml + bodyHtml
+
+  // Now line (DOM-based, injected after innerHTML set)
+  if (nowDayIdx >= 0) {
+    const nowH = new Date().getHours() + new Date().getMinutes()/60
+    const cols = document.querySelectorAll('.cal-day-col')
+    if (cols[nowDayIdx]) {
+      const line = document.createElement('div')
+      line.className = 'cal-now-line'
+      line.style.top = ((nowH - CAL_START_H) * PX_PER_H) + 'px'
+      cols[nowDayIdx].appendChild(line)
+    }
+  }
+}
+
+// ── LIST ───────────────────────────────────────────────────────────────────
+function renderList() {
+  const text   = document.getElementById('filter-text').value.toLowerCase()
+  const status = document.getElementById('filter-status').value
+  const type   = document.getElementById('filter-type').value
+  const now    = new Date()
+
+  let filtered = allBookings.filter(b => {
+    if (text && !JSON.stringify(b).toLowerCase().includes(text)) return false
+    if (type && b.principal_type !== type) return false
+    const bs = new Date(b.start_time), be = new Date(b.end_time)
+    if (status === 'upcoming') return !b.cancelled && bs > now
+    if (status === 'active')   return !b.cancelled && bs <= now && be > now
+    if (status === 'past')     return !b.cancelled && be <= now
+    if (status === 'cancelled') return b.cancelled
+    return true
+  })
+
+  const total = filtered.length
+  const pages = Math.ceil(total / PAGE_SIZE)
+  if (listPage >= pages && pages > 0) listPage = pages - 1
+  if (listPage < 0) listPage = 0
+  const slice = filtered.slice(listPage * PAGE_SIZE, (listPage+1) * PAGE_SIZE)
+
+  const body = document.getElementById('list-body')
+  if (!slice.length) {
+    body.innerHTML = `<div style="color:#4b5563;font-size:13px;text-align:center;padding:40px">No bookings found.</div>`
+  } else {
+    body.innerHTML = slice.map(b => {
+      const bs = new Date(b.start_time), be = new Date(b.end_time)
+      const isActive = !b.cancelled && bs <= new Date() && be > new Date()
+      const tag = `<span class="booking-tag tag-${b.principal_type}">${b.principal_type}</span>`
+      const cTag = b.cancelled ? `<span class="booking-tag tag-cancelled">cancelled</span>` : ''
+      const activeMark = isActive ? `<span class="booking-tag" style="background:#064e3b;color:#6ee7b7">LIVE</span>` : ''
+      const preview = b.content ? b.content.slice(0, 80).replace(/\n/g,' ') : ''
+      return `<div class="booking-row${b.cancelled?' cancelled':''}">
+        <div class="booking-row-left">
+          <div class="booking-row-title">${esc(b.description || b.principal_name)} ${tag} ${cTag} ${activeMark}</div>
+          <div class="booking-row-meta">
+            ${esc(b.principal_name)} · ${b.content_type} ·
+            ${fmtDt(b.start_time)} – ${fmtTime(b.end_time)}
+          </div>
+          ${preview ? `<div class="content-preview">${esc(preview)}</div>` : ''}
+        </div>
+        <div class="booking-row-actions">
+          <button class="btn-ghost btn-sm" onclick="openDetail('${b.booking_id}')">Detail</button>
+          ${!b.cancelled ? `<button class="btn-danger btn-sm" onclick="cancelBooking('${b.booking_id}')">Cancel</button>` : ''}
+        </div>
+      </div>`
+    }).join('')
+  }
+
+  // Pagination
+  const pag = document.getElementById('list-pagination')
+  if (pages <= 1) { pag.innerHTML = ''; return }
+  pag.innerHTML =
+    `<button class="btn-ghost btn-sm" onclick="listGo(${listPage-1})" ${listPage===0?'disabled':''}>&#8592;</button>
+     <span>Page ${listPage+1} of ${pages} (${total} total)</span>
+     <button class="btn-ghost btn-sm" onclick="listGo(${listPage+1})" ${listPage>=pages-1?'disabled':''}>&#8594;</button>`
+}
+
+function listGo(page) { listPage = page; renderList() }
+
+async function cancelBooking(id) {
+  if (!authToken) { toast('Log in first', true); return }
+  if (!confirm('Cancel this booking?')) return
+  try {
+    const r = await fetch('/api/book/' + id, { method:'DELETE', headers: authHeaders() })
+    if (r.status === 204) {
+      toast('Booking cancelled'); await fetchBookings(); renderList(); renderCalendar()
+    } else {
+      const d = await r.json()
+      toast(typeof d.detail === 'string' ? d.detail : JSON.stringify(d.detail), true)
+    }
+  } catch(e) { toast(e.message, true) }
+}
+
+// ── Detail modal ───────────────────────────────────────────────────────────
+function openDetail(id) {
+  const b = allBookings.find(x => x.booking_id === id)
+  if (!b) return
+  detailBookingId = id
+  document.getElementById('dm-title').textContent = b.description || b.principal_name
+
+  const rows = [
+    ['Booking ID', b.booking_id],
+    ['Principal', b.principal_name + ' (' + b.principal_type + ')'],
+    ['Content type', b.content_type],
+    ['Start', fmtDt(b.start_time)],
+    ['End', fmtDt(b.end_time)],
+    ['Status', b.cancelled ? 'Cancelled' : (new Date(b.end_time) < new Date() ? 'Past' : (new Date(b.start_time) <= new Date() ? 'Active' : 'Upcoming'))],
+    ['Created', fmtDt(b.created_at)],
+  ]
+  document.getElementById('dm-rows').innerHTML = rows.map(([k,v]) =>
+    `<div class="detail-row"><b>${k}</b>${esc(v)}</div>`).join('')
+
+  const cwrap = document.getElementById('dm-content-wrap')
+  const dcontent = document.getElementById('dm-content')
+  if (b.content_type === 'image') {
+    cwrap.style.display = 'none'
+  } else {
+    cwrap.style.display = ''
+    dcontent.textContent = b.content || '(empty)'
+  }
+
+  const dimg = document.getElementById('dm-img')
+  const imgSrc = '/api/history/' + id + '/image'
+  dimg.style.display = ''
+  dimg.src = imgSrc
+  dimg.onerror = () => { dimg.style.display = 'none' }
+
+  const cancelBtn = document.getElementById('dm-cancel-btn')
+  cancelBtn.style.display = (!b.cancelled && authToken) ? '' : 'none'
+
+  document.getElementById('detail-modal').classList.add('open')
+}
+
+async function cancelFromDetail() {
+  if (!detailBookingId) return
+  await cancelBooking(detailBookingId)
+  closeDetail()
+}
+
+function closeDetail() {
+  document.getElementById('detail-modal').classList.remove('open')
+  detailBookingId = null
+}
+
+// ── Image modal ────────────────────────────────────────────────────────────
+function openImgModal(src) {
+  document.getElementById('img-modal-src').src = src
+  document.getElementById('img-modal').classList.add('open')
+}
+function closeImgModal() { document.getElementById('img-modal').classList.remove('open') }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeDetail(); closeImgModal() }
+})
+
+// ── BOOK SLOT ──────────────────────────────────────────────────────────────
+function setContentType(type, btn) {
+  currentContentType = type
+  document.querySelectorAll('.ct-btn').forEach(b => b.classList.remove('active'))
+  btn.classList.add('active')
+  const hints = {
+    markdown: 'Markdown: use # headings, - bullets, **bold**',
+    svg: 'SVG: paste raw SVG XML (e.g. <svg xmlns=...>)</svg>)',
+    image: 'Image: paste base64-encoded PNG or JPEG data (without data:image prefix)',
+  }
+  document.getElementById('content-hint').textContent = hints[type] || ''
+  document.getElementById('book-content').placeholder =
+    type === 'markdown' ? '# Title\n\nYour content here…' :
+    type === 'svg' ? '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400">\n  …\n</svg>' :
+    'iVBORw0KGgoAAAANSUhEUgAA…'
+}
+
+function updateBookAuthWarn() {
+  document.getElementById('book-auth-warn').style.display = authToken ? 'none' : ''
+}
+
+function clearBookForm() {
+  document.getElementById('book-start').value = ''
+  document.getElementById('book-end').value = ''
+  document.getElementById('book-desc').value = ''
+  document.getElementById('book-content').value = ''
+  document.getElementById('book-conflict').style.display = 'none'
+}
+
+async function submitBooking() {
+  if (!authToken) { toast('Log in first', true); return }
+
+  const start = document.getElementById('book-start').value
+  const end   = document.getElementById('book-end').value
+  const desc  = document.getElementById('book-desc').value.trim()
+  const content = document.getElementById('book-content').value.trim()
+
+  if (!start || !end) { toast('Set start and end times', true); return }
+  if (!content) { toast('Enter content', true); return }
+
+  const conflictBox = document.getElementById('book-conflict')
+  conflictBox.style.display = 'none'
+
+  try {
+    const body = {
+      content_type: currentContentType,
+      content,
+      start_time: new Date(start).toISOString(),
+      end_time:   new Date(end).toISOString(),
+      description: desc,
+    }
+    const r = await fetch('/api/book', {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify(body),
+    })
+    if (r.status === 201) {
+      toast('Booking created!')
+      clearBookForm()
+      await fetchBookings()
+      renderCalendar()
+      showTab('calendar', document.querySelectorAll('.tab-btn')[0])
+    } else if (r.status === 409) {
+      const d = await r.json()
+      const conflicts = d.detail?.conflicts || []
+      conflictBox.style.display = ''
+      conflictBox.innerHTML = `<b>Conflict with ${conflicts.length} existing booking(s):</b><br>` +
+        conflicts.map(c =>
+          `• ${esc(c.principal_name)} (${c.principal_type}) — ${fmtDt(c.start_time)} to ${fmtTime(c.end_time)}: ${esc(c.description)}`
+        ).join('<br>')
+    } else {
+      const d = await r.json()
+      toast(typeof d.detail === 'string' ? d.detail : JSON.stringify(d.detail), true)
+    }
+  } catch(e) { toast(e.message, true) }
+}
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+function esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+}
+
+function fmtDt(iso) {
+  if (!iso) return '—'
+  const d = new Date(iso.endsWith('Z') ? iso : iso+'Z')
+  return d.toLocaleDateString(undefined,{month:'short',day:'numeric'}) + ' ' + d.toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'})
+}
+
+function fmtTime(iso) {
+  if (!iso) return '—'
+  const d = new Date(iso.endsWith('Z') ? iso : iso+'Z')
+  return d.toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'})
+}
 
 // ── Toast ──────────────────────────────────────────────────────────────────
-function toast(msg) {
+function toast(msg, err=false) {
   const t = document.getElementById('toast')
-  t.textContent = msg; t.classList.add('show')
-  setTimeout(() => t.classList.remove('show'), 2500)
+  t.textContent = msg
+  t.className = err ? 'err show' : 'show'
+  clearTimeout(t._timer)
+  t._timer = setTimeout(() => t.className = '', 3000)
 }
 
-// ── Canvas utils ───────────────────────────────────────────────────────────
-function coords(canvas, e) {
-  const r = canvas.getBoundingClientRect()
-  return { x: (e.clientX - r.left) * canvas.width / r.width,
-           y: (e.clientY - r.top)  * canvas.height / r.height }
-}
-
-// ── UPLOAD TAB ─────────────────────────────────────────────────────────────
-function loadFile(ev) {
-  const file = ev.target.files[0]; if (!file) return
-  document.getElementById('file-name').textContent = file.name
-  const reader = new FileReader()
-  reader.onload = e => {
-    const img = new Image()
-    img.onload = () => {
-      uploadImg = img; uploadRotation = 0; uploadScale = 1; uploadOffsetX = 0; uploadOffsetY = 0
-      fitUpload()
-      document.getElementById('edit-controls').style.display = 'flex'
-      document.getElementById('upload-overlay').style.display = 'none'
-    }
-    img.src = e.target.result
+// ── Pre-fill datetime ──────────────────────────────────────────────────────
+function prefillDatetimes() {
+  const now = new Date()
+  const start = new Date(now.getTime() + 60000)  // +1 min
+  const end   = new Date(now.getTime() + 3600000) // +1 hr
+  const fmt = d => {
+    const pad = n => String(n).padStart(2,'0')
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
   }
-  reader.readAsDataURL(file)
-}
-
-function getRotatedCanvas() {
-  const r90 = uploadRotation % 180 !== 0
-  const oc = document.createElement('canvas')
-  oc.width  = r90 ? uploadImg.naturalHeight : uploadImg.naturalWidth
-  oc.height = r90 ? uploadImg.naturalWidth  : uploadImg.naturalHeight
-  const ctx = oc.getContext('2d')
-  ctx.translate(oc.width/2, oc.height/2)
-  ctx.rotate(uploadRotation * Math.PI / 180)
-  ctx.drawImage(uploadImg, -uploadImg.naturalWidth/2, -uploadImg.naturalHeight/2)
-  return oc
-}
-
-function drawUpload() {
-  if (!uploadImg) return
-  const c = document.getElementById('upload-canvas')
-  const ctx = c.getContext('2d')
-  ctx.fillStyle = '#cccccc'; ctx.fillRect(0,0,600,400)
-  const src = getRotatedCanvas()
-  ctx.drawImage(src, uploadOffsetX, uploadOffsetY, src.width*uploadScale, src.height*uploadScale)
-}
-
-function fitUpload() {
-  if (!uploadImg) return
-  const src = getRotatedCanvas()
-  uploadScale = Math.min(600/src.width, 400/src.height)
-  uploadOffsetX = (600 - src.width*uploadScale)/2
-  uploadOffsetY = (400 - src.height*uploadScale)/2
-  document.getElementById('scale-slider').value = Math.round(uploadScale*100)
-  document.getElementById('scale-val').textContent = Math.round(uploadScale*100)+'%'
-  drawUpload()
-}
-
-function rotateUpload(deg) {
-  uploadRotation = (uploadRotation + deg + 360) % 360
-  fitUpload()
-}
-
-function onScale(v) {
-  const src = getRotatedCanvas()
-  const oldScale = uploadScale; uploadScale = v/100
-  // Scale around center
-  const cx = uploadOffsetX + src.width*oldScale/2
-  const cy = uploadOffsetY + src.height*oldScale/2
-  uploadOffsetX = cx - src.width*uploadScale/2
-  uploadOffsetY = cy - src.height*uploadScale/2
-  document.getElementById('scale-val').textContent = v+'%'
-  drawUpload()
-}
-
-function resetUpload() {
-  uploadRotation = 0; uploadScale = 1; uploadOffsetX = 0; uploadOffsetY = 0
-  document.getElementById('scale-slider').value = 100
-  document.getElementById('scale-val').textContent = '100%'
-  drawUpload()
-}
-
-// Drag to pan
-const uc = document.getElementById('upload-canvas')
-uc.addEventListener('mousedown', e => {
-  isDragging = true
-  const p = coords(uc, e); dragStart = p
-  dragOffset = { x: uploadOffsetX, y: uploadOffsetY }
-})
-uc.addEventListener('mousemove', e => {
-  if (!isDragging || !dragStart) return
-  const p = coords(uc, e)
-  uploadOffsetX = dragOffset.x + (p.x - dragStart.x)
-  uploadOffsetY = dragOffset.y + (p.y - dragStart.y)
-  drawUpload()
-})
-uc.addEventListener('mouseup', () => isDragging = false)
-uc.addEventListener('mouseleave', () => isDragging = false)
-
-async function sendUpload() {
-  const c = document.getElementById('upload-canvas')
-  // Render white background + image to final 600x400
-  const final = document.createElement('canvas'); final.width=600; final.height=400
-  const ctx = final.getContext('2d')
-  ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,600,400)
-  ctx.drawImage(c, 0,0)
-  const b64 = final.toDataURL('image/png').split(',')[1]
-  const r = await fetch('/api/display-image', {
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ image_b64: b64, description: 'upload' })
-  })
-  if (r.ok) { toast('Sent to display!'); setTimeout(refreshPreview, 2000) }
-  else toast('Error sending')
-}
-
-// ── DRAW TAB ───────────────────────────────────────────────────────────────
-function buildPalette() {
-  const wrap = document.getElementById('palette')
-  PALETTE.forEach(c => {
-    const s = document.createElement('div')
-    s.className = 'swatch' + (c.hex === drawColor ? ' active' : '')
-    s.dataset.color = c.hex
-    s.title = c.name
-    s.style.background = c.hex
-    s.onclick = () => {
-      document.querySelectorAll('.swatch').forEach(x => x.classList.remove('active'))
-      s.classList.add('active')
-      drawColor = c.hex; eraserOn = false
-      document.getElementById('eraser-btn').textContent = '✏ Brush'
-      document.getElementById('eraser-btn').classList.remove('eraser-active')
-    }
-    wrap.appendChild(s)
-  })
-}
-
-function toggleEraser() {
-  eraserOn = !eraserOn
-  const btn = document.getElementById('eraser-btn')
-  btn.textContent = eraserOn ? '⬜ Eraser' : '✏ Brush'
-  btn.classList.toggle('eraser-active', eraserOn)
-}
-
-function initDrawCanvas() {
-  const dc = document.getElementById('draw-canvas')
-  const ctx = dc.getContext('2d')
-  ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,600,400)
-
-  const snap = () => {
-    if (undoStack.length >= 30) undoStack.shift()
-    undoStack.push(ctx.getImageData(0,0,600,400))
-  }
-
-  dc.addEventListener('mousedown', e => {
-    snap(); isDrawing = true
-    const p = coords(dc, e); lastPt = p
-    ctx.beginPath(); ctx.arc(p.x, p.y, getBrushR(), 0, Math.PI*2)
-    ctx.fillStyle = eraserOn ? '#ffffff' : drawColor; ctx.fill()
-  })
-  dc.addEventListener('mousemove', e => {
-    if (!isDrawing) return
-    const p = coords(dc, e)
-    ctx.beginPath(); ctx.moveTo(lastPt.x, lastPt.y); ctx.lineTo(p.x, p.y)
-    ctx.strokeStyle = eraserOn ? '#ffffff' : drawColor
-    ctx.lineWidth = getBrushR()*2; ctx.lineCap = 'round'; ctx.lineJoin = 'round'
-    ctx.stroke(); lastPt = p
-  })
-  dc.addEventListener('mouseup', () => isDrawing = false)
-  dc.addEventListener('mouseleave', () => isDrawing = false)
-
-  // Touch
-  const tc = (e, fn) => { e.preventDefault(); fn(e.touches[0]) }
-  dc.addEventListener('touchstart', e => tc(e, ev => dc.dispatchEvent(new MouseEvent('mousedown', {clientX:ev.clientX,clientY:ev.clientY}))))
-  dc.addEventListener('touchmove',  e => tc(e, ev => dc.dispatchEvent(new MouseEvent('mousemove', {clientX:ev.clientX,clientY:ev.clientY}))))
-  dc.addEventListener('touchend',   e => { e.preventDefault(); isDrawing = false })
-}
-
-function getBrushR() { return parseInt(document.getElementById('brush-size').value)/2 }
-
-function undoDraw() {
-  if (!undoStack.length) return
-  const dc = document.getElementById('draw-canvas')
-  dc.getContext('2d').putImageData(undoStack.pop(), 0, 0)
-}
-
-function fillCanvas() {
-  const dc = document.getElementById('draw-canvas')
-  const ctx = dc.getContext('2d')
-  if (undoStack.length >= 30) undoStack.shift()
-  undoStack.push(ctx.getImageData(0,0,600,400))
-  ctx.fillStyle = eraserOn ? '#ffffff' : drawColor
-  ctx.fillRect(0,0,600,400)
-}
-
-function clearDraw() {
-  const dc = document.getElementById('draw-canvas')
-  const ctx = dc.getContext('2d')
-  if (undoStack.length >= 30) undoStack.shift()
-  undoStack.push(ctx.getImageData(0,0,600,400))
-  ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,600,400)
-}
-
-async function sendDrawing() {
-  const dc = document.getElementById('draw-canvas')
-  const b64 = dc.toDataURL('image/png').split(',')[1]
-  const r = await fetch('/api/display-image', {
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ image_b64: b64, description: 'drawing' })
-  })
-  if (r.ok) { toast('Drawing sent!'); setTimeout(refreshPreview, 2000) }
-  else toast('Error sending')
-}
-
-// ── HISTORY TAB ────────────────────────────────────────────────────────────
-async function loadHistory() {
-  const grid = document.getElementById('history-grid')
-  grid.innerHTML = '<p class="empty">Loading…</p>'
-  try {
-    const entries = await (await fetch('/api/history')).json()
-    if (!entries.length) { grid.innerHTML = '<p class="empty">No history yet.</p>'; return }
-    grid.innerHTML = entries.map(e => `
-      <div class="hist-card">
-        <img src="/api/history/${e.id}/image" loading="lazy"
-             onclick="openModal('/api/history/${e.id}/image')" alt="">
-        <div class="hist-info">
-          <div class="hist-time">${new Date(e.timestamp*1000).toLocaleString()}</div>
-          <div class="hist-desc">${e.description}</div>
-        </div>
-        <div class="hist-actions">
-          <button class="btn-ghost btn-sm" onclick="redisplay('${e.id}')">📺 Show</button>
-          <button class="btn-danger btn-sm" onclick="deleteEntry('${e.id}',this)">🗑</button>
-        </div>
-      </div>
-    `).join('')
-  } catch(e) { grid.innerHTML = '<p class="empty">Error loading history.</p>' }
-}
-
-async function redisplay(id) {
-  const r = await fetch(`/api/history/${id}/image`)
-  const blob = await r.blob()
-  const b64 = await new Promise(res => {
-    const rd = new FileReader(); rd.onload = e => res(e.target.result.split(',')[1]); rd.readAsDataURL(blob)
-  })
-  await fetch('/api/display-image', {
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ image_b64: b64, description: 'redisplay from history' })
-  })
-  toast('Sent to display!'); setTimeout(refreshPreview, 2000)
-}
-
-async function deleteEntry(id, btn) {
-  await fetch(`/api/history/${id}`, { method:'DELETE' })
-  btn.closest('.hist-card').remove()
-  toast('Deleted')
+  document.getElementById('book-start').value = fmt(start)
+  document.getElementById('book-end').value   = fmt(end)
 }
 
 // ── Init ───────────────────────────────────────────────────────────────────
-buildPalette()
-initDrawCanvas()
-pollStatus()
+updateAuthUI()
+prefillDatetimes()
+updateBookAuthWarn()
+
+async function init() {
+  await fetchBookings()
+  renderCalendar()
+  pollStatus()
+}
+init()
+
 setInterval(pollStatus, 5000)
-setInterval(refreshPreview, 10000)
+setInterval(refreshPreview, 15000)
+setInterval(async () => { await fetchBookings(); renderCalendar() }, 30000)
+
+// Refresh preview on load
+const img = document.getElementById('preview-img')
+img.src = '/api/preview?t=' + Date.now()
 </script>
 </body>
 </html>

@@ -6,6 +6,8 @@ Colours are chosen from the 6-colour Spectra 6 palette so quantisation
 is lossless for UI elements.
 """
 
+import base64
+import io
 import textwrap
 from datetime import datetime
 
@@ -149,6 +151,102 @@ def render_message(agent: str, title: str, body: str,
     draw.text((20, HEIGHT - 30), foot, font=_font(18), fill=(80, 80, 80))
 
     return img
+
+
+def render_booking_header(draw: ImageDraw.ImageDraw, principal_name: str,
+                          start_time: datetime, end_time: datetime) -> int:
+    """Draw a standard booking header bar. Returns the y position after the header."""
+    draw.rectangle([0, 0, WIDTH, 50], fill=FG)
+    draw.text((16, 10), principal_name, font=_font(26), fill=BG)
+    slot = f"{start_time.strftime('%d %b  %H:%M')} – {end_time.strftime('%H:%M')}"
+    draw.text((WIDTH - 280, 14), slot, font=_font(20), fill=BG)
+    return 60
+
+
+def render_markdown(content: str, principal_name: str,
+                    start_time: datetime, end_time: datetime) -> Image.Image:
+    """Render simple Markdown to the e-ink display.
+    Supports: # headings, - bullet points, **bold** (bold marker stripped), plain paragraphs.
+    """
+    img  = Image.new("RGB", (WIDTH, HEIGHT), BG)
+    draw = ImageDraw.Draw(img)
+    y = render_booking_header(draw, principal_name, start_time, end_time)
+
+    for raw_line in content.splitlines():
+        if y >= HEIGHT - 20:
+            break
+        line = raw_line.rstrip()
+
+        if not line:
+            y += 8
+            continue
+
+        # Strip bold/italic markers for rendering
+        clean = line.replace("**", "").replace("__", "").replace("*", "").replace("_", "")
+
+        if line.startswith("### "):
+            draw.text((16, y), clean[4:], font=_font(20), fill=FG)
+            y += 28
+        elif line.startswith("## "):
+            draw.text((16, y), clean[3:], font=_font(24), fill=FG)
+            y += 32
+        elif line.startswith("# "):
+            draw.text((16, y), clean[2:], font=_font(28), fill=FG)
+            y += 38
+        elif line.startswith(("- ", "* ", "+ ")):
+            text = clean[2:]
+            for i, wrapped in enumerate(textwrap.wrap(text, width=46)):
+                if y >= HEIGHT - 20:
+                    break
+                draw.text((16, y), ("•  " if i == 0 else "   ") + wrapped, font=_font(18), fill=FG)
+                y += 24
+        else:
+            for wrapped in textwrap.wrap(clean, width=52):
+                if y >= HEIGHT - 20:
+                    break
+                draw.text((16, y), wrapped, font=_font(18), fill=FG)
+                y += 24
+
+    return img
+
+
+def render_svg(content: str, principal_name: str,
+               start_time: datetime, end_time: datetime) -> Image.Image:
+    """Render an SVG string to the display. Falls back to error message if cairosvg unavailable."""
+    try:
+        import cairosvg
+        png_bytes = cairosvg.svg2png(
+            bytestring=content.encode(),
+            output_width=WIDTH,
+            output_height=HEIGHT,
+        )
+        img = Image.open(io.BytesIO(png_bytes)).convert("RGB").resize((WIDTH, HEIGHT), Image.LANCZOS)
+        return img
+    except ImportError:
+        return render_markdown(
+            "# SVG not supported\n\ncairosvg is not installed.\n\nUse markdown or image instead.",
+            principal_name, start_time, end_time,
+        )
+    except Exception as exc:
+        return render_markdown(
+            f"# SVG render error\n\n{exc}",
+            principal_name, start_time, end_time,
+        )
+
+
+def render_image(content_b64: str, principal_name: str,
+                 start_time: datetime, end_time: datetime) -> Image.Image:
+    """Render a base64-encoded PNG/JPEG to the display."""
+    try:
+        png_bytes = base64.b64decode(content_b64)
+        img = Image.open(io.BytesIO(png_bytes)).convert("RGB")
+        img = img.resize((WIDTH, HEIGHT), Image.LANCZOS)
+        return img
+    except Exception as exc:
+        return render_markdown(
+            f"# Image render error\n\n{exc}",
+            principal_name, start_time, end_time,
+        )
 
 
 def render_list(agent: str, title: str, items: list[str],

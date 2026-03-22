@@ -1,27 +1,28 @@
 """
 EPaperService — FastAPI entry point.
 
-Owns the Waveshare 3.6inch e-Paper HAT+ (E) (600×400, 6-colour Spectra 6).
+Controls the Waveshare 3.6inch e-Paper HAT+ (E) (600×400, 6-colour Spectra 6).
 - Idle mode: refreshes stats at :00/:20/:40 of every hour.
-- Agent mode: displays agent-pushed content; reverts to idle on expiry or /release.
+- Booking mode: displays agent/user-booked content for the reserved time window.
 """
 
 import asyncio
 import io
-import json
 import logging
-import uuid
 from contextlib import asynccontextmanager
-from datetime import datetime, timedelta
+from datetime import datetime, timezone
 from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
+from sqlalchemy import select
 
 from .config import settings
+from .database import init_db, get_db, AsyncSessionLocal
+from .models import Booking
 from .routers.epaper import router as epaper_router
-from .state import HistoryEntry, state
+from .state import state
 
 logging.basicConfig(
     level=logging.INFO,
@@ -31,114 +32,124 @@ logger = logging.getLogger(__name__)
 
 _STATIC  = Path(__file__).parent / "static"
 DATA_DIR = Path(__file__).parent.parent / "data"
-HIST_MAX = 50
 
 
-# ── disk helpers ──────────────────────────────────────────────────────────────
+# ── image helpers ─────────────────────────────────────────────────────────────
 
-def _hist_json() -> Path:
-    return DATA_DIR / "history.json"
-
-
-def _img_path(entry_id: str) -> Path:
-    return DATA_DIR / f"{entry_id}.png"
+def _booking_img_path(booking_id: str) -> Path:
+    return DATA_DIR / "bookings" / f"{booking_id}.png"
 
 
-def _save_history_index():
-    _hist_json().write_text(
-        json.dumps([
-            {"id": e.id, "timestamp": e.timestamp,
-             "mode": e.mode, "agent": e.agent, "description": e.description}
-            for e in state.history
-        ], indent=2)
-    )
+def _save_booking_png(booking_id: str, png: bytes) -> None:
+    p = _booking_img_path(booking_id)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_bytes(png)
 
 
-def _load_history_index():
-    if not _hist_json().exists():
-        return
-    try:
-        raw = json.loads(_hist_json().read_text())
-        for r in raw:
-            p = _img_path(r["id"])
-            if p.exists():
-                state.history.append(HistoryEntry(**r))
-        logger.info("Loaded %d history entries from disk", len(state.history))
-    except Exception as exc:
-        logger.warning("Could not load history index: %s", exc)
+# ── display helpers ───────────────────────────────────────────────────────────
 
+async def push_image(img, booking: Booking | None = None) -> None:
+    """Push a PIL image to the display (non-blocking). Saves PNG for preview."""
+    from . import display
 
-# ── helpers ───────────────────────────────────────────────────────────────────
-
-def next_refresh_ts() -> float:
-    """Unix timestamp of the next :00/:20/:40 minute boundary."""
-    now = datetime.now()
-    interval = settings.idle_interval_min
-    mark = (now.minute // interval + 1) * interval
-    if mark >= 60:
-        nxt = now.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
-    else:
-        nxt = now.replace(minute=mark, second=0, microsecond=0)
-    return nxt.timestamp()
-
-
-def _record(img, mode: str, agent: str | None, description: str):
-    """Save PIL image as PNG to disk and append a history entry."""
-    from PIL import Image  # noqa
-
-    entry_id = uuid.uuid4().hex[:12]
     buf = io.BytesIO()
     img.save(buf, format="PNG")
     png = buf.getvalue()
 
     state.current_image_png = png
-    _img_path(entry_id).write_bytes(png)
+    state.last_updated = datetime.now(timezone.utc).timestamp()
 
-    entry = HistoryEntry(
-        id=entry_id,
-        timestamp=datetime.now().timestamp(),
-        mode=mode,
-        agent=agent,
-        description=description,
-    )
-    state.history.append(entry)
-    if len(state.history) > HIST_MAX:
-        old = state.history.pop(0)
-        _img_path(old.id).unlink(missing_ok=True)
+    if booking:
+        _save_booking_png(booking.booking_id, png)
 
-    _save_history_index()
-
-
-async def push_image(img, mode: str = "agent",
-                     agent: str | None = None,
-                     description: str = "agent message") -> None:
-    """Push a PIL image to the display (non-blocking) and record to history."""
-    from . import display
-    _record(img, mode, agent, description)
     await asyncio.to_thread(display.show, img)
 
 
 async def refresh_stats() -> None:
-    """Render and push the idle stats screen."""
+    """Render and push the idle stats screen (not logged to booking history)."""
     from . import renderer
-    logger.info("Refreshing stats display")
+    logger.info("Refreshing idle stats display")
     img = await asyncio.to_thread(renderer.render_stats)
-    await push_image(img, mode="stats", agent=None, description="stats refresh")
-    state.last_updated = datetime.now().timestamp()
+    state.mode = "idle"
+    state.current_booking_id = None
+    state.agent_name = None
+    await push_image(img)
 
 
-# ── idle loop ─────────────────────────────────────────────────────────────────
+def render_booking(booking: Booking):
+    """Render a booking's content to a PIL image (synchronous, run in thread)."""
+    from . import renderer
+    from datetime import timezone as tz
 
-async def _idle_loop() -> None:
+    start = booking.start_time.replace(tzinfo=tz.utc) if booking.start_time.tzinfo is None else booking.start_time
+    end   = booking.end_time.replace(tzinfo=tz.utc)   if booking.end_time.tzinfo is None else booking.end_time
+
+    if booking.content_type == "svg":
+        return renderer.render_svg(booking.content, booking.principal_name, start, end)
+    elif booking.content_type == "image":
+        return renderer.render_image(booking.content, booking.principal_name, start, end)
+    else:  # markdown (default)
+        return renderer.render_markdown(booking.content, booking.principal_name, start, end)
+
+
+# ── booking query ─────────────────────────────────────────────────────────────
+
+async def get_active_booking() -> Booking | None:
+    """Return the active (non-cancelled, within time window) booking, or None."""
+    now = datetime.now(timezone.utc).replace(tzinfo=None)  # DB stores naive UTC
+    async with AsyncSessionLocal() as db:
+        result = await db.execute(
+            select(Booking)
+            .where(
+                Booking.cancelled == False,  # noqa: E712
+                Booking.start_time <= now,
+                Booking.end_time > now,
+            )
+            .order_by(Booking.start_time)
+            .limit(1)
+        )
+        return result.scalar_one_or_none()
+
+
+# ── display loop ──────────────────────────────────────────────────────────────
+
+async def _display_loop() -> None:
+    """
+    Unified display loop:
+    - Activates bookings at their start_time
+    - Reverts to idle on booking expiry
+    - Refreshes idle stats every idle_interval_min minutes
+    """
+    import time
+    last_stats_refresh = 0.0
+
     await refresh_stats()
+    last_stats_refresh = time.time()
+
     while True:
-        sleep_s = next_refresh_ts() - datetime.now().timestamp()
-        await asyncio.sleep(max(sleep_s, 1))
-        if state.is_expired():
-            logger.info("Agent display expired, returning to idle")
-            state.release()
-        if state.mode == "idle":
-            await refresh_stats()
+        try:
+            active = await get_active_booking()
+
+            if active:
+                if active.booking_id != state.current_booking_id:
+                    logger.info("Activating booking %s by %s", active.booking_id, active.principal_name)
+                    state.mode = "booked"
+                    state.current_booking_id = active.booking_id
+                    state.agent_name = active.principal_name
+                    img = await asyncio.to_thread(render_booking, active)
+                    await push_image(img, booking=active)
+            else:
+                if state.current_booking_id is not None:
+                    logger.info("Booking %s expired, reverting to idle", state.current_booking_id)
+                    await refresh_stats()
+                    last_stats_refresh = time.time()
+                elif time.time() - last_stats_refresh >= settings.idle_interval_min * 60:
+                    await refresh_stats()
+                    last_stats_refresh = time.time()
+        except Exception as exc:
+            logger.error("Display loop error: %s", exc)
+
+        await asyncio.sleep(30)
 
 
 # ── lifespan ──────────────────────────────────────────────────────────────────
@@ -146,9 +157,10 @@ async def _idle_loop() -> None:
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     DATA_DIR.mkdir(parents=True, exist_ok=True)
-    _load_history_index()
+    (DATA_DIR / "bookings").mkdir(parents=True, exist_ok=True)
+    await init_db()
     logger.info("EPaperService starting on %s:%d", settings.host, settings.port)
-    task = asyncio.create_task(_idle_loop())
+    task = asyncio.create_task(_display_loop())
     yield
     task.cancel()
     logger.info("EPaperService shutting down.")
@@ -158,12 +170,8 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="EPaperService",
-    description=(
-        "Controls the Waveshare 3.6inch e-Paper HAT+ (E) display.\n\n"
-        "Idle mode refreshes server stats every 20 minutes.\n\n"
-        "Agents can call **POST /api/show** to take over the display."
-    ),
-    version="1.1.0",
+    description="Controls the Waveshare 3.6inch e-Paper HAT+ (E) display with a booking schedule.",
+    version="2.0.0",
     lifespan=lifespan,
 )
 
@@ -185,4 +193,5 @@ async def health():
         "service": "EPaperService",
         "simulation": is_simulation(),
         "display_mode": state.mode,
+        "current_booking": state.current_booking_id,
     }

@@ -3,5 +3,9 @@ uvicorn[standard]
 pydantic-settings
 pillow
 psutil
+httpx
+sqlalchemy
+aiosqlite
+cairosvg
 RPi.GPIO
 spidev
