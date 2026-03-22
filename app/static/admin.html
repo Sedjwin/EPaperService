@@ -32,18 +32,18 @@ header h1 span{color:#f59e0b;margin-right:6px}
 .no-image{width:100%;aspect-ratio:3/2;background:#1f2937;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#374151;font-size:12px}
 
 .meta{font-size:11px;color:#6b7280;margin-top:6px;line-height:1.6}
-.meta b{color:#9ca3af}
 
 .active-booking-box{background:#1a1a2e;border:1px solid #1f2937;border-radius:6px;padding:8px;font-size:11px;color:#9ca3af;line-height:1.7}
 .active-booking-box .booking-title{font-size:12px;font-weight:600;color:#f3f4f6;margin-bottom:4px}
-.active-booking-box .booking-tag{font-size:10px;padding:1px 6px;border-radius:99px;font-weight:600;margin-left:4px}
+.booking-tag{font-size:10px;padding:1px 6px;border-radius:99px;font-weight:600;margin-left:4px}
 .tag-human{background:#1e3a5f;color:#60a5fa}
-.tag-agent{background:#1e3040;color:#a78bfa}
+.tag-agent{background:#2e1a5f;color:#c4b5fd}
 .tag-cancelled{background:#450a0a;color:#fca5a5}
 
 button{cursor:pointer;border:none;border-radius:6px;font-size:12px;font-weight:500;padding:6px 12px;transition:all .15s}
 .btn-ghost{background:#1f2937;color:#9ca3af}
 .btn-ghost:hover{background:#374151;color:#f3f4f6}
+.btn-ghost:disabled{opacity:.4;cursor:default}
 .btn-primary{background:#f59e0b;color:#000;font-weight:700}
 .btn-primary:hover{background:#fbbf24}
 .btn-danger{background:#7f1d1d;color:#fca5a5}
@@ -51,25 +51,24 @@ button{cursor:pointer;border:none;border-radius:6px;font-size:12px;font-weight:5
 .btn-sm{padding:4px 10px;font-size:11px}
 .btn-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 
-/* ── Auth form ── */
 .auth-form input{width:100%;background:#1f2937;border:1px solid #374151;border-radius:5px;padding:5px 8px;color:#f3f4f6;font-size:12px;margin-bottom:6px}
 .auth-form input:focus{outline:none;border-color:#f59e0b}
-.auth-info{font-size:11px;color:#6b7280;margin-top:6px}
+.auth-info{font-size:11px;color:#6b7280;margin-top:4px}
 .auth-info b{color:#d1d5db}
 
 /* ── Right panel ── */
 .right{flex:1;display:flex;flex-direction:column;min-width:0}
-.tabs-bar{display:flex;gap:0;border-bottom:1px solid #1f2937;background:#111827;flex-shrink:0}
+.tabs-bar{display:flex;border-bottom:1px solid #1f2937;background:#111827;flex-shrink:0}
 .tab-btn{padding:11px 18px;font-size:13px;font-weight:500;color:#6b7280;background:none;border-radius:0;border-bottom:2px solid transparent}
 .tab-btn:hover{color:#d1d5db;background:#1f2937}
 .tab-btn.active{color:#f59e0b;border-bottom-color:#f59e0b}
 .tab-pane{display:none;flex:1;overflow:auto;padding:16px}
 .tab-pane.active{display:flex;flex-direction:column;gap:12px}
 
-/* ── Calendar tab ── */
+/* ── Calendar ── */
 .cal-nav{display:flex;align-items:center;gap:10px}
 .cal-nav h2{font-size:14px;font-weight:600;color:#f3f4f6;flex:1}
-.cal-grid{position:relative;overflow-x:auto}
+.cal-grid{overflow-x:auto}
 .cal-header{display:flex;border-bottom:1px solid #1f2937;margin-bottom:2px}
 .cal-header-time{width:52px;flex-shrink:0}
 .cal-header-day{flex:1;min-width:80px;text-align:center;padding:4px 0;font-size:11px;color:#6b7280;border-left:1px solid #1f2937}
@@ -87,7 +86,7 @@ button{cursor:pointer;border:none;border-radius:6px;font-size:12px;font-weight:5
 .cal-now-line{position:absolute;left:0;right:0;border-top:2px solid #ef4444;pointer-events:none;z-index:5}
 .cal-now-line::before{content:'';position:absolute;left:-4px;top:-4px;width:8px;height:8px;background:#ef4444;border-radius:50%}
 
-/* ── List tab ── */
+/* ── List ── */
 .list-filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .list-filters input,.list-filters select{background:#1f2937;border:1px solid #374151;border-radius:5px;padding:5px 8px;color:#f3f4f6;font-size:12px}
 .list-filters input:focus,.list-filters select:focus{outline:none;border-color:#f59e0b}
@@ -101,20 +100,38 @@ button{cursor:pointer;border:none;border-radius:6px;font-size:12px;font-weight:5
 .pagination{display:flex;gap:8px;align-items:center;justify-content:center;padding:8px 0}
 .pagination span{font-size:12px;color:#6b7280}
 
-/* ── Book Slot tab ── */
-.book-form{max-width:600px;display:flex;flex-direction:column;gap:14px}
+/* ── Book tab layout ── */
+.book-layout{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap}
+.book-form{flex:1;min-width:300px;max-width:520px;display:flex;flex-direction:column;gap:14px}
+.book-preview-col{flex:1;min-width:260px;display:flex;flex-direction:column;gap:8px}
+.book-preview-col .section-label{font-size:10px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.8px}
+.preview-canvas-wrap{position:relative;border:1px solid #1f2937;border-radius:8px;overflow:hidden;background:#f5f5f5;line-height:0}
+.preview-canvas-wrap canvas{display:block;width:100%;height:auto}
+.preview-empty{display:flex;align-items:center;justify-content:center;height:140px;background:#111827;border-radius:8px;color:#4b5563;font-size:12px;border:1px solid #1f2937}
+.preview-note{font-size:10px;color:#4b5563;text-align:center}
+
+/* ── Form elements ── */
 .form-group{display:flex;flex-direction:column;gap:4px}
 .form-group label{font-size:12px;color:#9ca3af;font-weight:500}
 .form-group input,.form-group select,.form-group textarea{background:#1f2937;border:1px solid #374151;border-radius:6px;padding:8px 10px;color:#f3f4f6;font-size:13px;font-family:inherit}
 .form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:#f59e0b}
-.form-group textarea{min-height:120px;resize:vertical}
+.form-group textarea{min-height:110px;resize:vertical;font-family:monospace;font-size:12px}
 .form-row{display:flex;gap:10px}
 .form-row .form-group{flex:1}
 .form-hint{font-size:11px;color:#4b5563;margin-top:2px}
-.content-type-tabs{display:flex;gap:0;border:1px solid #374151;border-radius:6px;overflow:hidden}
+.content-type-tabs{display:flex;border:1px solid #374151;border-radius:6px;overflow:hidden}
 .ct-btn{flex:1;padding:6px 0;font-size:12px;font-weight:500;background:#1f2937;color:#6b7280;border-radius:0}
 .ct-btn:hover{background:#374151;color:#d1d5db}
 .ct-btn.active{background:#f59e0b;color:#000}
+
+/* ── Image drop zone ── */
+.img-dropzone{border:2px dashed #374151;border-radius:8px;padding:24px 16px;text-align:center;cursor:pointer;transition:all .2s;background:#111827}
+.img-dropzone:hover,.img-dropzone.drag-over{border-color:#f59e0b;background:#1a1506}
+.img-dropzone-text{font-size:13px;color:#6b7280;margin-bottom:10px}
+.img-dropzone-text b{color:#9ca3af;display:block;margin-bottom:4px;font-size:14px}
+.img-dropzone-actions{display:flex;gap:8px;justify-content:center}
+.img-loaded-info{display:flex;align-items:center;gap:10px;background:#1f2937;border-radius:6px;padding:8px 10px;font-size:12px;color:#9ca3af}
+.img-loaded-info button{padding:3px 8px;font-size:11px}
 
 /* ── Detail modal ── */
 #detail-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999;align-items:center;justify-content:center}
@@ -157,7 +174,7 @@ button{cursor:pointer;border:none;border-radius:6px;font-size:12px;font-weight:5
 
     <div class="panel-section">
       <div class="section-label">Current Display</div>
-      <div class="preview-wrap" id="preview-wrap" onclick="openImgModal('/api/preview?t='+Date.now())">
+      <div class="preview-wrap" onclick="openImgModal('/api/preview?t='+Date.now())">
         <img id="preview-img" src="" alt="" style="display:none"
              onload="this.style.display='';document.getElementById('no-img').style.display='none'"
              onerror="this.style.display='none';document.getElementById('no-img').style.display='flex'">
@@ -171,7 +188,7 @@ button{cursor:pointer;border:none;border-radius:6px;font-size:12px;font-weight:5
       <div class="section-label">Active Booking</div>
       <div id="active-booking-box" class="active-booking-box"></div>
       <div class="btn-row">
-        <button class="btn-danger btn-sm" id="cancel-active-btn" onclick="cancelActiveBooking()">Cancel Booking</button>
+        <button class="btn-danger btn-sm" onclick="cancelActiveBooking()">Cancel Booking</button>
       </div>
     </div>
 
@@ -212,9 +229,9 @@ button{cursor:pointer;border:none;border-radius:6px;font-size:12px;font-weight:5
     <!-- CALENDAR -->
     <div id="tab-calendar" class="tab-pane active">
       <div class="cal-nav">
-        <button class="btn-ghost btn-sm" onclick="calShift(-7)">&#8592; Prev week</button>
+        <button class="btn-ghost btn-sm" onclick="calShift(-7)">&#8592; Prev</button>
         <h2 id="cal-title"></h2>
-        <button class="btn-ghost btn-sm" onclick="calShift(7)">Next week &#8594;</button>
+        <button class="btn-ghost btn-sm" onclick="calShift(7)">Next &#8594;</button>
         <button class="btn-ghost btn-sm" onclick="calGoToday()">Today</button>
       </div>
       <div class="cal-grid" id="cal-grid"></div>
@@ -243,48 +260,84 @@ button{cursor:pointer;border:none;border-radius:6px;font-size:12px;font-weight:5
 
     <!-- BOOK SLOT -->
     <div id="tab-book" class="tab-pane">
-      <div class="book-form">
-        <div id="book-auth-warn" style="background:#1a1a0a;border:1px solid #78350f;border-radius:6px;padding:10px;font-size:12px;color:#fbbf24;display:none">
-          You must be logged in to book a slot.
-        </div>
+      <div id="book-auth-warn" style="background:#1a1a0a;border:1px solid #78350f;border-radius:6px;padding:10px;font-size:12px;color:#fbbf24;display:none">
+        You must be logged in to book a slot.
+      </div>
+      <div class="book-layout">
 
-        <div class="form-group">
-          <label>Content Type</label>
-          <div class="content-type-tabs">
-            <button class="ct-btn active" onclick="setContentType('markdown',this)">Markdown</button>
-            <button class="ct-btn" onclick="setContentType('svg',this)">SVG</button>
-            <button class="ct-btn" onclick="setContentType('image',this)">Image (base64)</button>
-          </div>
-        </div>
-
-        <div class="form-row">
+        <!-- Left: form -->
+        <div class="book-form">
           <div class="form-group">
-            <label>Start Time</label>
-            <input type="datetime-local" id="book-start">
+            <label>Content Type</label>
+            <div class="content-type-tabs">
+              <button class="ct-btn active" onclick="setContentType('markdown',this)">Markdown</button>
+              <button class="ct-btn" onclick="setContentType('svg',this)">SVG</button>
+              <button class="ct-btn" onclick="setContentType('image',this)">Image</button>
+            </div>
           </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Start Time</label>
+              <input type="datetime-local" id="book-start" oninput="schedulePreview()">
+            </div>
+            <div class="form-group">
+              <label>End Time</label>
+              <input type="datetime-local" id="book-end" oninput="schedulePreview()">
+            </div>
+          </div>
+
           <div class="form-group">
-            <label>End Time</label>
-            <input type="datetime-local" id="book-end">
+            <label>Description <span style="color:#4b5563">(optional)</span></label>
+            <input type="text" id="book-desc" placeholder="Short label for this slot" oninput="schedulePreview()">
           </div>
+
+          <!-- Markdown / SVG textarea -->
+          <div class="form-group" id="content-text-wrap">
+            <label id="content-label">Content</label>
+            <textarea id="book-content" oninput="schedulePreview()" placeholder="# Title&#10;&#10;Your content here…"></textarea>
+            <div class="form-hint" id="content-hint">Use # headings, - bullets, **bold**</div>
+          </div>
+
+          <!-- Image upload -->
+          <div id="content-image-wrap" style="display:none">
+            <label style="font-size:12px;color:#9ca3af;font-weight:500;display:block;margin-bottom:6px">Image</label>
+            <div id="img-dropzone" class="img-dropzone"
+                 ondragover="dzDragOver(event)" ondragleave="dzDragLeave(event)" ondrop="dzDrop(event)"
+                 onclick="document.getElementById('img-file-input').click()">
+              <div class="img-dropzone-text">
+                <b>Drop an image here</b>
+                or click to browse · paste with Ctrl+V
+              </div>
+              <div class="img-dropzone-actions">
+                <button class="btn-ghost btn-sm" onclick="event.stopPropagation();document.getElementById('img-file-input').click()">Browse files</button>
+              </div>
+            </div>
+            <div id="img-loaded-row" class="img-loaded-info" style="display:none">
+              <span id="img-loaded-name" style="flex:1"></span>
+              <button class="btn-danger btn-sm" onclick="clearImage()">Remove</button>
+            </div>
+            <input type="file" id="img-file-input" accept="image/*" style="display:none" onchange="loadImageFile(this.files[0])">
+          </div>
+
+          <div style="display:flex;gap:8px;align-items:center">
+            <button class="btn-primary" onclick="submitBooking()">Book Slot</button>
+            <button class="btn-ghost" onclick="clearBookForm()">Clear</button>
+          </div>
+
+          <div id="book-conflict" style="display:none;background:#1a0a0a;border:1px solid #991b1b;border-radius:6px;padding:10px;font-size:12px;color:#fca5a5"></div>
         </div>
 
-        <div class="form-group">
-          <label>Description <span style="color:#4b5563">(optional)</span></label>
-          <input type="text" id="book-desc" placeholder="Short description of this slot">
+        <!-- Right: live preview -->
+        <div class="book-preview-col">
+          <div class="section-label">Display Preview <span style="text-transform:none;font-weight:400;color:#374151">(600×400)</span></div>
+          <div id="book-preview-empty" class="preview-empty">Enter content to see a preview</div>
+          <div id="book-preview-canvas-wrap" class="preview-canvas-wrap" style="display:none">
+            <canvas id="book-preview-canvas" width="600" height="400"></canvas>
+          </div>
+          <div class="preview-note" id="preview-note" style="display:none">Approximate preview — actual rendering may vary slightly</div>
         </div>
 
-        <div class="form-group">
-          <label>Content</label>
-          <textarea id="book-content" placeholder="Enter markdown, SVG, or base64 image data…"></textarea>
-          <div class="form-hint" id="content-hint">Markdown: use # headings, - bullets, **bold**</div>
-        </div>
-
-        <div style="display:flex;gap:8px;align-items:center">
-          <button class="btn-primary" onclick="submitBooking()">Book Slot</button>
-          <button class="btn-ghost" onclick="clearBookForm()">Clear</button>
-        </div>
-
-        <div id="book-conflict" style="display:none;background:#1a0a0a;border:1px solid #991b1b;border-radius:6px;padding:10px;font-size:12px;color:#fca5a5"></div>
       </div>
     </div>
 
@@ -319,13 +372,16 @@ button{cursor:pointer;border:none;border-radius:6px;font-size:12px;font-weight:5
 // ── State ──────────────────────────────────────────────────────────────────
 let authToken = localStorage.getItem('epaper_token') || null
 let authUser  = localStorage.getItem('epaper_user')  || null
-let calOffset = 0          // days from today (start of week view)
-let allBookings = []       // cache from /api/history
+let calOffset = 0
+let allBookings = []
 let listPage = 0
 const PAGE_SIZE = 20
 let currentContentType = 'markdown'
+let bookImageB64 = null   // base64 without data: prefix
+let bookImageName = ''
 let detailBookingId = null
 let activeBookingId = null
+let previewTimer = null
 
 // ── Tabs ───────────────────────────────────────────────────────────────────
 function showTab(name, btn) {
@@ -335,25 +391,23 @@ function showTab(name, btn) {
   if (btn) btn.classList.add('active')
   if (name === 'calendar') renderCalendar()
   if (name === 'list') { listPage = 0; renderList() }
-  if (name === 'book') updateBookAuthWarn()
+  if (name === 'book') { updateBookAuthWarn(); schedulePreview() }
 }
 
 // ── Auth ───────────────────────────────────────────────────────────────────
 function updateAuthUI() {
   const badge = document.getElementById('auth-badge')
-  const loggedIn = document.getElementById('auth-logged-in')
-  const formWrap = document.getElementById('auth-form-wrap')
   if (authToken) {
     badge.textContent = authUser || 'Logged in'
     badge.className = 'authed'
-    loggedIn.style.display = ''
-    formWrap.style.display = 'none'
+    document.getElementById('auth-logged-in').style.display = ''
+    document.getElementById('auth-form-wrap').style.display = 'none'
     document.getElementById('auth-username').textContent = authUser || '—'
   } else {
     badge.textContent = 'NOT LOGGED IN'
     badge.className = 'anon'
-    loggedIn.style.display = 'none'
-    formWrap.style.display = ''
+    document.getElementById('auth-logged-in').style.display = 'none'
+    document.getElementById('auth-form-wrap').style.display = ''
   }
 }
 
@@ -368,25 +422,19 @@ async function doLogin() {
       body: JSON.stringify({ username: user, password: pass })
     })
     const data = await r.json()
-    if (!r.ok || !data.access_token) {
-      toast(data.detail || 'Login failed', true); return
-    }
-    authToken = data.access_token
-    authUser  = user
+    if (!r.ok || !data.access_token) { toast(data.detail || 'Login failed', true); return }
+    authToken = data.access_token; authUser = user
     localStorage.setItem('epaper_token', authToken)
     localStorage.setItem('epaper_user', authUser)
-    updateAuthUI()
-    toast('Logged in as ' + user)
+    updateAuthUI(); toast('Logged in as ' + user)
     document.getElementById('login-pass').value = ''
   } catch(e) { toast('Login error: ' + e.message, true) }
 }
 
 function logout() {
   authToken = null; authUser = null
-  localStorage.removeItem('epaper_token')
-  localStorage.removeItem('epaper_user')
-  updateAuthUI()
-  toast('Logged out')
+  localStorage.removeItem('epaper_token'); localStorage.removeItem('epaper_user')
+  updateAuthUI(); toast('Logged out')
 }
 
 function authHeaders() {
@@ -397,23 +445,18 @@ function authHeaders() {
 // ── Status polling ─────────────────────────────────────────────────────────
 async function pollStatus() {
   try {
-    const r = await fetch('/api/status')
-    if (!r.ok) return
+    const r = await fetch('/api/status'); if (!r.ok) return
     const s = await r.json()
     document.getElementById('s-mode').textContent = s.mode
     document.getElementById('s-updated').textContent = s.last_updated
       ? new Date(s.last_updated * 1000).toLocaleTimeString() : '—'
     if (s.simulation) document.getElementById('sim-badge').style.display = ''
-
     const bWrap = document.getElementById('s-booking-wrap')
     if (s.current_booking) {
       bWrap.style.display = ''
       document.getElementById('s-booking').textContent = s.current_booking.principal_name
-    } else { bWrap.style.display = 'none' }
-
+    } else bWrap.style.display = 'none'
     activeBookingId = s.current_booking ? s.current_booking.booking_id : null
-
-    // Active booking panel
     const abSection = document.getElementById('active-booking-section')
     if (s.current_booking) {
       abSection.style.display = ''
@@ -423,8 +466,7 @@ async function pollStatus() {
         `<div class="booking-title">${esc(b.description || b.principal_name)} ${tag}</div>
          <div>${esc(b.principal_name)}</div>
          <div>${fmtDt(b.start_time)} – ${fmtTime(b.end_time)}</div>`
-    } else { abSection.style.display = 'none' }
-
+    } else abSection.style.display = 'none'
     document.getElementById('display-meta').innerHTML =
       `<b>${s.mode}</b>${s.current_booking ? ' · ' + esc(s.current_booking.principal_name) : ''}`
   } catch(e) {}
@@ -432,33 +474,19 @@ async function pollStatus() {
 
 function refreshPreview() {
   const img = document.getElementById('preview-img')
-  const newSrc = '/api/preview?t=' + Date.now()
   const tmp = new Image()
-  tmp.onload = () => { img.src = newSrc }
-  tmp.onerror = () => {}
-  tmp.src = newSrc
+  tmp.onload = () => { img.src = '/api/preview?t=' + Date.now() }
+  tmp.src = '/api/preview?t=' + Date.now()
 }
 
-// ── Cancel active booking ──────────────────────────────────────────────────
 async function cancelActiveBooking() {
   if (!activeBookingId) return
   if (!authToken) { toast('Log in first', true); return }
   if (!confirm('Cancel the current active booking?')) return
-  try {
-    const r = await fetch('/api/book/' + activeBookingId, {
-      method: 'DELETE', headers: authHeaders()
-    })
-    if (r.status === 204) {
-      toast('Booking cancelled'); await fetchBookings()
-      renderCalendar(); renderList()
-    } else {
-      const d = await r.json()
-      toast((d.detail || 'Error'), true)
-    }
-  } catch(e) { toast(e.message, true) }
+  await cancelBookingById(activeBookingId)
 }
 
-// ── Fetch all bookings ─────────────────────────────────────────────────────
+// ── Fetch bookings ─────────────────────────────────────────────────────────
 async function fetchBookings() {
   try {
     const r = await fetch('/api/history?limit=500')
@@ -467,103 +495,65 @@ async function fetchBookings() {
 }
 
 // ── CALENDAR ───────────────────────────────────────────────────────────────
-const CAL_START_H = 0   // show all 24h
-const CAL_END_H   = 24
-const CAL_H       = 600 // px height for the day body
-const PX_PER_H    = CAL_H / (CAL_END_H - CAL_START_H)
+const CAL_START_H = 0, CAL_END_H = 24, CAL_H = 600, PX_PER_H = CAL_H / 24
 
-function calShift(days) { calOffset += days; renderCalendar() }
-function calGoToday()   { calOffset = 0;     renderCalendar() }
+function calShift(d) { calOffset += d; renderCalendar() }
+function calGoToday() { calOffset = 0; renderCalendar() }
 
 function renderCalendar() {
   const today = new Date(); today.setHours(0,0,0,0)
   const start = new Date(today); start.setDate(start.getDate() + calOffset)
   const end   = new Date(start); end.setDate(end.getDate() + 7)
-
-  // Title
   const opts = { month:'short', day:'numeric' }
   document.getElementById('cal-title').textContent =
     start.toLocaleDateString(undefined, opts) + ' – ' + new Date(end.getTime()-1).toLocaleDateString(undefined, opts)
-
-  const days = []
-  for (let i=0;i<7;i++) {
-    const d = new Date(start); d.setDate(d.getDate() + i)
-    days.push(d)
-  }
-
-  // Build header
+  const days = Array.from({length:7}, (_,i) => { const d=new Date(start); d.setDate(d.getDate()+i); return d })
   const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
-  let headerHtml = `<div class="cal-header"><div class="cal-header-time"></div>`
+
+  let html = `<div class="cal-header"><div class="cal-header-time"></div>`
   days.forEach(d => {
     const isToday = d.toDateString() === today.toDateString()
-    headerHtml += `<div class="cal-header-day${isToday?' today':''}">${dayNames[d.getDay()]} ${d.getDate()}</div>`
+    html += `<div class="cal-header-day${isToday?' today':''}">${dayNames[d.getDay()]} ${d.getDate()}</div>`
   })
-  headerHtml += `</div>`
-
-  // Build body
-  let bodyHtml = `<div class="cal-body">`
-  // Time column
-  bodyHtml += `<div class="cal-time-col" style="height:${CAL_H}px;position:relative">`
-  for (let h=CAL_START_H; h<=CAL_END_H; h++) {
-    const y = (h - CAL_START_H) * PX_PER_H
-    const label = h === 24 ? '' : (h === 0 ? '12am' : h < 12 ? h+'am' : h===12 ? '12pm' : (h-12)+'pm')
-    bodyHtml += `<div class="cal-time-label" style="top:${y}px">${label}</div>`
+  html += `</div><div class="cal-body"><div class="cal-time-col" style="height:${CAL_H}px;position:relative">`
+  for (let h=0; h<=24; h++) {
+    const y = h * PX_PER_H
+    const label = h===0?'12am':h<12?h+'am':h===12?'12pm':h===24?'':(h-12)+'pm'
+    html += `<div class="cal-time-label" style="top:${y}px">${label}</div>`
   }
-  bodyHtml += `</div>`
-
-  // Day columns
+  html += `</div>`
   days.forEach(d => {
-    bodyHtml += `<div class="cal-day-col" style="height:${CAL_H}px;position:relative">`
-    // Hour lines
-    for (let h=CAL_START_H; h<=CAL_END_H; h++) {
-      const y = (h - CAL_START_H) * PX_PER_H
-      bodyHtml += `<div class="cal-hour-line" style="top:${y}px"></div>`
-    }
-    // Bookings for this day
-    const dayStart = d.getTime()
-    const dayEnd   = dayStart + 86400000
-    const relevant = allBookings.filter(b => {
-      const bs = new Date(b.start_time).getTime()
-      const be = new Date(b.end_time).getTime()
-      return bs < dayEnd && be > dayStart
-    })
-    relevant.forEach(b => {
-      const bs = new Date(b.start_time)
-      const be = new Date(b.end_time)
-      const startH = Math.max(bs.getHours() + bs.getMinutes()/60, CAL_START_H)
-      const endH   = Math.min(be.getHours() + be.getMinutes()/60 + (be.getDate() !== bs.getDate() ? 24 : 0), CAL_END_H)
-      const top    = (startH - CAL_START_H) * PX_PER_H
+    html += `<div class="cal-day-col" style="height:${CAL_H}px;position:relative">`
+    for (let h=0; h<=24; h++) html += `<div class="cal-hour-line" style="top:${h*PX_PER_H}px"></div>`
+    const dayStart = d.getTime(), dayEnd = dayStart + 86400000
+    allBookings.filter(b => {
+      const bs = new Date(b.start_time).getTime(), be = new Date(b.end_time).getTime()
+      return !b.cancelled && bs < dayEnd && be > dayStart
+    }).forEach(b => {
+      const bs = new Date(b.start_time), be = new Date(b.end_time)
+      const startH = Math.max(bs.getHours() + bs.getMinutes()/60, 0)
+      let endH = be.getHours() + be.getMinutes()/60
+      if (be.toDateString() !== d.toDateString()) endH = 24
+      endH = Math.min(endH, 24)
+      const top = startH * PX_PER_H
       const height = Math.max((endH - startH) * PX_PER_H, 14)
-      const now    = Date.now()
-      const expired = be.getTime() < now || b.cancelled
-      const cls = `cal-booking-block ${b.principal_type}${expired?' expired':''}`
-      const label = esc(b.description || b.principal_name)
-      bodyHtml += `<div class="${cls}" style="top:${top}px;height:${height}px" title="${label}" onclick="openDetail('${b.booking_id}')">${label}</div>`
+      const expired = new Date(b.end_time).getTime() < Date.now()
+      html += `<div class="cal-booking-block ${b.principal_type}${expired?' expired':''}" style="top:${top}px;height:${height}px" title="${esc(b.description||b.principal_name)}" onclick="openDetail('${b.booking_id}')">${esc(b.description||b.principal_name)}</div>`
     })
-    bodyHtml += `</div>`
+    html += `</div>`
   })
-  bodyHtml += `</div>`
+  html += `</div>`
+  document.getElementById('cal-grid').innerHTML = html
 
   // Now line
   const nowDate = new Date()
   const nowDayIdx = days.findIndex(d => d.toDateString() === nowDate.toDateString())
   if (nowDayIdx >= 0) {
-    const nowH = nowDate.getHours() + nowDate.getMinutes()/60
-    if (nowH >= CAL_START_H && nowH <= CAL_END_H) {
-      // inject now-line after render
-    }
-  }
-
-  document.getElementById('cal-grid').innerHTML = headerHtml + bodyHtml
-
-  // Now line (DOM-based, injected after innerHTML set)
-  if (nowDayIdx >= 0) {
-    const nowH = new Date().getHours() + new Date().getMinutes()/60
     const cols = document.querySelectorAll('.cal-day-col')
     if (cols[nowDayIdx]) {
       const line = document.createElement('div')
       line.className = 'cal-now-line'
-      line.style.top = ((nowH - CAL_START_H) * PX_PER_H) + 'px'
+      line.style.top = ((nowDate.getHours() + nowDate.getMinutes()/60) * PX_PER_H) + 'px'
       cols[nowDayIdx].appendChild(line)
     }
   }
@@ -571,68 +561,57 @@ function renderCalendar() {
 
 // ── LIST ───────────────────────────────────────────────────────────────────
 function renderList() {
-  const text   = document.getElementById('filter-text').value.toLowerCase()
+  const text = document.getElementById('filter-text').value.toLowerCase()
   const status = document.getElementById('filter-status').value
-  const type   = document.getElementById('filter-type').value
-  const now    = new Date()
-
+  const type = document.getElementById('filter-type').value
+  const now = new Date()
   let filtered = allBookings.filter(b => {
     if (text && !JSON.stringify(b).toLowerCase().includes(text)) return false
     if (type && b.principal_type !== type) return false
     const bs = new Date(b.start_time), be = new Date(b.end_time)
-    if (status === 'upcoming') return !b.cancelled && bs > now
-    if (status === 'active')   return !b.cancelled && bs <= now && be > now
-    if (status === 'past')     return !b.cancelled && be <= now
+    if (status === 'upcoming')  return !b.cancelled && bs > now
+    if (status === 'active')    return !b.cancelled && bs <= now && be > now
+    if (status === 'past')      return !b.cancelled && be <= now
     if (status === 'cancelled') return b.cancelled
     return true
   })
-
-  const total = filtered.length
-  const pages = Math.ceil(total / PAGE_SIZE)
+  const total = filtered.length, pages = Math.ceil(total / PAGE_SIZE)
   if (listPage >= pages && pages > 0) listPage = pages - 1
   if (listPage < 0) listPage = 0
   const slice = filtered.slice(listPage * PAGE_SIZE, (listPage+1) * PAGE_SIZE)
-
   const body = document.getElementById('list-body')
   if (!slice.length) {
     body.innerHTML = `<div style="color:#4b5563;font-size:13px;text-align:center;padding:40px">No bookings found.</div>`
   } else {
     body.innerHTML = slice.map(b => {
       const bs = new Date(b.start_time), be = new Date(b.end_time)
-      const isActive = !b.cancelled && bs <= new Date() && be > new Date()
+      const isActive = !b.cancelled && bs <= now && be > now
       const tag = `<span class="booking-tag tag-${b.principal_type}">${b.principal_type}</span>`
       const cTag = b.cancelled ? `<span class="booking-tag tag-cancelled">cancelled</span>` : ''
-      const activeMark = isActive ? `<span class="booking-tag" style="background:#064e3b;color:#6ee7b7">LIVE</span>` : ''
-      const preview = b.content ? b.content.slice(0, 80).replace(/\n/g,' ') : ''
+      const aTag = isActive ? `<span class="booking-tag" style="background:#064e3b;color:#6ee7b7">LIVE</span>` : ''
+      const preview = b.content_type !== 'image' && b.content ? b.content.slice(0,80).replace(/\n/g,' ') : ''
       return `<div class="booking-row${b.cancelled?' cancelled':''}">
         <div class="booking-row-left">
-          <div class="booking-row-title">${esc(b.description || b.principal_name)} ${tag} ${cTag} ${activeMark}</div>
-          <div class="booking-row-meta">
-            ${esc(b.principal_name)} · ${b.content_type} ·
-            ${fmtDt(b.start_time)} – ${fmtTime(b.end_time)}
-          </div>
-          ${preview ? `<div class="content-preview">${esc(preview)}</div>` : ''}
+          <div class="booking-row-title">${esc(b.description||b.principal_name)} ${tag} ${cTag} ${aTag}</div>
+          <div class="booking-row-meta">${esc(b.principal_name)} · ${b.content_type} · ${fmtDt(b.start_time)} – ${fmtTime(b.end_time)}</div>
+          ${preview?`<div class="content-preview">${esc(preview)}</div>`:''}
         </div>
         <div class="booking-row-actions">
           <button class="btn-ghost btn-sm" onclick="openDetail('${b.booking_id}')">Detail</button>
-          ${!b.cancelled ? `<button class="btn-danger btn-sm" onclick="cancelBooking('${b.booking_id}')">Cancel</button>` : ''}
+          ${!b.cancelled?`<button class="btn-danger btn-sm" onclick="cancelBookingById('${b.booking_id}')">Cancel</button>`:''}
         </div>
       </div>`
     }).join('')
   }
-
-  // Pagination
   const pag = document.getElementById('list-pagination')
   if (pages <= 1) { pag.innerHTML = ''; return }
-  pag.innerHTML =
-    `<button class="btn-ghost btn-sm" onclick="listGo(${listPage-1})" ${listPage===0?'disabled':''}>&#8592;</button>
-     <span>Page ${listPage+1} of ${pages} (${total} total)</span>
-     <button class="btn-ghost btn-sm" onclick="listGo(${listPage+1})" ${listPage>=pages-1?'disabled':''}>&#8594;</button>`
+  pag.innerHTML = `<button class="btn-ghost btn-sm" onclick="listGo(${listPage-1})" ${listPage===0?'disabled':''}>&#8592;</button>
+    <span>Page ${listPage+1} of ${pages} (${total} total)</span>
+    <button class="btn-ghost btn-sm" onclick="listGo(${listPage+1})" ${listPage>=pages-1?'disabled':''}>&#8594;</button>`
 }
+function listGo(p) { listPage = p; renderList() }
 
-function listGo(page) { listPage = page; renderList() }
-
-async function cancelBooking(id) {
+async function cancelBookingById(id) {
   if (!authToken) { toast('Log in first', true); return }
   if (!confirm('Cancel this booking?')) return
   try {
@@ -641,88 +620,62 @@ async function cancelBooking(id) {
       toast('Booking cancelled'); await fetchBookings(); renderList(); renderCalendar()
     } else {
       const d = await r.json()
-      toast(typeof d.detail === 'string' ? d.detail : JSON.stringify(d.detail), true)
+      toast(typeof d.detail==='string' ? d.detail : JSON.stringify(d.detail), true)
     }
   } catch(e) { toast(e.message, true) }
 }
 
 // ── Detail modal ───────────────────────────────────────────────────────────
 function openDetail(id) {
-  const b = allBookings.find(x => x.booking_id === id)
-  if (!b) return
+  const b = allBookings.find(x => x.booking_id === id); if (!b) return
   detailBookingId = id
   document.getElementById('dm-title').textContent = b.description || b.principal_name
-
   const rows = [
-    ['Booking ID', b.booking_id],
-    ['Principal', b.principal_name + ' (' + b.principal_type + ')'],
-    ['Content type', b.content_type],
-    ['Start', fmtDt(b.start_time)],
-    ['End', fmtDt(b.end_time)],
-    ['Status', b.cancelled ? 'Cancelled' : (new Date(b.end_time) < new Date() ? 'Past' : (new Date(b.start_time) <= new Date() ? 'Active' : 'Upcoming'))],
+    ['Booking ID', b.booking_id], ['Principal', b.principal_name + ' (' + b.principal_type + ')'],
+    ['Content type', b.content_type], ['Start', fmtDt(b.start_time)], ['End', fmtDt(b.end_time)],
+    ['Status', b.cancelled ? 'Cancelled' : (new Date(b.end_time)<new Date()?'Past':(new Date(b.start_time)<=new Date()?'Active':'Upcoming'))],
     ['Created', fmtDt(b.created_at)],
   ]
-  document.getElementById('dm-rows').innerHTML = rows.map(([k,v]) =>
-    `<div class="detail-row"><b>${k}</b>${esc(v)}</div>`).join('')
-
+  document.getElementById('dm-rows').innerHTML = rows.map(([k,v])=>`<div class="detail-row"><b>${k}</b>${esc(v)}</div>`).join('')
   const cwrap = document.getElementById('dm-content-wrap')
-  const dcontent = document.getElementById('dm-content')
-  if (b.content_type === 'image') {
-    cwrap.style.display = 'none'
-  } else {
-    cwrap.style.display = ''
-    dcontent.textContent = b.content || '(empty)'
-  }
-
+  if (b.content_type === 'image') { cwrap.style.display = 'none' }
+  else { cwrap.style.display = ''; document.getElementById('dm-content').textContent = b.content || '(empty)' }
   const dimg = document.getElementById('dm-img')
-  const imgSrc = '/api/history/' + id + '/image'
+  dimg.src = '/api/history/' + id + '/image'
   dimg.style.display = ''
-  dimg.src = imgSrc
   dimg.onerror = () => { dimg.style.display = 'none' }
-
-  const cancelBtn = document.getElementById('dm-cancel-btn')
-  cancelBtn.style.display = (!b.cancelled && authToken) ? '' : 'none'
-
+  document.getElementById('dm-cancel-btn').style.display = (!b.cancelled && authToken) ? '' : 'none'
   document.getElementById('detail-modal').classList.add('open')
 }
+async function cancelFromDetail() { if (detailBookingId) { await cancelBookingById(detailBookingId); closeDetail() } }
+function closeDetail() { document.getElementById('detail-modal').classList.remove('open'); detailBookingId = null }
 
-async function cancelFromDetail() {
-  if (!detailBookingId) return
-  await cancelBooking(detailBookingId)
-  closeDetail()
-}
-
-function closeDetail() {
-  document.getElementById('detail-modal').classList.remove('open')
-  detailBookingId = null
-}
-
-// ── Image modal ────────────────────────────────────────────────────────────
+// ── Image zoom modal ───────────────────────────────────────────────────────
 function openImgModal(src) {
   document.getElementById('img-modal-src').src = src
   document.getElementById('img-modal').classList.add('open')
 }
 function closeImgModal() { document.getElementById('img-modal').classList.remove('open') }
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closeDetail(); closeImgModal() }
-})
+document.addEventListener('keydown', e => { if(e.key==='Escape'){closeDetail();closeImgModal()} })
 
 // ── BOOK SLOT ──────────────────────────────────────────────────────────────
 function setContentType(type, btn) {
   currentContentType = type
   document.querySelectorAll('.ct-btn').forEach(b => b.classList.remove('active'))
   btn.classList.add('active')
+  const isImg = type === 'image'
+  document.getElementById('content-text-wrap').style.display = isImg ? 'none' : ''
+  document.getElementById('content-image-wrap').style.display = isImg ? '' : ''
   const hints = {
-    markdown: 'Markdown: use # headings, - bullets, **bold**',
-    svg: 'SVG: paste raw SVG XML (e.g. <svg xmlns=...>)</svg>)',
-    image: 'Image: paste base64-encoded PNG or JPEG data (without data:image prefix)',
+    markdown: 'Use # headings, - bullets, **bold**, plain paragraphs',
+    svg: 'Paste raw SVG XML — must start with <svg …>',
   }
   document.getElementById('content-hint').textContent = hints[type] || ''
+  document.getElementById('content-label').textContent = type === 'svg' ? 'SVG Content' : 'Content'
   document.getElementById('book-content').placeholder =
-    type === 'markdown' ? '# Title\n\nYour content here…' :
-    type === 'svg' ? '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400">\n  …\n</svg>' :
-    'iVBORw0KGgoAAAANSUhEUgAA…'
+    type === 'markdown' ? '# Title\n\n- Point one\n- Point two\n\nSome body text.' :
+    '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400">\n  …\n</svg>'
+  schedulePreview()
 }
 
 function updateBookAuthWarn() {
@@ -730,98 +683,267 @@ function updateBookAuthWarn() {
 }
 
 function clearBookForm() {
-  document.getElementById('book-start').value = ''
-  document.getElementById('book-end').value = ''
   document.getElementById('book-desc').value = ''
   document.getElementById('book-content').value = ''
   document.getElementById('book-conflict').style.display = 'none'
+  clearImage()
+  prefillDatetimes()
+  schedulePreview()
 }
 
+function clearImage() {
+  bookImageB64 = null; bookImageName = ''
+  document.getElementById('img-dropzone').style.display = ''
+  document.getElementById('img-loaded-row').style.display = 'none'
+  document.getElementById('img-file-input').value = ''
+  schedulePreview()
+}
+
+// ── Image input ────────────────────────────────────────────────────────────
+function dzDragOver(e) { e.preventDefault(); document.getElementById('img-dropzone').classList.add('drag-over') }
+function dzDragLeave(e) { document.getElementById('img-dropzone').classList.remove('drag-over') }
+function dzDrop(e) {
+  e.preventDefault(); document.getElementById('img-dropzone').classList.remove('drag-over')
+  const file = e.dataTransfer.files[0]; if (file && file.type.startsWith('image/')) loadImageFile(file)
+}
+
+function loadImageFile(file) {
+  if (!file) return
+  const reader = new FileReader()
+  reader.onload = ev => {
+    const dataUrl = ev.target.result
+    bookImageB64 = dataUrl.split(',')[1]
+    bookImageName = file.name
+    document.getElementById('img-dropzone').style.display = 'none'
+    document.getElementById('img-loaded-row').style.display = 'flex'
+    document.getElementById('img-loaded-name').textContent = file.name + ' (' + (file.size/1024).toFixed(0) + ' KB)'
+    schedulePreview()
+  }
+  reader.readAsDataURL(file)
+}
+
+// Paste anywhere on the book tab
+document.addEventListener('paste', e => {
+  if (!document.getElementById('tab-book').classList.contains('active')) return
+  if (currentContentType !== 'image') return
+  const items = e.clipboardData?.items
+  if (!items) return
+  for (const item of items) {
+    if (item.type.startsWith('image/')) {
+      loadImageFile(item.getAsFile()); break
+    }
+  }
+})
+
+// ── Submit booking ─────────────────────────────────────────────────────────
 async function submitBooking() {
   if (!authToken) { toast('Log in first', true); return }
-
   const start = document.getElementById('book-start').value
   const end   = document.getElementById('book-end').value
   const desc  = document.getElementById('book-desc').value.trim()
-  const content = document.getElementById('book-content').value.trim()
-
   if (!start || !end) { toast('Set start and end times', true); return }
-  if (!content) { toast('Enter content', true); return }
 
-  const conflictBox = document.getElementById('book-conflict')
-  conflictBox.style.display = 'none'
+  let content
+  if (currentContentType === 'image') {
+    if (!bookImageB64) { toast('Upload an image first', true); return }
+    content = bookImageB64
+  } else {
+    content = document.getElementById('book-content').value.trim()
+    if (!content) { toast('Enter content', true); return }
+  }
 
+  document.getElementById('book-conflict').style.display = 'none'
   try {
-    const body = {
-      content_type: currentContentType,
-      content,
-      start_time: new Date(start).toISOString(),
-      end_time:   new Date(end).toISOString(),
-      description: desc,
-    }
     const r = await fetch('/api/book', {
-      method: 'POST',
-      headers: authHeaders(),
-      body: JSON.stringify(body),
+      method: 'POST', headers: authHeaders(),
+      body: JSON.stringify({ content_type: currentContentType, content, description: desc,
+                             start_time: new Date(start).toISOString(),
+                             end_time:   new Date(end).toISOString() })
     })
     if (r.status === 201) {
       toast('Booking created!')
-      clearBookForm()
-      await fetchBookings()
-      renderCalendar()
+      clearBookForm(); await fetchBookings(); renderCalendar()
       showTab('calendar', document.querySelectorAll('.tab-btn')[0])
     } else if (r.status === 409) {
       const d = await r.json()
       const conflicts = d.detail?.conflicts || []
-      conflictBox.style.display = ''
-      conflictBox.innerHTML = `<b>Conflict with ${conflicts.length} existing booking(s):</b><br>` +
-        conflicts.map(c =>
-          `• ${esc(c.principal_name)} (${c.principal_type}) — ${fmtDt(c.start_time)} to ${fmtTime(c.end_time)}: ${esc(c.description)}`
-        ).join('<br>')
+      const el = document.getElementById('book-conflict')
+      el.style.display = ''
+      el.innerHTML = `<b>Conflict with ${conflicts.length} existing booking(s):</b><br>` +
+        conflicts.map(c => `• ${esc(c.principal_name)} (${c.principal_type}) — ${fmtDt(c.start_time)} to ${fmtTime(c.end_time)}: ${esc(c.description)}`).join('<br>')
     } else {
       const d = await r.json()
-      toast(typeof d.detail === 'string' ? d.detail : JSON.stringify(d.detail), true)
+      toast(typeof d.detail==='string' ? d.detail : JSON.stringify(d.detail), true)
     }
   } catch(e) { toast(e.message, true) }
 }
 
+// ── LIVE PREVIEW ────────────────────────────────────────────────────────────
+function schedulePreview() {
+  clearTimeout(previewTimer)
+  previewTimer = setTimeout(renderBookPreview, 150)
+}
+
+function renderBookPreview() {
+  const canvas = document.getElementById('book-preview-canvas')
+  const ctx = canvas.getContext('2d')
+  const empty = document.getElementById('book-preview-empty')
+  const wrap  = document.getElementById('book-preview-canvas-wrap')
+  const note  = document.getElementById('preview-note')
+
+  if (currentContentType === 'image') {
+    if (!bookImageB64) {
+      empty.style.display = ''; wrap.style.display = 'none'; note.style.display = 'none'; return
+    }
+    empty.style.display = 'none'; wrap.style.display = ''; note.style.display = ''
+    const img = new Image()
+    img.onload = () => {
+      ctx.clearRect(0,0,600,400)
+      // scale to fill
+      const scale = Math.max(600/img.width, 400/img.height)
+      const w = img.width*scale, h = img.height*scale
+      ctx.drawImage(img, (600-w)/2, (400-h)/2, w, h)
+    }
+    img.src = 'data:image/png;base64,' + bookImageB64
+    return
+  }
+
+  if (currentContentType === 'svg') {
+    const svgText = document.getElementById('book-content').value.trim()
+    if (!svgText) { empty.style.display=''; wrap.style.display='none'; note.style.display='none'; return }
+    empty.style.display = 'none'; wrap.style.display = ''; note.style.display = ''
+    try {
+      const blob = new Blob([svgText], {type:'image/svg+xml'})
+      const url  = URL.createObjectURL(blob)
+      const img  = new Image()
+      img.onload = () => {
+        ctx.clearRect(0,0,600,400)
+        ctx.drawImage(img, 0, 0, 600, 400)
+        URL.revokeObjectURL(url)
+      }
+      img.onerror = () => {
+        URL.revokeObjectURL(url)
+        drawErrorCanvas(ctx, 'Invalid SVG')
+      }
+      img.src = url
+    } catch(e) { drawErrorCanvas(ctx, 'SVG error: ' + e.message) }
+    return
+  }
+
+  // Markdown
+  const mdText = document.getElementById('book-content').value
+  if (!mdText.trim()) { empty.style.display=''; wrap.style.display='none'; note.style.display='none'; return }
+  empty.style.display = 'none'; wrap.style.display = ''; note.style.display = ''
+
+  const desc  = document.getElementById('book-desc').value.trim()
+  const start = document.getElementById('book-start').value
+  const end   = document.getElementById('book-end').value
+  const name  = authUser || 'Preview'
+  const slot  = (start && end)
+    ? fmtSlot(new Date(start)) + ' – ' + fmtTimeShort(new Date(end))
+    : ''
+
+  drawMarkdownPreview(ctx, mdText, desc || name, slot)
+}
+
+function drawMarkdownPreview(ctx, content, principalName, slot) {
+  // Background
+  ctx.fillStyle = '#f5f5f0'
+  ctx.fillRect(0, 0, 600, 400)
+
+  // Header bar
+  ctx.fillStyle = '#111111'
+  ctx.fillRect(0, 0, 600, 50)
+  ctx.fillStyle = '#ffffff'
+  ctx.font = 'bold 22px Arial, sans-serif'
+  ctx.fillText(principalName.slice(0, 28), 16, 33)
+  if (slot) {
+    ctx.font = '17px Arial, sans-serif'
+    ctx.textAlign = 'right'
+    ctx.fillText(slot, 590, 32)
+    ctx.textAlign = 'left'
+  }
+
+  // Content
+  ctx.fillStyle = '#111111'
+  let y = 68
+  for (const rawLine of content.split('\n')) {
+    if (y >= 390) break
+    const line = rawLine.rstrip ? rawLine.rstrip() : rawLine.replace(/\s+$/, '')
+    if (!line) { y += 8; continue }
+    const clean = line.replace(/\*\*/g,'').replace(/__/g,'').replace(/\*/g,'').replace(/_/g,'')
+    if (line.startsWith('### ')) {
+      ctx.font = '18px Arial, sans-serif'; y = drawWrapped(ctx, clean.slice(4), 16, y, 568, 26)
+    } else if (line.startsWith('## ')) {
+      ctx.font = 'bold 22px Arial, sans-serif'; y = drawWrapped(ctx, clean.slice(3), 16, y, 568, 30)
+    } else if (line.startsWith('# ')) {
+      ctx.font = 'bold 26px Arial, sans-serif'; y = drawWrapped(ctx, clean.slice(2), 16, y, 568, 34)
+    } else if (/^[-*+] /.test(line)) {
+      ctx.font = '16px Arial, sans-serif'
+      y = drawWrapped(ctx, '• ' + clean.slice(2), 16, y, 564, 22, 24)
+    } else {
+      ctx.font = '16px Arial, sans-serif'; y = drawWrapped(ctx, clean, 16, y, 568, 22)
+    }
+    if (y >= 390) break
+  }
+}
+
+function drawWrapped(ctx, text, x, y, maxW, lineH, indent=0) {
+  const words = text.split(' ')
+  let line = ''
+  let firstLine = true
+  for (const word of words) {
+    const test = line ? line + ' ' + word : word
+    if (ctx.measureText(test).width > maxW) {
+      if (line) { ctx.fillText(line, x + (firstLine?0:indent), y + lineH - 4); y += lineH; firstLine = false; line = word }
+      else { ctx.fillText(word, x, y + lineH - 4); y += lineH; line = '' }
+    } else line = test
+    if (y >= 388) break
+  }
+  if (line && y < 388) { ctx.fillText(line, x + (firstLine?0:indent), y + lineH - 4); y += lineH }
+  return y
+}
+
+function drawErrorCanvas(ctx, msg) {
+  ctx.fillStyle = '#1a0505'; ctx.fillRect(0,0,600,400)
+  ctx.fillStyle = '#fca5a5'; ctx.font = '16px Arial'
+  ctx.fillText(msg, 20, 200)
+}
+
+function fmtSlot(d) {
+  return d.toLocaleDateString(undefined,{month:'short',day:'numeric'}) + ' ' +
+    d.toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'})
+}
+function fmtTimeShort(d) { return d.toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'}) }
+
 // ── Helpers ────────────────────────────────────────────────────────────────
 function esc(s) {
-  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
 }
-
 function fmtDt(iso) {
   if (!iso) return '—'
-  const d = new Date(iso.endsWith('Z') ? iso : iso+'Z')
-  return d.toLocaleDateString(undefined,{month:'short',day:'numeric'}) + ' ' + d.toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'})
+  const d = new Date(iso.endsWith('Z')?iso:iso+'Z')
+  return d.toLocaleDateString(undefined,{month:'short',day:'numeric'}) + ' ' +
+         d.toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'})
 }
-
 function fmtTime(iso) {
   if (!iso) return '—'
-  const d = new Date(iso.endsWith('Z') ? iso : iso+'Z')
+  const d = new Date(iso.endsWith('Z')?iso:iso+'Z')
   return d.toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'})
 }
 
-// ── Toast ──────────────────────────────────────────────────────────────────
 function toast(msg, err=false) {
   const t = document.getElementById('toast')
-  t.textContent = msg
-  t.className = err ? 'err show' : 'show'
-  clearTimeout(t._timer)
-  t._timer = setTimeout(() => t.className = '', 3000)
+  t.textContent = msg; t.className = (err?'err ':' ') + 'show'
+  clearTimeout(t._timer); t._timer = setTimeout(() => t.className = '', 3000)
 }
 
-// ── Pre-fill datetime ──────────────────────────────────────────────────────
 function prefillDatetimes() {
+  const pad = n => String(n).padStart(2,'0')
+  const fmt = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
   const now = new Date()
-  const start = new Date(now.getTime() + 60000)  // +1 min
-  const end   = new Date(now.getTime() + 3600000) // +1 hr
-  const fmt = d => {
-    const pad = n => String(n).padStart(2,'0')
-    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
-  }
-  document.getElementById('book-start').value = fmt(start)
-  document.getElementById('book-end').value   = fmt(end)
+  document.getElementById('book-start').value = fmt(new Date(now.getTime()+60000))
+  document.getElementById('book-end').value   = fmt(new Date(now.getTime()+3600000))
 }
 
 // ── Init ───────────────────────────────────────────────────────────────────
@@ -829,20 +951,14 @@ updateAuthUI()
 prefillDatetimes()
 updateBookAuthWarn()
 
-async function init() {
-  await fetchBookings()
-  renderCalendar()
-  pollStatus()
-}
+async function init() { await fetchBookings(); renderCalendar(); pollStatus() }
 init()
 
 setInterval(pollStatus, 5000)
 setInterval(refreshPreview, 15000)
 setInterval(async () => { await fetchBookings(); renderCalendar() }, 30000)
 
-// Refresh preview on load
-const img = document.getElementById('preview-img')
-img.src = '/api/preview?t=' + Date.now()
+document.getElementById('preview-img').src = '/api/preview?t=' + Date.now()
 </script>
 </body>
 </html>
