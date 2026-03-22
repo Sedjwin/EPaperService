@@ -2,7 +2,7 @@
 
 Controls a Waveshare 3.6" e-Paper HAT+ (E) 6-colour display (600×400 pixels) attached to the Raspberry Pi 5. Two operating modes: **idle** (auto-refreshes system stats) and **agent** (displays content pushed by an AI agent, with optional auto-expiry). Includes a full browser-based admin panel.
 
-**Ports:** `8004` (internal) / `13375` (external, HTTPS via nginx)
+**Ports:** `8004` (internal) / `13375` (external, HTTPS via Caddy)
 
 ---
 
