@@ -8,34 +8,31 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:system-ui,sans-serif;background:#0a0a0f;color:#e2e8f0;min-height:100vh;display:flex;flex-direction:column}
 header{background:#111827;border-bottom:1px solid #1f2937;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-header h1{font-size:15px;font-weight:700;color:#f9fafb;letter-spacing:-.3px}
+header h1{font-size:15px;font-weight:700;color:#f9fafb}
 header h1 span{color:#f59e0b;margin-right:6px}
 #status-bar{font-size:12px;color:#6b7280;display:flex;gap:14px;align-items:center}
 #status-bar b{color:#f3f4f6}
-#sim-badge{background:#dc2626;color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;letter-spacing:.5px}
-#auth-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;letter-spacing:.5px}
+#sim-badge{background:#dc2626;color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px}
+#auth-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px}
 #auth-badge.authed{background:#065f46;color:#6ee7b7}
 #auth-badge.anon{background:#374151;color:#9ca3af}
 
 .layout{display:flex;flex:1;overflow:hidden}
 
-/* ── Left panel ── */
-.left{width:270px;flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid #1f2937;background:#111827;overflow-y:auto}
+/* ── Left ── */
+.left{width:272px;flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid #1f2937;background:#111827;overflow-y:auto}
 .panel-section{padding:12px 14px;border-bottom:1px solid #1f2937}
 .section-label{font-size:10px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
-
 .preview-wrap{background:#000;border-radius:6px;overflow:hidden;cursor:pointer;position:relative;line-height:0}
-.preview-wrap img{width:100%;height:auto;display:block;transition:opacity .2s}
+.preview-wrap img{width:100%;height:auto;display:block}
 .preview-wrap:hover img{opacity:.9}
 .preview-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;color:#fff;font-size:11px;pointer-events:none;background:rgba(0,0,0,.4)}
 .preview-wrap:hover .preview-hint{opacity:1}
 .no-image{width:100%;aspect-ratio:3/2;background:#1f2937;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#374151;font-size:12px}
-
 .meta{font-size:11px;color:#6b7280;margin-top:6px;line-height:1.6}
-
-.active-booking-box{background:#1a1a2e;border:1px solid #1f2937;border-radius:6px;padding:8px;font-size:11px;color:#9ca3af;line-height:1.7}
-.active-booking-box .booking-title{font-size:12px;font-weight:600;color:#f3f4f6;margin-bottom:4px}
-.booking-tag{font-size:10px;padding:1px 6px;border-radius:99px;font-weight:600;margin-left:4px}
+.ab-box{background:#1a1a2e;border:1px solid #1f2937;border-radius:6px;padding:8px;font-size:11px;color:#9ca3af;line-height:1.7}
+.ab-box .ab-title{font-size:12px;font-weight:600;color:#f3f4f6;margin-bottom:4px}
+.booking-tag{font-size:10px;padding:1px 6px;border-radius:99px;font-weight:600}
 .tag-human{background:#1e3a5f;color:#60a5fa}
 .tag-agent{background:#2e1a5f;color:#c4b5fd}
 .tag-cancelled{background:#450a0a;color:#fca5a5}
@@ -53,13 +50,17 @@ button{cursor:pointer;border:none;border-radius:6px;font-size:12px;font-weight:5
 
 .auth-form input{width:100%;background:#1f2937;border:1px solid #374151;border-radius:5px;padding:5px 8px;color:#f3f4f6;font-size:12px;margin-bottom:6px}
 .auth-form input:focus{outline:none;border-color:#f59e0b}
-.auth-info{font-size:11px;color:#6b7280;margin-top:4px}
-.auth-info b{color:#d1d5db}
 
-/* ── Right panel ── */
+/* ── Settings section ── */
+.settings-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.settings-row label{font-size:11px;color:#9ca3af;min-width:100px}
+.settings-row select,.settings-row input[type=number]{background:#1f2937;border:1px solid #374151;border-radius:5px;padding:4px 6px;color:#f3f4f6;font-size:12px;flex:1}
+.settings-row select:focus,.settings-row input:focus{outline:none;border-color:#f59e0b}
+
+/* ── Right ── */
 .right{flex:1;display:flex;flex-direction:column;min-width:0}
 .tabs-bar{display:flex;border-bottom:1px solid #1f2937;background:#111827;flex-shrink:0}
-.tab-btn{padding:11px 18px;font-size:13px;font-weight:500;color:#6b7280;background:none;border-radius:0;border-bottom:2px solid transparent}
+.tab-btn{padding:10px 16px;font-size:13px;font-weight:500;color:#6b7280;background:none;border-radius:0;border-bottom:2px solid transparent}
 .tab-btn:hover{color:#d1d5db;background:#1f2937}
 .tab-btn.active{color:#f59e0b;border-bottom-color:#f59e0b}
 .tab-pane{display:none;flex:1;overflow:auto;padding:16px}
@@ -70,81 +71,105 @@ button{cursor:pointer;border:none;border-radius:6px;font-size:12px;font-weight:5
 .cal-nav h2{font-size:14px;font-weight:600;color:#f3f4f6;flex:1}
 .cal-grid{overflow-x:auto}
 .cal-header{display:flex;border-bottom:1px solid #1f2937;margin-bottom:2px}
-.cal-header-time{width:52px;flex-shrink:0}
+.cal-header-time{width:48px;flex-shrink:0}
 .cal-header-day{flex:1;min-width:80px;text-align:center;padding:4px 0;font-size:11px;color:#6b7280;border-left:1px solid #1f2937}
 .cal-header-day.today{color:#f59e0b;font-weight:700}
-.cal-body{display:flex;position:relative}
-.cal-time-col{width:52px;flex-shrink:0;position:relative}
-.cal-time-label{position:absolute;right:6px;font-size:10px;color:#4b5563;transform:translateY(-6px)}
+.cal-body{display:flex}
+.cal-time-col{width:48px;flex-shrink:0;position:relative}
+.cal-time-label{position:absolute;right:4px;font-size:10px;color:#4b5563;transform:translateY(-6px)}
 .cal-day-col{flex:1;min-width:80px;border-left:1px solid #1f2937;position:relative}
 .cal-hour-line{position:absolute;left:0;right:0;border-top:1px solid #1f2937}
-.cal-booking-block{position:absolute;left:2px;right:2px;border-radius:4px;padding:2px 4px;font-size:10px;font-weight:600;overflow:hidden;cursor:pointer;opacity:.9;line-height:1.3}
-.cal-booking-block:hover{opacity:1;z-index:10}
-.cal-booking-block.human{background:#1e3a5f;color:#93c5fd;border-left:3px solid #3b82f6}
-.cal-booking-block.agent{background:#2e1a5f;color:#c4b5fd;border-left:3px solid #8b5cf6}
-.cal-booking-block.expired{opacity:.4}
-.cal-now-line{position:absolute;left:0;right:0;border-top:2px solid #ef4444;pointer-events:none;z-index:5}
+.cal-block{position:absolute;left:2px;right:2px;border-radius:4px;padding:2px 4px;font-size:10px;font-weight:600;overflow:hidden;cursor:pointer;opacity:.9;line-height:1.3}
+.cal-block:hover{opacity:1;z-index:5}
+.cal-block.human{background:#1e3a5f;color:#93c5fd;border-left:3px solid #3b82f6}
+.cal-block.agent{background:#2e1a5f;color:#c4b5fd;border-left:3px solid #8b5cf6}
+.cal-block.expired{opacity:.4}
+.cal-now-line{position:absolute;left:0;right:0;border-top:2px solid #ef4444;pointer-events:none;z-index:4}
 .cal-now-line::before{content:'';position:absolute;left:-4px;top:-4px;width:8px;height:8px;background:#ef4444;border-radius:50%}
 
-/* ── List ── */
+/* ── History ── */
+.hist-item{background:#111827;border:1px solid #1f2937;border-radius:8px;overflow:hidden;display:flex;gap:0}
+.hist-item.cancelled{opacity:.5}
+.hist-thumb{width:120px;flex-shrink:0;background:#0a0a0f;position:relative;cursor:pointer}
+.hist-thumb img{width:100%;height:80px;object-fit:cover;display:block}
+.hist-thumb .no-thumb{width:100%;height:80px;display:flex;align-items:center;justify-content:center;color:#374151;font-size:11px;flex-direction:column;gap:4px}
+.hist-thumb:hover img{opacity:.85}
+.hist-body{flex:1;padding:8px 10px;min-width:0}
+.hist-title{font-size:13px;font-weight:600;color:#f3f4f6;display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:3px}
+.hist-meta{font-size:11px;color:#6b7280;line-height:1.6}
+.hist-preview{font-size:11px;color:#4b5563;font-family:monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:400px;margin-top:2px}
+.hist-actions{display:flex;gap:5px;align-items:flex-start;flex-shrink:0;padding:8px 8px 8px 0}
 .list-filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .list-filters input,.list-filters select{background:#1f2937;border:1px solid #374151;border-radius:5px;padding:5px 8px;color:#f3f4f6;font-size:12px}
 .list-filters input:focus,.list-filters select:focus{outline:none;border-color:#f59e0b}
-.booking-row{background:#111827;border:1px solid #1f2937;border-radius:8px;padding:10px 12px;display:flex;align-items:flex-start;gap:10px}
-.booking-row.cancelled{opacity:.5}
-.booking-row-left{flex:1;min-width:0}
-.booking-row-title{font-size:13px;font-weight:600;color:#f3f4f6;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.booking-row-meta{font-size:11px;color:#6b7280;margin-top:3px;line-height:1.6}
-.booking-row-actions{display:flex;gap:6px;flex-shrink:0;align-items:flex-start;margin-top:2px}
-.content-preview{font-size:11px;color:#4b5563;margin-top:4px;font-family:monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:500px}
 .pagination{display:flex;gap:8px;align-items:center;justify-content:center;padding:8px 0}
 .pagination span{font-size:12px;color:#6b7280}
 
-/* ── Book tab layout ── */
+/* ── Book Slot ── */
 .book-layout{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap}
-.book-form{flex:1;min-width:300px;max-width:520px;display:flex;flex-direction:column;gap:14px}
-.book-preview-col{flex:1;min-width:260px;display:flex;flex-direction:column;gap:8px}
-.book-preview-col .section-label{font-size:10px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.8px}
-.preview-canvas-wrap{position:relative;border:1px solid #1f2937;border-radius:8px;overflow:hidden;background:#f5f5f5;line-height:0}
+.book-form{flex:1;min-width:300px;max-width:510px;display:flex;flex-direction:column;gap:13px}
+.book-preview-col{flex:1;min-width:240px;display:flex;flex-direction:column;gap:8px}
+.preview-canvas-wrap{border:1px solid #1f2937;border-radius:8px;overflow:hidden;background:#f5f5f5;line-height:0}
 .preview-canvas-wrap canvas{display:block;width:100%;height:auto}
-.preview-empty{display:flex;align-items:center;justify-content:center;height:140px;background:#111827;border-radius:8px;color:#4b5563;font-size:12px;border:1px solid #1f2937}
-.preview-note{font-size:10px;color:#4b5563;text-align:center}
+.preview-empty-box{display:flex;align-items:center;justify-content:center;height:130px;background:#111827;border-radius:8px;color:#4b5563;font-size:12px;border:1px solid #1f2937}
 
-/* ── Form elements ── */
 .form-group{display:flex;flex-direction:column;gap:4px}
 .form-group label{font-size:12px;color:#9ca3af;font-weight:500}
-.form-group input,.form-group select,.form-group textarea{background:#1f2937;border:1px solid #374151;border-radius:6px;padding:8px 10px;color:#f3f4f6;font-size:13px;font-family:inherit}
+.form-group input,.form-group select,.form-group textarea{background:#1f2937;border:1px solid #374151;border-radius:6px;padding:7px 10px;color:#f3f4f6;font-size:13px;font-family:inherit}
 .form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:#f59e0b}
-.form-group textarea{min-height:110px;resize:vertical;font-family:monospace;font-size:12px}
+.form-group textarea{min-height:100px;resize:vertical;font-family:monospace;font-size:12px}
 .form-row{display:flex;gap:10px}
 .form-row .form-group{flex:1}
-.form-hint{font-size:11px;color:#4b5563;margin-top:2px}
-.content-type-tabs{display:flex;border:1px solid #374151;border-radius:6px;overflow:hidden}
+.form-hint{font-size:11px;color:#4b5563}
+.ct-tabs{display:flex;border:1px solid #374151;border-radius:6px;overflow:hidden}
 .ct-btn{flex:1;padding:6px 0;font-size:12px;font-weight:500;background:#1f2937;color:#6b7280;border-radius:0}
 .ct-btn:hover{background:#374151;color:#d1d5db}
 .ct-btn.active{background:#f59e0b;color:#000}
 
-/* ── Image drop zone ── */
-.img-dropzone{border:2px dashed #374151;border-radius:8px;padding:24px 16px;text-align:center;cursor:pointer;transition:all .2s;background:#111827}
+.img-dropzone{border:2px dashed #374151;border-radius:8px;padding:22px 16px;text-align:center;cursor:pointer;transition:all .2s;background:#111827}
 .img-dropzone:hover,.img-dropzone.drag-over{border-color:#f59e0b;background:#1a1506}
-.img-dropzone-text{font-size:13px;color:#6b7280;margin-bottom:10px}
-.img-dropzone-text b{color:#9ca3af;display:block;margin-bottom:4px;font-size:14px}
-.img-dropzone-actions{display:flex;gap:8px;justify-content:center}
-.img-loaded-info{display:flex;align-items:center;gap:10px;background:#1f2937;border-radius:6px;padding:8px 10px;font-size:12px;color:#9ca3af}
-.img-loaded-info button{padding:3px 8px;font-size:11px}
+.img-dz-text{font-size:13px;color:#6b7280;margin-bottom:8px}
+.img-dz-text b{color:#9ca3af;display:block;margin-bottom:3px}
+.img-loaded-row{display:flex;align-items:center;gap:8px;background:#1f2937;border-radius:6px;padding:7px 10px;font-size:12px;color:#9ca3af}
+
+/* ── Idle Screen tab ── */
+.idle-layout{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap}
+.idle-form{flex:1;min-width:300px;max-width:480px;display:flex;flex-direction:column;gap:14px}
+.idle-preview-col{flex:1;min-width:240px;display:flex;flex-direction:column;gap:8px}
+.mode-tabs{display:flex;border:1px solid #374151;border-radius:6px;overflow:hidden}
+.mode-btn{flex:1;padding:7px 0;font-size:12px;font-weight:500;background:#1f2937;color:#6b7280;border-radius:0}
+.mode-btn:hover{background:#374151;color:#d1d5db}
+.mode-btn.active{background:#374151;color:#f59e0b;border-bottom:2px solid #f59e0b}
+
+/* Widget list */
+.widget-list{display:flex;flex-direction:column;gap:4px}
+.widget-row{display:flex;align-items:center;gap:8px;background:#1f2937;border-radius:6px;padding:6px 8px}
+.widget-row input[type=checkbox]{accent-color:#f59e0b;width:14px;height:14px;flex-shrink:0}
+.widget-row-label{flex:1;font-size:12px;color:#d1d5db}
+.widget-row-arrows{display:flex;flex-direction:column;gap:1px}
+.widget-row-arrows button{padding:0 5px;font-size:10px;line-height:14px;height:14px;background:#374151;color:#9ca3af;border-radius:3px}
+.widget-row-arrows button:hover{background:#4b5563;color:#f3f4f6}
+.widget-row-arrows button:disabled{opacity:.3;cursor:default}
 
 /* ── Detail modal ── */
 #detail-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999;align-items:center;justify-content:center}
 #detail-modal.open{display:flex}
-.detail-box{background:#111827;border:1px solid #374151;border-radius:12px;padding:24px;max-width:520px;width:90%;max-height:90vh;overflow-y:auto}
-.detail-box h2{font-size:15px;font-weight:700;color:#f9fafb;margin-bottom:14px}
-.detail-row{display:flex;gap:8px;font-size:12px;color:#6b7280;margin-bottom:6px}
-.detail-row b{color:#d1d5db;min-width:110px;flex-shrink:0}
-.detail-content{background:#0a0a0f;border:1px solid #1f2937;border-radius:6px;padding:10px;font-size:11px;font-family:monospace;color:#9ca3af;max-height:160px;overflow:auto;margin-top:8px;white-space:pre-wrap;word-break:break-all}
-.detail-img{width:100%;border-radius:6px;margin-top:10px;cursor:zoom-in}
+.detail-box{background:#111827;border:1px solid #374151;border-radius:12px;padding:22px;max-width:500px;width:90%;max-height:90vh;overflow-y:auto}
+.detail-box h2{font-size:15px;font-weight:700;color:#f9fafb;margin-bottom:12px}
+.detail-row{display:flex;gap:8px;font-size:12px;color:#6b7280;margin-bottom:5px}
+.detail-row b{color:#d1d5db;min-width:100px;flex-shrink:0}
+.detail-content{background:#0a0a0f;border:1px solid #1f2937;border-radius:6px;padding:8px;font-size:11px;font-family:monospace;color:#9ca3af;max-height:130px;overflow:auto;margin-top:6px;white-space:pre-wrap;word-break:break-all}
+.detail-img{width:100%;border-radius:6px;margin-top:8px;cursor:zoom-in}
 
-/* ── Img modal ── */
-#img-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:1000;align-items:center;justify-content:center;cursor:zoom-out}
+/* ── Apply-again dialog ── */
+#apply-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:998;align-items:center;justify-content:center}
+#apply-modal.open{display:flex}
+.apply-box{background:#111827;border:1px solid #374151;border-radius:12px;padding:22px;max-width:440px;width:90%}
+.apply-box h2{font-size:14px;font-weight:700;color:#f9fafb;margin-bottom:14px}
+.apply-box .form-group{margin-bottom:10px}
+
+/* ── Image zoom ── */
+#img-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:1000;align-items:center;justify-content:center;cursor:zoom-out}
 #img-modal.open{display:flex}
 #img-modal img{max-width:90vw;max-height:90vh;border-radius:8px}
 
@@ -168,7 +193,6 @@ button{cursor:pointer;border:none;border-radius:6px;font-size:12px;font-weight:5
 </header>
 
 <div class="layout">
-
   <!-- ── Left ── -->
   <div class="left">
 
@@ -184,27 +208,53 @@ button{cursor:pointer;border:none;border-radius:6px;font-size:12px;font-weight:5
       <div class="meta" id="display-meta"></div>
     </div>
 
-    <div class="panel-section" id="active-booking-section" style="display:none">
+    <div class="panel-section" id="active-section" style="display:none">
       <div class="section-label">Active Booking</div>
-      <div id="active-booking-box" class="active-booking-box"></div>
+      <div id="active-box" class="ab-box"></div>
       <div class="btn-row">
-        <button class="btn-danger btn-sm" onclick="cancelActiveBooking()">Cancel Booking</button>
+        <button class="btn-danger btn-sm" onclick="cancelActiveBooking()">Cancel</button>
       </div>
     </div>
 
     <div class="panel-section">
       <div class="section-label">Auth</div>
       <div id="auth-logged-in" style="display:none">
-        <div class="auth-info">Logged in as <b id="auth-username">—</b></div>
+        <div style="font-size:11px;color:#6b7280">Logged in as <b id="auth-username" style="color:#d1d5db"></b></div>
         <div class="btn-row"><button class="btn-ghost btn-sm" onclick="logout()">Log out</button></div>
       </div>
       <div id="auth-form-wrap">
         <div class="auth-form">
           <input type="text" id="login-user" placeholder="Username" autocomplete="username">
           <input type="password" id="login-pass" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
-          <button class="btn-primary" style="width:100%" onclick="doLogin()">Log In</button>
+          <button class="btn-primary" style="width:100%;margin-top:2px" onclick="doLogin()">Log In</button>
         </div>
-        <div class="auth-info" style="margin-top:6px">Login to book or cancel slots</div>
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="section-label">Apply Now Settings</div>
+      <div class="settings-row">
+        <label>Mode</label>
+        <select id="cfg-apply-mode" onchange="applyModeChanged()">
+          <option value="fixed">Fixed duration</option>
+          <option value="snap">Snap to interval</option>
+          <option value="retain">Retain until displaced</option>
+        </select>
+      </div>
+      <div class="settings-row" id="cfg-fixed-row">
+        <label>Duration (mins)</label>
+        <input type="number" id="cfg-fixed-mins" min="1" max="1440" value="30">
+      </div>
+      <div class="settings-row" id="cfg-snap-row" style="display:none">
+        <label>Snap interval</label>
+        <input type="number" id="cfg-snap-mins" min="5" max="60" value="20">
+      </div>
+      <div class="settings-row">
+        <label>Idle refresh (mins)</label>
+        <input type="number" id="cfg-idle-mins" min="5" max="120" value="20">
+      </div>
+      <div class="btn-row">
+        <button class="btn-ghost btn-sm" onclick="saveApplySettings()">Save Settings</button>
       </div>
     </div>
 
@@ -222,8 +272,9 @@ button{cursor:pointer;border:none;border-radius:6px;font-size:12px;font-weight:5
   <div class="right">
     <div class="tabs-bar">
       <button class="tab-btn active" onclick="showTab('calendar',this)">Calendar</button>
-      <button class="tab-btn" onclick="showTab('list',this)">Schedule / History</button>
+      <button class="tab-btn" onclick="showTab('history',this)">History</button>
       <button class="tab-btn" onclick="showTab('book',this)">Book Slot</button>
+      <button class="tab-btn" onclick="showTab('idle',this)">Idle Screen</button>
     </div>
 
     <!-- CALENDAR -->
@@ -234,110 +285,166 @@ button{cursor:pointer;border:none;border-radius:6px;font-size:12px;font-weight:5
         <button class="btn-ghost btn-sm" onclick="calShift(7)">Next &#8594;</button>
         <button class="btn-ghost btn-sm" onclick="calGoToday()">Today</button>
       </div>
-      <div class="cal-grid" id="cal-grid"></div>
+      <div id="cal-grid"></div>
     </div>
 
-    <!-- LIST -->
-    <div id="tab-list" class="tab-pane">
+    <!-- HISTORY -->
+    <div id="tab-history" class="tab-pane">
       <div class="list-filters">
-        <input type="text" id="filter-text" placeholder="Search…" oninput="renderList()" style="flex:1;min-width:140px">
-        <select id="filter-status" onchange="renderList()">
+        <input type="text" id="filter-text" placeholder="Search…" oninput="renderHistory()" style="flex:1;min-width:130px">
+        <select id="filter-status" onchange="renderHistory()">
           <option value="all">All</option>
           <option value="upcoming">Upcoming</option>
           <option value="active">Active</option>
           <option value="past">Past</option>
           <option value="cancelled">Cancelled</option>
         </select>
-        <select id="filter-type" onchange="renderList()">
-          <option value="">Any type</option>
+        <select id="filter-type" onchange="renderHistory()">
+          <option value="">Any</option>
           <option value="human">Human</option>
           <option value="agent">Agent</option>
         </select>
       </div>
-      <div id="list-body" style="display:flex;flex-direction:column;gap:8px"></div>
-      <div class="pagination" id="list-pagination"></div>
+      <div id="history-body" style="display:flex;flex-direction:column;gap:7px"></div>
+      <div class="pagination" id="history-pagination"></div>
     </div>
 
     <!-- BOOK SLOT -->
     <div id="tab-book" class="tab-pane">
-      <div id="book-auth-warn" style="background:#1a1a0a;border:1px solid #78350f;border-radius:6px;padding:10px;font-size:12px;color:#fbbf24;display:none">
+      <div id="book-auth-warn" style="background:#1a1a0a;border:1px solid #78350f;border-radius:6px;padding:9px;font-size:12px;color:#fbbf24;display:none">
         You must be logged in to book a slot.
       </div>
       <div class="book-layout">
-
-        <!-- Left: form -->
         <div class="book-form">
           <div class="form-group">
             <label>Content Type</label>
-            <div class="content-type-tabs">
+            <div class="ct-tabs">
               <button class="ct-btn active" onclick="setContentType('markdown',this)">Markdown</button>
               <button class="ct-btn" onclick="setContentType('svg',this)">SVG</button>
               <button class="ct-btn" onclick="setContentType('image',this)">Image</button>
             </div>
           </div>
-
           <div class="form-row">
             <div class="form-group">
-              <label>Start Time</label>
+              <label>Start Time <span style="color:#4b5563">(blank = now)</span></label>
               <input type="datetime-local" id="book-start" oninput="schedulePreview()">
             </div>
             <div class="form-group">
-              <label>End Time</label>
+              <label>End Time <span style="color:#4b5563">(blank = auto)</span></label>
               <input type="datetime-local" id="book-end" oninput="schedulePreview()">
             </div>
           </div>
-
           <div class="form-group">
             <label>Description <span style="color:#4b5563">(optional)</span></label>
-            <input type="text" id="book-desc" placeholder="Short label for this slot" oninput="schedulePreview()">
+            <input type="text" id="book-desc" placeholder="Short label" oninput="schedulePreview()">
           </div>
-
-          <!-- Markdown / SVG textarea -->
           <div class="form-group" id="content-text-wrap">
             <label id="content-label">Content</label>
             <textarea id="book-content" oninput="schedulePreview()" placeholder="# Title&#10;&#10;Your content here…"></textarea>
             <div class="form-hint" id="content-hint">Use # headings, - bullets, **bold**</div>
           </div>
-
-          <!-- Image upload -->
           <div id="content-image-wrap" style="display:none">
             <label style="font-size:12px;color:#9ca3af;font-weight:500;display:block;margin-bottom:6px">Image</label>
-            <div id="img-dropzone" class="img-dropzone"
-                 ondragover="dzDragOver(event)" ondragleave="dzDragLeave(event)" ondrop="dzDrop(event)"
-                 onclick="document.getElementById('img-file-input').click()">
-              <div class="img-dropzone-text">
-                <b>Drop an image here</b>
-                or click to browse · paste with Ctrl+V
-              </div>
-              <div class="img-dropzone-actions">
-                <button class="btn-ghost btn-sm" onclick="event.stopPropagation();document.getElementById('img-file-input').click()">Browse files</button>
-              </div>
+            <div id="book-dz" class="img-dropzone"
+                 ondragover="dzOver(event,'book-dz')" ondragleave="dzLeave('book-dz')" ondrop="dzDrop(event,'book')"
+                 onclick="document.getElementById('book-img-input').click()">
+              <div class="img-dz-text"><b>Drop image here</b>or click to browse · paste Ctrl+V</div>
+              <button class="btn-ghost btn-sm" onclick="event.stopPropagation();document.getElementById('book-img-input').click()">Browse</button>
             </div>
-            <div id="img-loaded-row" class="img-loaded-info" style="display:none">
-              <span id="img-loaded-name" style="flex:1"></span>
-              <button class="btn-danger btn-sm" onclick="clearImage()">Remove</button>
+            <div id="book-img-loaded" class="img-loaded-row" style="display:none">
+              <span id="book-img-name" style="flex:1"></span>
+              <button class="btn-danger btn-sm" onclick="clearBookImage()">Remove</button>
             </div>
-            <input type="file" id="img-file-input" accept="image/*" style="display:none" onchange="loadImageFile(this.files[0])">
+            <input type="file" id="book-img-input" accept="image/*" style="display:none" onchange="loadImage(this.files[0],'book')">
           </div>
-
-          <div style="display:flex;gap:8px;align-items:center">
+          <div style="display:flex;gap:8px">
             <button class="btn-primary" onclick="submitBooking()">Book Slot</button>
             <button class="btn-ghost" onclick="clearBookForm()">Clear</button>
           </div>
-
-          <div id="book-conflict" style="display:none;background:#1a0a0a;border:1px solid #991b1b;border-radius:6px;padding:10px;font-size:12px;color:#fca5a5"></div>
+          <div id="book-conflict" style="display:none;background:#1a0a0a;border:1px solid #991b1b;border-radius:6px;padding:9px;font-size:12px;color:#fca5a5"></div>
         </div>
-
-        <!-- Right: live preview -->
         <div class="book-preview-col">
-          <div class="section-label">Display Preview <span style="text-transform:none;font-weight:400;color:#374151">(600×400)</span></div>
-          <div id="book-preview-empty" class="preview-empty">Enter content to see a preview</div>
-          <div id="book-preview-canvas-wrap" class="preview-canvas-wrap" style="display:none">
+          <div class="section-label">Preview <span style="text-transform:none;font-weight:400;color:#374151">(600×400)</span></div>
+          <div id="book-preview-empty" class="preview-empty-box">Enter content to preview</div>
+          <div id="book-preview-wrap" class="preview-canvas-wrap" style="display:none">
             <canvas id="book-preview-canvas" width="600" height="400"></canvas>
           </div>
-          <div class="preview-note" id="preview-note" style="display:none">Approximate preview — actual rendering may vary slightly</div>
+          <div id="book-preview-note" style="font-size:10px;color:#4b5563;text-align:center;display:none">Approximate — actual rendering may differ slightly</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IDLE SCREEN -->
+    <div id="tab-idle" class="tab-pane">
+      <div class="idle-layout">
+        <div class="idle-form">
+          <div class="form-group">
+            <label>Idle Screen Mode</label>
+            <div class="mode-tabs">
+              <button class="mode-btn active" onclick="setIdleMode('auto',this)">Auto (Widgets)</button>
+              <button class="mode-btn" onclick="setIdleMode('markdown',this)">Markdown</button>
+              <button class="mode-btn" onclick="setIdleMode('svg',this)">SVG</button>
+              <button class="mode-btn" onclick="setIdleMode('image',this)">Image</button>
+            </div>
+          </div>
+
+          <!-- Auto widgets -->
+          <div id="idle-auto-panel">
+            <div class="form-group">
+              <label>Widgets (drag to reorder — or use arrows)</label>
+              <div class="widget-list" id="widget-list"></div>
+            </div>
+            <div class="form-group" id="idle-weather-row">
+              <label>Weather Location</label>
+              <input type="text" id="idle-weather-loc" value="Abingdon, UK" placeholder="e.g. Abingdon, UK">
+            </div>
+            <div class="form-group" id="idle-custom-text-row" style="display:none">
+              <label>Custom Text</label>
+              <input type="text" id="idle-custom-text" placeholder="Shown on the idle screen">
+            </div>
+          </div>
+
+          <!-- Markdown/SVG editor -->
+          <div id="idle-content-panel" style="display:none">
+            <div class="form-group">
+              <label id="idle-content-label">Content</label>
+              <textarea id="idle-content" style="min-height:140px;resize:vertical;font-family:monospace;font-size:12px;background:#1f2937;border:1px solid #374151;border-radius:6px;padding:8px;color:#f3f4f6"
+                        oninput="scheduleIdlePreview()" placeholder="# Your Idle Screen&#10;&#10;Content goes here…"></textarea>
+            </div>
+          </div>
+
+          <!-- Image upload -->
+          <div id="idle-image-panel" style="display:none">
+            <div class="form-group">
+              <label>Idle Screen Image</label>
+              <div id="idle-dz" class="img-dropzone"
+                   ondragover="dzOver(event,'idle-dz')" ondragleave="dzLeave('idle-dz')" ondrop="dzDrop(event,'idle')"
+                   onclick="document.getElementById('idle-img-input').click()">
+                <div class="img-dz-text"><b>Drop image here</b>or click to browse · paste Ctrl+V</div>
+                <button class="btn-ghost btn-sm" onclick="event.stopPropagation();document.getElementById('idle-img-input').click()">Browse</button>
+              </div>
+              <div id="idle-img-loaded" class="img-loaded-row" style="display:none">
+                <span id="idle-img-name" style="flex:1"></span>
+                <button class="btn-danger btn-sm" onclick="clearIdleImage()">Remove</button>
+              </div>
+              <input type="file" id="idle-img-input" accept="image/*" style="display:none" onchange="loadImage(this.files[0],'idle')">
+            </div>
+          </div>
+
+          <div style="display:flex;gap:8px;align-items:center">
+            <button class="btn-primary" onclick="saveIdleConfig()">Save Idle Screen</button>
+            <button class="btn-ghost" onclick="fetchIdlePreview()">Refresh Preview</button>
+          </div>
         </div>
 
+        <div class="idle-preview-col">
+          <div class="section-label">Preview <span style="text-transform:none;font-weight:400;color:#374151">(server-rendered)</span></div>
+          <div id="idle-preview-loading" style="display:flex;align-items:center;justify-content:center;height:130px;background:#111827;border-radius:8px;color:#4b5563;font-size:12px;border:1px solid #1f2937">Loading preview…</div>
+          <div id="idle-preview-wrap" class="preview-canvas-wrap" style="display:none">
+            <img id="idle-preview-img" src="" alt="" style="width:100%;display:block" onerror="this.parentElement.style.display='none'">
+          </div>
+          <div style="font-size:10px;color:#4b5563;text-align:center;margin-top:4px">Preview reflects saved config + current system data</div>
+        </div>
       </div>
     </div>
 
@@ -350,21 +457,62 @@ button{cursor:pointer;border:none;border-radius:6px;font-size:12px;font-weight:5
     <h2 id="dm-title"></h2>
     <div id="dm-rows"></div>
     <div id="dm-content-wrap" style="display:none">
-      <div style="font-size:11px;color:#4b5563;margin-top:10px;margin-bottom:4px">Content:</div>
+      <div style="font-size:11px;color:#4b5563;margin-top:8px;margin-bottom:4px">Content:</div>
       <div class="detail-content" id="dm-content"></div>
     </div>
     <img id="dm-img" class="detail-img" style="display:none" onclick="openImgModal(this.src)" alt="">
-    <div class="btn-row" style="margin-top:14px">
+    <div class="btn-row" style="margin-top:12px">
+      <button class="btn-primary btn-sm" id="dm-apply-btn" style="display:none" onclick="openApplyModal(currentDetailId)">Apply Again</button>
       <button class="btn-ghost btn-sm" id="dm-cancel-btn" style="display:none" onclick="cancelFromDetail()">Cancel Booking</button>
       <button class="btn-ghost btn-sm" onclick="closeDetail()">Close</button>
     </div>
   </div>
 </div>
 
-<!-- Image zoom modal -->
-<div id="img-modal" onclick="closeImgModal()">
-  <img id="img-modal-src" alt="">
+<!-- Apply-again modal -->
+<div id="apply-modal" onclick="if(event.target===this)closeApplyModal()">
+  <div class="apply-box">
+    <h2>Apply Again</h2>
+    <div style="font-size:12px;color:#6b7280;margin-bottom:12px" id="apply-desc"></div>
+
+    <div class="form-group" style="margin-bottom:12px">
+      <label style="font-size:12px;color:#9ca3af;font-weight:500">When</label>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:6px">
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#d1d5db;cursor:pointer">
+          <input type="radio" name="apply-when" value="now" checked style="accent-color:#f59e0b">
+          Apply Now <span style="font-size:11px;color:#6b7280" id="apply-now-hint">(end time from your Apply Now setting)</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#d1d5db;cursor:pointer">
+          <input type="radio" name="apply-when" value="custom" style="accent-color:#f59e0b">
+          Custom time window
+        </label>
+      </div>
+    </div>
+
+    <div id="apply-custom-times" style="display:none">
+      <div class="form-row" style="margin-bottom:10px">
+        <div class="form-group">
+          <label style="font-size:12px;color:#9ca3af">Start</label>
+          <input type="datetime-local" id="apply-start" style="background:#1f2937;border:1px solid #374151;border-radius:6px;padding:7px;color:#f3f4f6;font-size:12px;width:100%">
+        </div>
+        <div class="form-group">
+          <label style="font-size:12px;color:#9ca3af">End</label>
+          <input type="datetime-local" id="apply-end" style="background:#1f2937;border:1px solid #374151;border-radius:6px;padding:7px;color:#f3f4f6;font-size:12px;width:100%">
+        </div>
+      </div>
+    </div>
+
+    <div id="apply-conflict" style="display:none;background:#1a0a0a;border:1px solid #991b1b;border-radius:6px;padding:9px;font-size:12px;color:#fca5a5;margin-bottom:10px"></div>
+
+    <div style="display:flex;gap:8px">
+      <button class="btn-primary" onclick="submitApply()">Book It</button>
+      <button class="btn-ghost" onclick="closeApplyModal()">Cancel</button>
+    </div>
+  </div>
 </div>
+
+<!-- Image zoom -->
+<div id="img-modal" onclick="closeImgModal()"><img id="img-modal-src" alt=""></div>
 
 <div id="toast"></div>
 
@@ -374,14 +522,28 @@ let authToken = localStorage.getItem('epaper_token') || null
 let authUser  = localStorage.getItem('epaper_user')  || null
 let calOffset = 0
 let allBookings = []
-let listPage = 0
+let histPage = 0
 const PAGE_SIZE = 20
-let currentContentType = 'markdown'
-let bookImageB64 = null   // base64 without data: prefix
-let bookImageName = ''
-let detailBookingId = null
+let bookContentType = 'markdown'
+let bookImageB64    = null
+let idleImageB64    = null
+let currentDetailId = null
+let applyBookingId  = null
 let activeBookingId = null
-let previewTimer = null
+let previewTimer    = null
+let idlePreviewTimer = null
+let idleMode        = 'auto'
+let idleWidgets     = []
+let idleConfig      = {}
+
+// All available widgets in default order
+const ALL_WIDGETS = ['cpu','ram','temp','disk','weather','uptime','ip','active_services','next_booking','booking_count','custom_text','quote']
+const WIDGET_LABELS = {
+  cpu:'CPU usage', ram:'RAM usage', temp:'Temperature', disk:'Disk usage',
+  weather:'Weather', uptime:'Uptime', ip:'IP / Hostname',
+  active_services:'Active services', next_booking:'Next booking',
+  booking_count:'Booking count', custom_text:'Custom text', 'quote':'Inspirational quote™'
+}
 
 // ── Tabs ───────────────────────────────────────────────────────────────────
 function showTab(name, btn) {
@@ -389,25 +551,24 @@ function showTab(name, btn) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'))
   document.getElementById('tab-' + name).classList.add('active')
   if (btn) btn.classList.add('active')
-  if (name === 'calendar') renderCalendar()
-  if (name === 'list') { listPage = 0; renderList() }
-  if (name === 'book') { updateBookAuthWarn(); schedulePreview() }
+  if (name === 'calendar')  renderCalendar()
+  if (name === 'history')   { histPage = 0; renderHistory() }
+  if (name === 'book')      { updateBookAuthWarn(); schedulePreview() }
+  if (name === 'idle')      loadIdleConfig()
 }
 
 // ── Auth ───────────────────────────────────────────────────────────────────
 function updateAuthUI() {
   const badge = document.getElementById('auth-badge')
   if (authToken) {
-    badge.textContent = authUser || 'Logged in'
-    badge.className = 'authed'
+    badge.textContent = authUser || 'Logged in'; badge.className = 'authed'
     document.getElementById('auth-logged-in').style.display = ''
-    document.getElementById('auth-form-wrap').style.display = 'none'
+    document.getElementById('auth-form-wrap').style.display  = 'none'
     document.getElementById('auth-username').textContent = authUser || '—'
   } else {
-    badge.textContent = 'NOT LOGGED IN'
-    badge.className = 'anon'
+    badge.textContent = 'NOT LOGGED IN'; badge.className = 'anon'
     document.getElementById('auth-logged-in').style.display = 'none'
-    document.getElementById('auth-form-wrap').style.display = ''
+    document.getElementById('auth-form-wrap').style.display  = ''
   }
 }
 
@@ -417,13 +578,12 @@ async function doLogin() {
   if (!user || !pass) { toast('Enter username and password', true); return }
   try {
     const r = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username: user, password: pass })
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({username:user, password:pass})
     })
-    const data = await r.json()
-    if (!r.ok || !data.access_token) { toast(data.detail || 'Login failed', true); return }
-    authToken = data.access_token; authUser = user
+    const d = await r.json()
+    if (!r.ok || !d.access_token) { toast(d.detail || 'Login failed', true); return }
+    authToken = d.access_token; authUser = user
     localStorage.setItem('epaper_token', authToken)
     localStorage.setItem('epaper_user', authUser)
     updateAuthUI(); toast('Logged in as ' + user)
@@ -437,46 +597,43 @@ function logout() {
   updateAuthUI(); toast('Logged out')
 }
 
-function authHeaders() {
-  return authToken ? { 'Authorization': 'Bearer ' + authToken, 'Content-Type': 'application/json' }
-                   : { 'Content-Type': 'application/json' }
+function authHeaders(json=true) {
+  const h = json ? {'Content-Type':'application/json'} : {}
+  if (authToken) h['Authorization'] = 'Bearer ' + authToken
+  return h
 }
 
-// ── Status polling ─────────────────────────────────────────────────────────
+// ── Status ─────────────────────────────────────────────────────────────────
 async function pollStatus() {
   try {
     const r = await fetch('/api/status'); if (!r.ok) return
     const s = await r.json()
     document.getElementById('s-mode').textContent = s.mode
     document.getElementById('s-updated').textContent = s.last_updated
-      ? new Date(s.last_updated * 1000).toLocaleTimeString() : '—'
+      ? new Date(s.last_updated*1000).toLocaleTimeString() : '—'
     if (s.simulation) document.getElementById('sim-badge').style.display = ''
-    const bWrap = document.getElementById('s-booking-wrap')
+    const bw = document.getElementById('s-booking-wrap')
     if (s.current_booking) {
-      bWrap.style.display = ''
-      document.getElementById('s-booking').textContent = s.current_booking.principal_name
-    } else bWrap.style.display = 'none'
+      bw.style.display = ''; document.getElementById('s-booking').textContent = s.current_booking.principal_name
+    } else bw.style.display = 'none'
     activeBookingId = s.current_booking ? s.current_booking.booking_id : null
-    const abSection = document.getElementById('active-booking-section')
+    const sec = document.getElementById('active-section')
     if (s.current_booking) {
-      abSection.style.display = ''
+      sec.style.display = ''
       const b = s.current_booking
-      const tag = `<span class="booking-tag tag-${b.principal_type}">${b.principal_type}</span>`
-      document.getElementById('active-booking-box').innerHTML =
-        `<div class="booking-title">${esc(b.description || b.principal_name)} ${tag}</div>
-         <div>${esc(b.principal_name)}</div>
-         <div>${fmtDt(b.start_time)} – ${fmtTime(b.end_time)}</div>`
-    } else abSection.style.display = 'none'
+      document.getElementById('active-box').innerHTML =
+        `<div class="ab-title">${esc(b.description||b.principal_name)} <span class="booking-tag tag-${b.principal_type}">${b.principal_type}</span></div>
+         <div>${esc(b.principal_name)}</div><div>${fmtDt(b.start_time)} – ${fmtTime(b.end_time)}</div>`
+    } else sec.style.display = 'none'
     document.getElementById('display-meta').innerHTML =
-      `<b>${s.mode}</b>${s.current_booking ? ' · ' + esc(s.current_booking.principal_name) : ''}`
+      `<b>${s.mode}</b>${s.current_booking?' · '+esc(s.current_booking.principal_name):''}`
   } catch(e) {}
 }
 
 function refreshPreview() {
   const img = document.getElementById('preview-img')
-  const tmp = new Image()
-  tmp.onload = () => { img.src = '/api/preview?t=' + Date.now() }
-  tmp.src = '/api/preview?t=' + Date.now()
+  const tmp = new Image(); tmp.onload = () => { img.src = '/api/preview?t='+Date.now() }
+  tmp.src = '/api/preview?t='+Date.now()
 }
 
 async function cancelActiveBooking() {
@@ -486,7 +643,7 @@ async function cancelActiveBooking() {
   await cancelBookingById(activeBookingId)
 }
 
-// ── Fetch bookings ─────────────────────────────────────────────────────────
+// ── Bookings ───────────────────────────────────────────────────────────────
 async function fetchBookings() {
   try {
     const r = await fetch('/api/history?limit=500')
@@ -494,456 +651,636 @@ async function fetchBookings() {
   } catch(e) {}
 }
 
-// ── CALENDAR ───────────────────────────────────────────────────────────────
-const CAL_START_H = 0, CAL_END_H = 24, CAL_H = 600, PX_PER_H = CAL_H / 24
+async function cancelBookingById(id) {
+  if (!authToken) { toast('Log in first', true); return }
+  if (!confirm('Cancel this booking?')) return
+  try {
+    const r = await fetch('/api/book/'+id, {method:'DELETE', headers:authHeaders()})
+    if (r.status === 204) { toast('Booking cancelled'); await fetchBookings(); renderHistory(); renderCalendar() }
+    else { const d=await r.json(); toast(typeof d.detail==='string'?d.detail:JSON.stringify(d.detail), true) }
+  } catch(e) { toast(e.message, true) }
+}
 
-function calShift(d) { calOffset += d; renderCalendar() }
-function calGoToday() { calOffset = 0; renderCalendar() }
+// ── Apply Now settings ─────────────────────────────────────────────────────
+function applyModeChanged() {
+  const mode = document.getElementById('cfg-apply-mode').value
+  document.getElementById('cfg-fixed-row').style.display = mode==='fixed' ? '' : 'none'
+  document.getElementById('cfg-snap-row').style.display  = mode==='snap'  ? '' : 'none'
+}
+
+async function saveApplySettings() {
+  const patch = {
+    apply_now_mode:       document.getElementById('cfg-apply-mode').value,
+    apply_now_fixed_mins: parseInt(document.getElementById('cfg-fixed-mins').value)||30,
+    apply_now_snap_mins:  parseInt(document.getElementById('cfg-snap-mins').value)||20,
+    idle_interval_mins:   parseInt(document.getElementById('cfg-idle-mins').value)||20,
+  }
+  if (!authToken) { toast('Log in first', true); return }
+  try {
+    const saved = {...idleConfig, ...patch}
+    const r = await fetch('/api/idle-config', {
+      method:'POST', headers:authHeaders(),
+      body: JSON.stringify(saved)
+    })
+    if (r.ok) { idleConfig = saved; toast('Settings saved') }
+    else toast('Save failed', true)
+  } catch(e) { toast(e.message, true) }
+}
+
+function populateApplySettings(cfg) {
+  document.getElementById('cfg-apply-mode').value  = cfg.apply_now_mode || 'snap'
+  document.getElementById('cfg-fixed-mins').value  = cfg.apply_now_fixed_mins || 30
+  document.getElementById('cfg-snap-mins').value   = cfg.apply_now_snap_mins  || 20
+  document.getElementById('cfg-idle-mins').value   = cfg.idle_interval_mins   || 20
+  applyModeChanged()
+  // Update apply-now hint
+  const mode = cfg.apply_now_mode || 'snap'
+  const hints = {
+    fixed: `(+${cfg.apply_now_fixed_mins||30} min from now)`,
+    snap:  `(next ${cfg.apply_now_snap_mins||20}-min mark)`,
+    retain:'(until next booking displaces it)',
+  }
+  document.getElementById('apply-now-hint').textContent = hints[mode] || ''
+}
+
+// ── CALENDAR ───────────────────────────────────────────────────────────────
+const CAL_H=580, PX=CAL_H/24
+function calShift(d){calOffset+=d;renderCalendar()}
+function calGoToday(){calOffset=0;renderCalendar()}
 
 function renderCalendar() {
-  const today = new Date(); today.setHours(0,0,0,0)
-  const start = new Date(today); start.setDate(start.getDate() + calOffset)
-  const end   = new Date(start); end.setDate(end.getDate() + 7)
-  const opts = { month:'short', day:'numeric' }
-  document.getElementById('cal-title').textContent =
-    start.toLocaleDateString(undefined, opts) + ' – ' + new Date(end.getTime()-1).toLocaleDateString(undefined, opts)
-  const days = Array.from({length:7}, (_,i) => { const d=new Date(start); d.setDate(d.getDate()+i); return d })
-  const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
+  const today=new Date();today.setHours(0,0,0,0)
+  const start=new Date(today);start.setDate(start.getDate()+calOffset)
+  const opts={month:'short',day:'numeric'}
+  const days=Array.from({length:7},(_,i)=>{const d=new Date(start);d.setDate(d.getDate()+i);return d})
+  const dn=['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
+  document.getElementById('cal-title').textContent=
+    start.toLocaleDateString(undefined,opts)+' – '+new Date(start.getTime()+6*86400000).toLocaleDateString(undefined,opts)
 
-  let html = `<div class="cal-header"><div class="cal-header-time"></div>`
-  days.forEach(d => {
-    const isToday = d.toDateString() === today.toDateString()
-    html += `<div class="cal-header-day${isToday?' today':''}">${dayNames[d.getDay()]} ${d.getDate()}</div>`
+  let h=`<div class="cal-header"><div class="cal-header-time"></div>`
+  days.forEach(d=>{
+    const it=d.toDateString()===today.toDateString()
+    h+=`<div class="cal-header-day${it?' today':''}">${dn[d.getDay()]} ${d.getDate()}</div>`
   })
-  html += `</div><div class="cal-body"><div class="cal-time-col" style="height:${CAL_H}px;position:relative">`
-  for (let h=0; h<=24; h++) {
-    const y = h * PX_PER_H
-    const label = h===0?'12am':h<12?h+'am':h===12?'12pm':h===24?'':(h-12)+'pm'
-    html += `<div class="cal-time-label" style="top:${y}px">${label}</div>`
+  h+=`</div><div class="cal-body"><div class="cal-time-col" style="height:${CAL_H}px;position:relative">`
+  for(let i=0;i<=24;i++){
+    const lbl=i===0?'12am':i<12?i+'am':i===12?'12pm':i===24?'':(i-12)+'pm'
+    h+=`<div class="cal-time-label" style="top:${i*PX}px">${lbl}</div>`
   }
-  html += `</div>`
-  days.forEach(d => {
-    html += `<div class="cal-day-col" style="height:${CAL_H}px;position:relative">`
-    for (let h=0; h<=24; h++) html += `<div class="cal-hour-line" style="top:${h*PX_PER_H}px"></div>`
-    const dayStart = d.getTime(), dayEnd = dayStart + 86400000
-    allBookings.filter(b => {
-      const bs = new Date(b.start_time).getTime(), be = new Date(b.end_time).getTime()
-      return !b.cancelled && bs < dayEnd && be > dayStart
-    }).forEach(b => {
-      const bs = new Date(b.start_time), be = new Date(b.end_time)
-      const startH = Math.max(bs.getHours() + bs.getMinutes()/60, 0)
-      let endH = be.getHours() + be.getMinutes()/60
-      if (be.toDateString() !== d.toDateString()) endH = 24
-      endH = Math.min(endH, 24)
-      const top = startH * PX_PER_H
-      const height = Math.max((endH - startH) * PX_PER_H, 14)
-      const expired = new Date(b.end_time).getTime() < Date.now()
-      html += `<div class="cal-booking-block ${b.principal_type}${expired?' expired':''}" style="top:${top}px;height:${height}px" title="${esc(b.description||b.principal_name)}" onclick="openDetail('${b.booking_id}')">${esc(b.description||b.principal_name)}</div>`
+  h+=`</div>`
+  days.forEach(d=>{
+    h+=`<div class="cal-day-col" style="height:${CAL_H}px;position:relative">`
+    for(let i=0;i<=24;i++) h+=`<div class="cal-hour-line" style="top:${i*PX}px"></div>`
+    const ds=d.getTime(),de=ds+86400000
+    allBookings.filter(b=>{
+      const bs=new Date(b.start_time).getTime(),be=new Date(b.end_time).getTime()
+      return !b.cancelled&&bs<de&&be>ds
+    }).forEach(b=>{
+      const bs=new Date(b.start_time),be=new Date(b.end_time)
+      const sh=Math.max(bs.getHours()+bs.getMinutes()/60,0)
+      let eh=be.getHours()+be.getMinutes()/60
+      if(be.toDateString()!==d.toDateString())eh=24
+      eh=Math.min(eh,24)
+      const top=sh*PX,height=Math.max((eh-sh)*PX,14)
+      const exp=new Date(b.end_time).getTime()<Date.now()
+      h+=`<div class="cal-block ${b.principal_type}${exp?' expired':''}" style="top:${top}px;height:${height}px" title="${esc(b.description||b.principal_name)}" onclick="openDetail('${b.booking_id}')">${esc(b.description||b.principal_name)}</div>`
     })
-    html += `</div>`
+    h+=`</div>`
   })
-  html += `</div>`
-  document.getElementById('cal-grid').innerHTML = html
+  h+=`</div>`
+  document.getElementById('cal-grid').innerHTML=h
 
-  // Now line
-  const nowDate = new Date()
-  const nowDayIdx = days.findIndex(d => d.toDateString() === nowDate.toDateString())
-  if (nowDayIdx >= 0) {
-    const cols = document.querySelectorAll('.cal-day-col')
-    if (cols[nowDayIdx]) {
-      const line = document.createElement('div')
-      line.className = 'cal-now-line'
-      line.style.top = ((nowDate.getHours() + nowDate.getMinutes()/60) * PX_PER_H) + 'px'
-      cols[nowDayIdx].appendChild(line)
+  const nd=new Date()
+  const ni=days.findIndex(d=>d.toDateString()===nd.toDateString())
+  if(ni>=0){
+    const cols=document.querySelectorAll('.cal-day-col')
+    if(cols[ni]){
+      const line=document.createElement('div')
+      line.className='cal-now-line'
+      line.style.top=((nd.getHours()+nd.getMinutes()/60)*PX)+'px'
+      cols[ni].appendChild(line)
     }
   }
 }
 
-// ── LIST ───────────────────────────────────────────────────────────────────
-function renderList() {
-  const text = document.getElementById('filter-text').value.toLowerCase()
-  const status = document.getElementById('filter-status').value
-  const type = document.getElementById('filter-type').value
-  const now = new Date()
-  let filtered = allBookings.filter(b => {
-    if (text && !JSON.stringify(b).toLowerCase().includes(text)) return false
-    if (type && b.principal_type !== type) return false
-    const bs = new Date(b.start_time), be = new Date(b.end_time)
-    if (status === 'upcoming')  return !b.cancelled && bs > now
-    if (status === 'active')    return !b.cancelled && bs <= now && be > now
-    if (status === 'past')      return !b.cancelled && be <= now
-    if (status === 'cancelled') return b.cancelled
+// ── HISTORY ────────────────────────────────────────────────────────────────
+function renderHistory() {
+  const text=document.getElementById('filter-text').value.toLowerCase()
+  const status=document.getElementById('filter-status').value
+  const type=document.getElementById('filter-type').value
+  const now=new Date()
+  let filtered=allBookings.filter(b=>{
+    if(text&&!JSON.stringify(b).toLowerCase().includes(text))return false
+    if(type&&b.principal_type!==type)return false
+    const bs=new Date(b.start_time),be=new Date(b.end_time)
+    if(status==='upcoming') return !b.cancelled&&bs>now
+    if(status==='active')   return !b.cancelled&&bs<=now&&be>now
+    if(status==='past')     return !b.cancelled&&be<=now
+    if(status==='cancelled')return b.cancelled
     return true
   })
-  const total = filtered.length, pages = Math.ceil(total / PAGE_SIZE)
-  if (listPage >= pages && pages > 0) listPage = pages - 1
-  if (listPage < 0) listPage = 0
-  const slice = filtered.slice(listPage * PAGE_SIZE, (listPage+1) * PAGE_SIZE)
-  const body = document.getElementById('list-body')
-  if (!slice.length) {
-    body.innerHTML = `<div style="color:#4b5563;font-size:13px;text-align:center;padding:40px">No bookings found.</div>`
+  const total=filtered.length,pages=Math.ceil(total/PAGE_SIZE)
+  if(histPage>=pages&&pages>0)histPage=pages-1
+  if(histPage<0)histPage=0
+  const slice=filtered.slice(histPage*PAGE_SIZE,(histPage+1)*PAGE_SIZE)
+  const body=document.getElementById('history-body')
+  if(!slice.length){
+    body.innerHTML=`<div style="color:#4b5563;font-size:13px;text-align:center;padding:40px">No bookings found.</div>`
   } else {
-    body.innerHTML = slice.map(b => {
-      const bs = new Date(b.start_time), be = new Date(b.end_time)
-      const isActive = !b.cancelled && bs <= now && be > now
-      const tag = `<span class="booking-tag tag-${b.principal_type}">${b.principal_type}</span>`
-      const cTag = b.cancelled ? `<span class="booking-tag tag-cancelled">cancelled</span>` : ''
-      const aTag = isActive ? `<span class="booking-tag" style="background:#064e3b;color:#6ee7b7">LIVE</span>` : ''
-      const preview = b.content_type !== 'image' && b.content ? b.content.slice(0,80).replace(/\n/g,' ') : ''
-      return `<div class="booking-row${b.cancelled?' cancelled':''}">
-        <div class="booking-row-left">
-          <div class="booking-row-title">${esc(b.description||b.principal_name)} ${tag} ${cTag} ${aTag}</div>
-          <div class="booking-row-meta">${esc(b.principal_name)} · ${b.content_type} · ${fmtDt(b.start_time)} – ${fmtTime(b.end_time)}</div>
-          ${preview?`<div class="content-preview">${esc(preview)}</div>`:''}
+    body.innerHTML=slice.map(b=>{
+      const bs=new Date(b.start_time),be=new Date(b.end_time)
+      const isActive=!b.cancelled&&bs<=now&&be>now
+      const tag=`<span class="booking-tag tag-${b.principal_type}">${b.principal_type}</span>`
+      const ctag=b.cancelled?`<span class="booking-tag tag-cancelled">cancelled</span>`:''
+      const atag=isActive?`<span class="booking-tag" style="background:#064e3b;color:#6ee7b7">LIVE</span>`:''
+      const prev=b.content_type!=='image'&&b.content?b.content.slice(0,70).replace(/\n/g,' '):''
+      return `<div class="hist-item${b.cancelled?' cancelled':''}">
+        <div class="hist-thumb" onclick="openImgModal('/api/history/${b.booking_id}/image')">
+          <img src="/api/history/${b.booking_id}/image" loading="lazy" alt=""
+               onerror="this.parentElement.innerHTML='<div class=\\'no-thumb\\'>No image yet</div>'">
         </div>
-        <div class="booking-row-actions">
+        <div class="hist-body">
+          <div class="hist-title">${esc(b.description||b.principal_name)} ${tag}${ctag}${atag}</div>
+          <div class="hist-meta">${esc(b.principal_name)} · ${b.content_type} · ${fmtDt(b.start_time)} – ${fmtTime(b.end_time)}</div>
+          ${prev?`<div class="hist-preview">${esc(prev)}</div>`:''}
+        </div>
+        <div class="hist-actions">
+          <button class="btn-primary btn-sm" onclick="openApplyModal('${b.booking_id}')">Apply Again</button>
           <button class="btn-ghost btn-sm" onclick="openDetail('${b.booking_id}')">Detail</button>
           ${!b.cancelled?`<button class="btn-danger btn-sm" onclick="cancelBookingById('${b.booking_id}')">Cancel</button>`:''}
         </div>
       </div>`
     }).join('')
   }
-  const pag = document.getElementById('list-pagination')
-  if (pages <= 1) { pag.innerHTML = ''; return }
-  pag.innerHTML = `<button class="btn-ghost btn-sm" onclick="listGo(${listPage-1})" ${listPage===0?'disabled':''}>&#8592;</button>
-    <span>Page ${listPage+1} of ${pages} (${total} total)</span>
-    <button class="btn-ghost btn-sm" onclick="listGo(${listPage+1})" ${listPage>=pages-1?'disabled':''}>&#8594;</button>`
+  const pag=document.getElementById('history-pagination')
+  if(pages<=1){pag.innerHTML='';return}
+  pag.innerHTML=`<button class="btn-ghost btn-sm" onclick="histGo(${histPage-1})" ${histPage===0?'disabled':''}>&#8592;</button>
+    <span>Page ${histPage+1} of ${pages} (${total} total)</span>
+    <button class="btn-ghost btn-sm" onclick="histGo(${histPage+1})" ${histPage>=pages-1?'disabled':''}>&#8594;</button>`
 }
-function listGo(p) { listPage = p; renderList() }
-
-async function cancelBookingById(id) {
-  if (!authToken) { toast('Log in first', true); return }
-  if (!confirm('Cancel this booking?')) return
-  try {
-    const r = await fetch('/api/book/' + id, { method:'DELETE', headers: authHeaders() })
-    if (r.status === 204) {
-      toast('Booking cancelled'); await fetchBookings(); renderList(); renderCalendar()
-    } else {
-      const d = await r.json()
-      toast(typeof d.detail==='string' ? d.detail : JSON.stringify(d.detail), true)
-    }
-  } catch(e) { toast(e.message, true) }
-}
+function histGo(p){histPage=p;renderHistory()}
 
 // ── Detail modal ───────────────────────────────────────────────────────────
 function openDetail(id) {
-  const b = allBookings.find(x => x.booking_id === id); if (!b) return
-  detailBookingId = id
-  document.getElementById('dm-title').textContent = b.description || b.principal_name
-  const rows = [
-    ['Booking ID', b.booking_id], ['Principal', b.principal_name + ' (' + b.principal_type + ')'],
-    ['Content type', b.content_type], ['Start', fmtDt(b.start_time)], ['End', fmtDt(b.end_time)],
-    ['Status', b.cancelled ? 'Cancelled' : (new Date(b.end_time)<new Date()?'Past':(new Date(b.start_time)<=new Date()?'Active':'Upcoming'))],
-    ['Created', fmtDt(b.created_at)],
-  ]
-  document.getElementById('dm-rows').innerHTML = rows.map(([k,v])=>`<div class="detail-row"><b>${k}</b>${esc(v)}</div>`).join('')
-  const cwrap = document.getElementById('dm-content-wrap')
-  if (b.content_type === 'image') { cwrap.style.display = 'none' }
-  else { cwrap.style.display = ''; document.getElementById('dm-content').textContent = b.content || '(empty)' }
-  const dimg = document.getElementById('dm-img')
-  dimg.src = '/api/history/' + id + '/image'
-  dimg.style.display = ''
-  dimg.onerror = () => { dimg.style.display = 'none' }
-  document.getElementById('dm-cancel-btn').style.display = (!b.cancelled && authToken) ? '' : 'none'
+  const b=allBookings.find(x=>x.booking_id===id);if(!b)return
+  currentDetailId=id
+  document.getElementById('dm-title').textContent=b.description||b.principal_name
+  const now=new Date()
+  const status=b.cancelled?'Cancelled':(new Date(b.end_time)<now?'Past':(new Date(b.start_time)<=now?'Active':'Upcoming'))
+  document.getElementById('dm-rows').innerHTML=[
+    ['Booking ID',b.booking_id],['Principal',b.principal_name+' ('+b.principal_type+')'],
+    ['Type',b.content_type],['Start',fmtDt(b.start_time)],['End',fmtDt(b.end_time)],
+    ['Status',status],['Created',fmtDt(b.created_at)]
+  ].map(([k,v])=>`<div class="detail-row"><b>${k}</b>${esc(v)}</div>`).join('')
+  const cw=document.getElementById('dm-content-wrap')
+  if(b.content_type==='image')cw.style.display='none'
+  else{cw.style.display='';document.getElementById('dm-content').textContent=b.content||'(empty)'}
+  const di=document.getElementById('dm-img')
+  di.src='/api/history/'+id+'/image'; di.style.display=''
+  di.onerror=()=>{di.style.display='none'}
+  document.getElementById('dm-apply-btn').style.display=''
+  document.getElementById('dm-cancel-btn').style.display=(!b.cancelled&&authToken)?'':'none'
   document.getElementById('detail-modal').classList.add('open')
 }
-async function cancelFromDetail() { if (detailBookingId) { await cancelBookingById(detailBookingId); closeDetail() } }
-function closeDetail() { document.getElementById('detail-modal').classList.remove('open'); detailBookingId = null }
+async function cancelFromDetail(){if(currentDetailId){await cancelBookingById(currentDetailId);closeDetail()}}
+function closeDetail(){document.getElementById('detail-modal').classList.remove('open');currentDetailId=null}
 
-// ── Image zoom modal ───────────────────────────────────────────────────────
-function openImgModal(src) {
-  document.getElementById('img-modal-src').src = src
-  document.getElementById('img-modal').classList.add('open')
+// ── Apply-again modal ──────────────────────────────────────────────────────
+function openApplyModal(id) {
+  const b=allBookings.find(x=>x.booking_id===id);if(!b)return
+  applyBookingId=id
+  document.getElementById('apply-desc').textContent=
+    `"${b.description||b.principal_name}" — ${b.content_type}`
+  document.getElementById('apply-conflict').style.display='none'
+  // Reset radio
+  document.querySelector('input[name=apply-when][value=now]').checked=true
+  document.getElementById('apply-custom-times').style.display='none'
+  // Pre-fill custom times
+  const pad=n=>String(n).padStart(2,'0')
+  const fmt=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
+  const s=new Date(Date.now()+60000),e=new Date(Date.now()+3600000)
+  document.getElementById('apply-start').value=fmt(s)
+  document.getElementById('apply-end').value=fmt(e)
+  document.getElementById('apply-modal').classList.add('open')
 }
-function closeImgModal() { document.getElementById('img-modal').classList.remove('open') }
-document.addEventListener('keydown', e => { if(e.key==='Escape'){closeDetail();closeImgModal()} })
+
+document.addEventListener('change',e=>{
+  if(e.target.name==='apply-when'){
+    document.getElementById('apply-custom-times').style.display=
+      e.target.value==='custom'?'':'none'
+  }
+})
+
+async function submitApply() {
+  if(!authToken){toast('Log in first',true);return}
+  const b=allBookings.find(x=>x.booking_id===applyBookingId);if(!b)return
+  const when=document.querySelector('input[name=apply-when]:checked').value
+  const body={content_type:b.content_type, content:b.content, description:b.description}
+  if(when==='custom'){
+    const s=document.getElementById('apply-start').value
+    const e=document.getElementById('apply-end').value
+    if(!s||!e){toast('Set start and end times',true);return}
+    body.start_time=new Date(s).toISOString()
+    body.end_time  =new Date(e).toISOString()
+  }
+  document.getElementById('apply-conflict').style.display='none'
+  try{
+    const r=await fetch('/api/book',{method:'POST',headers:authHeaders(),body:JSON.stringify(body)})
+    if(r.status===201){
+      toast('Booking created!'); closeApplyModal(); closeDetail()
+      await fetchBookings(); renderHistory(); renderCalendar()
+    } else if(r.status===409){
+      const d=await r.json()
+      const el=document.getElementById('apply-conflict')
+      el.style.display=''
+      el.innerHTML=`<b>Conflict:</b><br>`+(d.detail?.conflicts||[]).map(c=>
+        `• ${esc(c.principal_name)} — ${fmtDt(c.start_time)} to ${fmtTime(c.end_time)}`
+      ).join('<br>')
+    } else {
+      const d=await r.json()
+      toast(typeof d.detail==='string'?d.detail:JSON.stringify(d.detail),true)
+    }
+  }catch(e){toast(e.message,true)}
+}
+function closeApplyModal(){document.getElementById('apply-modal').classList.remove('open');applyBookingId=null}
 
 // ── BOOK SLOT ──────────────────────────────────────────────────────────────
 function setContentType(type, btn) {
-  currentContentType = type
-  document.querySelectorAll('.ct-btn').forEach(b => b.classList.remove('active'))
+  bookContentType=type
+  document.querySelectorAll('.ct-btn').forEach(b=>b.classList.remove('active'))
   btn.classList.add('active')
-  const isImg = type === 'image'
-  document.getElementById('content-text-wrap').style.display = isImg ? 'none' : ''
-  document.getElementById('content-image-wrap').style.display = isImg ? '' : ''
-  const hints = {
-    markdown: 'Use # headings, - bullets, **bold**, plain paragraphs',
-    svg: 'Paste raw SVG XML — must start with <svg …>',
-  }
-  document.getElementById('content-hint').textContent = hints[type] || ''
-  document.getElementById('content-label').textContent = type === 'svg' ? 'SVG Content' : 'Content'
-  document.getElementById('book-content').placeholder =
-    type === 'markdown' ? '# Title\n\n- Point one\n- Point two\n\nSome body text.' :
+  const isImg=type==='image'
+  document.getElementById('content-text-wrap').style.display=isImg?'none':''
+  document.getElementById('content-image-wrap').style.display=isImg?'':''
+  const hints={markdown:'Use # headings, - bullets, **bold**',svg:'Paste raw SVG XML'}
+  document.getElementById('content-hint').textContent=hints[type]||''
+  document.getElementById('content-label').textContent=type==='svg'?'SVG Content':'Content'
+  document.getElementById('book-content').placeholder=
+    type==='markdown'?'# Title\n\n- Point one\n- Point two':
     '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400">\n  …\n</svg>'
   schedulePreview()
 }
 
-function updateBookAuthWarn() {
-  document.getElementById('book-auth-warn').style.display = authToken ? 'none' : ''
+function updateBookAuthWarn(){document.getElementById('book-auth-warn').style.display=authToken?'none':''}
+
+function clearBookForm(){
+  document.getElementById('book-desc').value=''
+  document.getElementById('book-content').value=''
+  document.getElementById('book-conflict').style.display='none'
+  clearBookImage(); prefillDatetimes(); schedulePreview()
 }
 
-function clearBookForm() {
-  document.getElementById('book-desc').value = ''
-  document.getElementById('book-content').value = ''
-  document.getElementById('book-conflict').style.display = 'none'
-  clearImage()
-  prefillDatetimes()
+function clearBookImage(){
+  bookImageB64=null
+  document.getElementById('book-dz').style.display=''
+  document.getElementById('book-img-loaded').style.display='none'
+  document.getElementById('book-img-input').value=''
   schedulePreview()
 }
 
-function clearImage() {
-  bookImageB64 = null; bookImageName = ''
-  document.getElementById('img-dropzone').style.display = ''
-  document.getElementById('img-loaded-row').style.display = 'none'
-  document.getElementById('img-file-input').value = ''
-  schedulePreview()
+async function submitBooking() {
+  if(!authToken){toast('Log in first',true);return}
+  const start=document.getElementById('book-start').value
+  const end=document.getElementById('book-end').value
+  let content
+  if(bookContentType==='image'){if(!bookImageB64){toast('Upload an image first',true);return};content=bookImageB64}
+  else{content=document.getElementById('book-content').value.trim();if(!content){toast('Enter content',true);return}}
+  document.getElementById('book-conflict').style.display='none'
+  try{
+    const body={content_type:bookContentType,content,description:document.getElementById('book-desc').value.trim()}
+    if(start) body.start_time=new Date(start).toISOString()
+    if(end)   body.end_time  =new Date(end).toISOString()
+    const r=await fetch('/api/book',{method:'POST',headers:authHeaders(),body:JSON.stringify(body)})
+    if(r.status===201){
+      toast('Booking created!'); clearBookForm(); await fetchBookings(); renderCalendar()
+      showTab('calendar',document.querySelectorAll('.tab-btn')[0])
+    } else if(r.status===409){
+      const d=await r.json()
+      const el=document.getElementById('book-conflict');el.style.display=''
+      el.innerHTML=`<b>Conflict with ${(d.detail?.conflicts||[]).length} booking(s):</b><br>`+
+        (d.detail?.conflicts||[]).map(c=>
+          `• ${esc(c.principal_name)} (${c.principal_type}) — ${fmtDt(c.start_time)} to ${fmtTime(c.end_time)}: ${esc(c.description)}`
+        ).join('<br>')
+    } else {const d=await r.json();toast(typeof d.detail==='string'?d.detail:JSON.stringify(d.detail),true)}
+  }catch(e){toast(e.message,true)}
 }
 
-// ── Image input ────────────────────────────────────────────────────────────
-function dzDragOver(e) { e.preventDefault(); document.getElementById('img-dropzone').classList.add('drag-over') }
-function dzDragLeave(e) { document.getElementById('img-dropzone').classList.remove('drag-over') }
-function dzDrop(e) {
-  e.preventDefault(); document.getElementById('img-dropzone').classList.remove('drag-over')
-  const file = e.dataTransfer.files[0]; if (file && file.type.startsWith('image/')) loadImageFile(file)
+// ── Booking preview ────────────────────────────────────────────────────────
+function schedulePreview(){clearTimeout(previewTimer);previewTimer=setTimeout(renderBookPreview,150)}
+
+function renderBookPreview() {
+  const canvas=document.getElementById('book-preview-canvas')
+  const ctx=canvas.getContext('2d')
+  const empty=document.getElementById('book-preview-empty')
+  const wrap=document.getElementById('book-preview-wrap')
+  const note=document.getElementById('book-preview-note')
+
+  if(bookContentType==='image'){
+    if(!bookImageB64){empty.style.display='';wrap.style.display='none';note.style.display='none';return}
+    empty.style.display='none';wrap.style.display='';note.style.display=''
+    const img=new Image()
+    img.onload=()=>{ctx.clearRect(0,0,600,400);const s=Math.max(600/img.width,400/img.height),w=img.width*s,h=img.height*s;ctx.drawImage(img,(600-w)/2,(400-h)/2,w,h)}
+    img.src='data:image/png;base64,'+bookImageB64;return
+  }
+  if(bookContentType==='svg'){
+    const sv=document.getElementById('book-content').value.trim()
+    if(!sv){empty.style.display='';wrap.style.display='none';note.style.display='none';return}
+    empty.style.display='none';wrap.style.display='';note.style.display=''
+    const blob=new Blob([sv],{type:'image/svg+xml'})
+    const url=URL.createObjectURL(blob)
+    const img=new Image()
+    img.onload=()=>{ctx.clearRect(0,0,600,400);ctx.drawImage(img,0,0,600,400);URL.revokeObjectURL(url)}
+    img.onerror=()=>{URL.revokeObjectURL(url);drawErrCanvas(ctx,'Invalid SVG')}
+    img.src=url;return
+  }
+  // Markdown
+  const md=document.getElementById('book-content').value
+  if(!md.trim()){empty.style.display='';wrap.style.display='none';note.style.display='none';return}
+  empty.style.display='none';wrap.style.display='';note.style.display=''
+  const desc=document.getElementById('book-desc').value.trim()
+  const start=document.getElementById('book-start').value
+  const end=document.getElementById('book-end').value
+  const slot=(start&&end)?fmtSlotLocal(new Date(start))+' – '+fmtTimeLocal(new Date(end)):''
+  drawMdPreview(ctx,md,desc||(authUser||'Preview'),slot)
 }
 
-function loadImageFile(file) {
-  if (!file) return
-  const reader = new FileReader()
-  reader.onload = ev => {
-    const dataUrl = ev.target.result
-    bookImageB64 = dataUrl.split(',')[1]
-    bookImageName = file.name
-    document.getElementById('img-dropzone').style.display = 'none'
-    document.getElementById('img-loaded-row').style.display = 'flex'
-    document.getElementById('img-loaded-name').textContent = file.name + ' (' + (file.size/1024).toFixed(0) + ' KB)'
-    schedulePreview()
+function drawMdPreview(ctx,content,name,slot){
+  ctx.fillStyle='#f5f5f0';ctx.fillRect(0,0,600,400)
+  ctx.fillStyle='#111111';ctx.fillRect(0,0,600,50)
+  ctx.fillStyle='#ffffff';ctx.font='bold 22px Arial,sans-serif'
+  ctx.textAlign='left';ctx.fillText(name.slice(0,28),16,33)
+  if(slot){ctx.font='17px Arial,sans-serif';ctx.textAlign='right';ctx.fillText(slot,590,32);ctx.textAlign='left'}
+  ctx.fillStyle='#111111';let y=68
+  for(const raw of content.split('\n')){
+    if(y>=390)break
+    const line=raw.replace(/\s+$/,'')
+    if(!line){y+=8;continue}
+    const clean=line.replace(/\*\*/g,'').replace(/__/g,'').replace(/\*/g,'').replace(/_/g,'')
+    if(line.startsWith('### ')){ctx.font='18px Arial,sans-serif';y=wrapText(ctx,clean.slice(4),16,y,568,26)}
+    else if(line.startsWith('## ')){ctx.font='bold 22px Arial,sans-serif';y=wrapText(ctx,clean.slice(3),16,y,568,30)}
+    else if(line.startsWith('# ')){ctx.font='bold 26px Arial,sans-serif';y=wrapText(ctx,clean.slice(2),16,y,568,34)}
+    else if(/^[-*+] /.test(line)){ctx.font='16px Arial,sans-serif';y=wrapText(ctx,'• '+clean.slice(2),16,y,564,22,20)}
+    else{ctx.font='16px Arial,sans-serif';y=wrapText(ctx,clean,16,y,568,22)}
+    if(y>=390)break
+  }
+}
+
+function wrapText(ctx,text,x,y,maxW,lh,indent=0){
+  const words=text.split(' ');let line='',first=true
+  for(const w of words){
+    const test=line?line+' '+w:w
+    if(ctx.measureText(test).width>maxW){
+      if(line){ctx.fillText(line,x+(first?0:indent),y+lh-4);y+=lh;first=false;line=w}
+      else{ctx.fillText(w,x,y+lh-4);y+=lh;line=''}
+    }else line=test
+    if(y>=388)break
+  }
+  if(line&&y<388){ctx.fillText(line,x+(first?0:indent),y+lh-4);y+=lh}
+  return y
+}
+
+function drawErrCanvas(ctx,msg){ctx.fillStyle='#1a0505';ctx.fillRect(0,0,600,400);ctx.fillStyle='#fca5a5';ctx.font='16px Arial';ctx.fillText(msg,20,200)}
+
+// ── IDLE SCREEN ────────────────────────────────────────────────────────────
+async function loadIdleConfig() {
+  try {
+    const r=await fetch('/api/idle-config')
+    if(!r.ok)return
+    idleConfig=await r.json()
+    idleMode=idleConfig.mode||'auto'
+    idleWidgets=idleConfig.auto_widgets||['cpu','ram','temp']
+    // Set mode buttons
+    document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'))
+    const modeBtn=document.querySelector(`.mode-btn[onclick*="'${idleMode}'"]`)
+    if(modeBtn)modeBtn.classList.add('active')
+    showIdleModePanel(idleMode)
+    // Populate weather location & custom text
+    document.getElementById('idle-weather-loc').value=idleConfig.weather_location||'Abingdon, UK'
+    document.getElementById('idle-custom-text').value=idleConfig.custom_text||''
+    // Populate content
+    document.getElementById('idle-content').value=idleConfig.content||''
+    // Apply Now settings
+    populateApplySettings(idleConfig)
+    // Build widget list
+    buildWidgetList()
+    // Check for idle image
+    if(idleConfig.image_b64==='__has_image__'){
+      document.getElementById('idle-dz').style.display='none'
+      document.getElementById('idle-img-loaded').style.display='flex'
+      document.getElementById('idle-img-name').textContent='(existing image saved)'
+    }
+    // Show preview
+    fetchIdlePreview()
+  } catch(e) {}
+}
+
+function setIdleMode(mode, btn) {
+  idleMode=mode
+  document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'))
+  btn.classList.add('active')
+  showIdleModePanel(mode)
+  scheduleIdlePreview()
+}
+
+function showIdleModePanel(mode) {
+  document.getElementById('idle-auto-panel').style.display   = mode==='auto'    ? '' : 'none'
+  document.getElementById('idle-content-panel').style.display= (mode==='markdown'||mode==='svg') ? '' : 'none'
+  document.getElementById('idle-image-panel').style.display  = mode==='image'   ? '' : 'none'
+  document.getElementById('idle-content-label').textContent  = mode==='svg' ? 'SVG Content' : 'Markdown Content'
+  document.getElementById('idle-content').placeholder        =
+    mode==='svg' ? '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400">\n  …\n</svg>'
+                 : '# Idle Screen\n\nShown when no booking is active.'
+}
+
+function buildWidgetList() {
+  // Start with the current selection order, then add remaining widgets at end
+  const ordered = [...idleWidgets]
+  ALL_WIDGETS.forEach(w => { if(!ordered.includes(w)) ordered.push(w) })
+  const list = document.getElementById('widget-list')
+  list.innerHTML = ordered.map((w,i) => `
+    <div class="widget-row" data-widget="${w}">
+      <input type="checkbox" ${idleWidgets.includes(w)?'checked':''} onchange="widgetToggle('${w}',this.checked)">
+      <span class="widget-row-label">${WIDGET_LABELS[w]||w}</span>
+      <div class="widget-row-arrows">
+        <button onclick="widgetMove('${w}',-1)" ${i===0?'disabled':''}>▲</button>
+        <button onclick="widgetMove('${w}',1)"  ${i===ordered.length-1?'disabled':''}>▼</button>
+      </div>
+    </div>`).join('')
+  // Show custom-text input only if that widget is checked
+  document.getElementById('idle-custom-text-row').style.display=
+    idleWidgets.includes('custom_text')?'':'none'
+}
+
+function getWidgetOrder() {
+  return [...document.querySelectorAll('.widget-row')].map(r=>r.dataset.widget)
+}
+
+function widgetToggle(w, checked) {
+  if(checked){ if(!idleWidgets.includes(w)) idleWidgets.push(w) }
+  else idleWidgets=idleWidgets.filter(x=>x!==w)
+  // Update custom_text visibility
+  document.getElementById('idle-custom-text-row').style.display=
+    idleWidgets.includes('custom_text')?'':'none'
+  scheduleIdlePreview()
+}
+
+function widgetMove(w, dir) {
+  const order=getWidgetOrder()
+  const i=order.indexOf(w)
+  if(i<0) return
+  const ni=i+dir
+  if(ni<0||ni>=order.length) return
+  ;[order[i],order[ni]]=[order[ni],order[i]]
+  // Re-sync checked state
+  idleWidgets=order.filter(x=>{
+    const cb=document.querySelector(`.widget-row[data-widget="${x}"] input[type=checkbox]`)
+    return cb&&cb.checked
+  })
+  // Rebuild
+  const list=document.getElementById('widget-list')
+  list.innerHTML=order.map((ow,j)=>`
+    <div class="widget-row" data-widget="${ow}">
+      <input type="checkbox" ${idleWidgets.includes(ow)?'checked':''} onchange="widgetToggle('${ow}',this.checked)">
+      <span class="widget-row-label">${WIDGET_LABELS[ow]||ow}</span>
+      <div class="widget-row-arrows">
+        <button onclick="widgetMove('${ow}',-1)" ${j===0?'disabled':''}>▲</button>
+        <button onclick="widgetMove('${ow}',1)"  ${j===order.length-1?'disabled':''}>▼</button>
+      </div>
+    </div>`).join('')
+  document.getElementById('idle-custom-text-row').style.display=
+    idleWidgets.includes('custom_text')?'':'none'
+  scheduleIdlePreview()
+}
+
+async function saveIdleConfig() {
+  if(!authToken){toast('Log in first',true);return}
+  const cfg={
+    ...idleConfig,
+    mode: idleMode,
+    auto_widgets: getWidgetOrder().filter(w=>{
+      const cb=document.querySelector(`.widget-row[data-widget="${w}"] input[type=checkbox]`)
+      return cb&&cb.checked
+    }),
+    weather_location: document.getElementById('idle-weather-loc').value.trim(),
+    custom_text:      document.getElementById('idle-custom-text').value.trim(),
+    content:          document.getElementById('idle-content').value,
+    // Keep apply now settings
+    apply_now_mode:       document.getElementById('cfg-apply-mode').value,
+    apply_now_fixed_mins: parseInt(document.getElementById('cfg-fixed-mins').value)||30,
+    apply_now_snap_mins:  parseInt(document.getElementById('cfg-snap-mins').value)||20,
+    idle_interval_mins:   parseInt(document.getElementById('cfg-idle-mins').value)||20,
+  }
+  if(idleImageB64) cfg.image_b64=idleImageB64
+  else if(idleConfig.image_b64==='__has_image__') cfg.image_b64='__has_image__'
+  try{
+    const r=await fetch('/api/idle-config',{method:'POST',headers:authHeaders(),body:JSON.stringify(cfg)})
+    if(r.ok){idleConfig=cfg;toast('Idle screen saved');fetchIdlePreview()}
+    else toast('Save failed',true)
+  }catch(e){toast(e.message,true)}
+}
+
+function scheduleIdlePreview(){clearTimeout(idlePreviewTimer);idlePreviewTimer=setTimeout(fetchIdlePreview,600)}
+
+async function fetchIdlePreview() {
+  const loading=document.getElementById('idle-preview-loading')
+  const wrap=document.getElementById('idle-preview-wrap')
+  loading.style.display='flex'; wrap.style.display='none'
+  // Build preview config from current UI state
+  const cfg={
+    mode: idleMode,
+    auto_widgets: idleWidgets,
+    weather_location: document.getElementById('idle-weather-loc').value||'Abingdon, UK',
+    custom_text:      document.getElementById('idle-custom-text').value,
+    content:          document.getElementById('idle-content').value,
+    quote_index:      idleConfig.quote_index||0,
+    services_to_check:idleConfig.services_to_check||[],
+    image_b64: idleImageB64||idleConfig.image_b64||'',
+  }
+  try{
+    const r=await fetch('/api/idle-preview',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(cfg)})
+    if(r.ok){
+      const blob=await r.blob()
+      const url=URL.createObjectURL(blob)
+      document.getElementById('idle-preview-img').src=url
+      loading.style.display='none'; wrap.style.display=''
+    }
+  }catch(e){loading.textContent='Preview failed'}
+}
+
+function clearIdleImage(){
+  idleImageB64=null
+  document.getElementById('idle-dz').style.display=''
+  document.getElementById('idle-img-loaded').style.display='none'
+  document.getElementById('idle-img-input').value=''
+  scheduleIdlePreview()
+}
+
+// ── Image drag/drop/load ───────────────────────────────────────────────────
+function dzOver(e,id){e.preventDefault();document.getElementById(id).classList.add('drag-over')}
+function dzLeave(id){document.getElementById(id).classList.remove('drag-over')}
+function dzDrop(e,target){
+  e.preventDefault()
+  document.getElementById(target+'-dz').classList.remove('drag-over')
+  const f=e.dataTransfer.files[0]
+  if(f&&f.type.startsWith('image/'))loadImage(f,target)
+}
+
+function loadImage(file, target) {
+  if(!file)return
+  const reader=new FileReader()
+  reader.onload=ev=>{
+    const b64=ev.target.result.split(',')[1]
+    if(target==='book'){
+      bookImageB64=b64
+      document.getElementById('book-dz').style.display='none'
+      document.getElementById('book-img-loaded').style.display='flex'
+      document.getElementById('book-img-name').textContent=file.name+' ('+(file.size/1024).toFixed(0)+' KB)'
+      schedulePreview()
+    } else {
+      idleImageB64=b64
+      document.getElementById('idle-dz').style.display='none'
+      document.getElementById('idle-img-loaded').style.display='flex'
+      document.getElementById('idle-img-name').textContent=file.name+' ('+(file.size/1024).toFixed(0)+' KB)'
+      scheduleIdlePreview()
+    }
   }
   reader.readAsDataURL(file)
 }
 
-// Paste anywhere on the book tab
-document.addEventListener('paste', e => {
-  if (!document.getElementById('tab-book').classList.contains('active')) return
-  if (currentContentType !== 'image') return
-  const items = e.clipboardData?.items
-  if (!items) return
-  for (const item of items) {
-    if (item.type.startsWith('image/')) {
-      loadImageFile(item.getAsFile()); break
-    }
+document.addEventListener('paste',e=>{
+  const items=e.clipboardData?.items;if(!items)return
+  for(const item of items){
+    if(!item.type.startsWith('image/'))continue
+    const pane=document.querySelector('.tab-pane.active')
+    if(pane?.id==='tab-book'&&bookContentType==='image'){loadImage(item.getAsFile(),'book');break}
+    if(pane?.id==='tab-idle'&&idleMode==='image'){loadImage(item.getAsFile(),'idle');break}
   }
 })
 
-// ── Submit booking ─────────────────────────────────────────────────────────
-async function submitBooking() {
-  if (!authToken) { toast('Log in first', true); return }
-  const start = document.getElementById('book-start').value
-  const end   = document.getElementById('book-end').value
-  const desc  = document.getElementById('book-desc').value.trim()
-  if (!start || !end) { toast('Set start and end times', true); return }
-
-  let content
-  if (currentContentType === 'image') {
-    if (!bookImageB64) { toast('Upload an image first', true); return }
-    content = bookImageB64
-  } else {
-    content = document.getElementById('book-content').value.trim()
-    if (!content) { toast('Enter content', true); return }
-  }
-
-  document.getElementById('book-conflict').style.display = 'none'
-  try {
-    const r = await fetch('/api/book', {
-      method: 'POST', headers: authHeaders(),
-      body: JSON.stringify({ content_type: currentContentType, content, description: desc,
-                             start_time: new Date(start).toISOString(),
-                             end_time:   new Date(end).toISOString() })
-    })
-    if (r.status === 201) {
-      toast('Booking created!')
-      clearBookForm(); await fetchBookings(); renderCalendar()
-      showTab('calendar', document.querySelectorAll('.tab-btn')[0])
-    } else if (r.status === 409) {
-      const d = await r.json()
-      const conflicts = d.detail?.conflicts || []
-      const el = document.getElementById('book-conflict')
-      el.style.display = ''
-      el.innerHTML = `<b>Conflict with ${conflicts.length} existing booking(s):</b><br>` +
-        conflicts.map(c => `• ${esc(c.principal_name)} (${c.principal_type}) — ${fmtDt(c.start_time)} to ${fmtTime(c.end_time)}: ${esc(c.description)}`).join('<br>')
-    } else {
-      const d = await r.json()
-      toast(typeof d.detail==='string' ? d.detail : JSON.stringify(d.detail), true)
-    }
-  } catch(e) { toast(e.message, true) }
-}
-
-// ── LIVE PREVIEW ────────────────────────────────────────────────────────────
-function schedulePreview() {
-  clearTimeout(previewTimer)
-  previewTimer = setTimeout(renderBookPreview, 150)
-}
-
-function renderBookPreview() {
-  const canvas = document.getElementById('book-preview-canvas')
-  const ctx = canvas.getContext('2d')
-  const empty = document.getElementById('book-preview-empty')
-  const wrap  = document.getElementById('book-preview-canvas-wrap')
-  const note  = document.getElementById('preview-note')
-
-  if (currentContentType === 'image') {
-    if (!bookImageB64) {
-      empty.style.display = ''; wrap.style.display = 'none'; note.style.display = 'none'; return
-    }
-    empty.style.display = 'none'; wrap.style.display = ''; note.style.display = ''
-    const img = new Image()
-    img.onload = () => {
-      ctx.clearRect(0,0,600,400)
-      // scale to fill
-      const scale = Math.max(600/img.width, 400/img.height)
-      const w = img.width*scale, h = img.height*scale
-      ctx.drawImage(img, (600-w)/2, (400-h)/2, w, h)
-    }
-    img.src = 'data:image/png;base64,' + bookImageB64
-    return
-  }
-
-  if (currentContentType === 'svg') {
-    const svgText = document.getElementById('book-content').value.trim()
-    if (!svgText) { empty.style.display=''; wrap.style.display='none'; note.style.display='none'; return }
-    empty.style.display = 'none'; wrap.style.display = ''; note.style.display = ''
-    try {
-      const blob = new Blob([svgText], {type:'image/svg+xml'})
-      const url  = URL.createObjectURL(blob)
-      const img  = new Image()
-      img.onload = () => {
-        ctx.clearRect(0,0,600,400)
-        ctx.drawImage(img, 0, 0, 600, 400)
-        URL.revokeObjectURL(url)
-      }
-      img.onerror = () => {
-        URL.revokeObjectURL(url)
-        drawErrorCanvas(ctx, 'Invalid SVG')
-      }
-      img.src = url
-    } catch(e) { drawErrorCanvas(ctx, 'SVG error: ' + e.message) }
-    return
-  }
-
-  // Markdown
-  const mdText = document.getElementById('book-content').value
-  if (!mdText.trim()) { empty.style.display=''; wrap.style.display='none'; note.style.display='none'; return }
-  empty.style.display = 'none'; wrap.style.display = ''; note.style.display = ''
-
-  const desc  = document.getElementById('book-desc').value.trim()
-  const start = document.getElementById('book-start').value
-  const end   = document.getElementById('book-end').value
-  const name  = authUser || 'Preview'
-  const slot  = (start && end)
-    ? fmtSlot(new Date(start)) + ' – ' + fmtTimeShort(new Date(end))
-    : ''
-
-  drawMarkdownPreview(ctx, mdText, desc || name, slot)
-}
-
-function drawMarkdownPreview(ctx, content, principalName, slot) {
-  // Background
-  ctx.fillStyle = '#f5f5f0'
-  ctx.fillRect(0, 0, 600, 400)
-
-  // Header bar
-  ctx.fillStyle = '#111111'
-  ctx.fillRect(0, 0, 600, 50)
-  ctx.fillStyle = '#ffffff'
-  ctx.font = 'bold 22px Arial, sans-serif'
-  ctx.fillText(principalName.slice(0, 28), 16, 33)
-  if (slot) {
-    ctx.font = '17px Arial, sans-serif'
-    ctx.textAlign = 'right'
-    ctx.fillText(slot, 590, 32)
-    ctx.textAlign = 'left'
-  }
-
-  // Content
-  ctx.fillStyle = '#111111'
-  let y = 68
-  for (const rawLine of content.split('\n')) {
-    if (y >= 390) break
-    const line = rawLine.rstrip ? rawLine.rstrip() : rawLine.replace(/\s+$/, '')
-    if (!line) { y += 8; continue }
-    const clean = line.replace(/\*\*/g,'').replace(/__/g,'').replace(/\*/g,'').replace(/_/g,'')
-    if (line.startsWith('### ')) {
-      ctx.font = '18px Arial, sans-serif'; y = drawWrapped(ctx, clean.slice(4), 16, y, 568, 26)
-    } else if (line.startsWith('## ')) {
-      ctx.font = 'bold 22px Arial, sans-serif'; y = drawWrapped(ctx, clean.slice(3), 16, y, 568, 30)
-    } else if (line.startsWith('# ')) {
-      ctx.font = 'bold 26px Arial, sans-serif'; y = drawWrapped(ctx, clean.slice(2), 16, y, 568, 34)
-    } else if (/^[-*+] /.test(line)) {
-      ctx.font = '16px Arial, sans-serif'
-      y = drawWrapped(ctx, '• ' + clean.slice(2), 16, y, 564, 22, 24)
-    } else {
-      ctx.font = '16px Arial, sans-serif'; y = drawWrapped(ctx, clean, 16, y, 568, 22)
-    }
-    if (y >= 390) break
-  }
-}
-
-function drawWrapped(ctx, text, x, y, maxW, lineH, indent=0) {
-  const words = text.split(' ')
-  let line = ''
-  let firstLine = true
-  for (const word of words) {
-    const test = line ? line + ' ' + word : word
-    if (ctx.measureText(test).width > maxW) {
-      if (line) { ctx.fillText(line, x + (firstLine?0:indent), y + lineH - 4); y += lineH; firstLine = false; line = word }
-      else { ctx.fillText(word, x, y + lineH - 4); y += lineH; line = '' }
-    } else line = test
-    if (y >= 388) break
-  }
-  if (line && y < 388) { ctx.fillText(line, x + (firstLine?0:indent), y + lineH - 4); y += lineH }
-  return y
-}
-
-function drawErrorCanvas(ctx, msg) {
-  ctx.fillStyle = '#1a0505'; ctx.fillRect(0,0,600,400)
-  ctx.fillStyle = '#fca5a5'; ctx.font = '16px Arial'
-  ctx.fillText(msg, 20, 200)
-}
-
-function fmtSlot(d) {
-  return d.toLocaleDateString(undefined,{month:'short',day:'numeric'}) + ' ' +
-    d.toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'})
-}
-function fmtTimeShort(d) { return d.toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'}) }
+// ── Image zoom ─────────────────────────────────────────────────────────────
+function openImgModal(src){document.getElementById('img-modal-src').src=src;document.getElementById('img-modal').classList.add('open')}
+function closeImgModal(){document.getElementById('img-modal').classList.remove('open')}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDetail();closeApplyModal();closeImgModal()}})
 
 // ── Helpers ────────────────────────────────────────────────────────────────
-function esc(s) {
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
-}
-function fmtDt(iso) {
-  if (!iso) return '—'
-  const d = new Date(iso.endsWith('Z')?iso:iso+'Z')
-  return d.toLocaleDateString(undefined,{month:'short',day:'numeric'}) + ' ' +
-         d.toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'})
-}
-function fmtTime(iso) {
-  if (!iso) return '—'
-  const d = new Date(iso.endsWith('Z')?iso:iso+'Z')
-  return d.toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'})
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function fmtDt(iso){if(!iso)return'—';const d=new Date(iso.endsWith('Z')?iso:iso+'Z');return d.toLocaleDateString(undefined,{month:'short',day:'numeric'})+' '+d.toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'})}
+function fmtTime(iso){if(!iso)return'—';const d=new Date(iso.endsWith('Z')?iso:iso+'Z');return d.toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'})}
+function fmtSlotLocal(d){return d.toLocaleDateString(undefined,{month:'short',day:'numeric'})+' '+d.toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'})}
+function fmtTimeLocal(d){return d.toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'})}
+
+function toast(msg,err=false){
+  const t=document.getElementById('toast')
+  t.textContent=msg;t.className=(err?'err ':'')+' show'
+  clearTimeout(t._t);t._t=setTimeout(()=>t.className='',3000)
 }
 
-function toast(msg, err=false) {
-  const t = document.getElementById('toast')
-  t.textContent = msg; t.className = (err?'err ':' ') + 'show'
-  clearTimeout(t._timer); t._timer = setTimeout(() => t.className = '', 3000)
-}
-
-function prefillDatetimes() {
-  const pad = n => String(n).padStart(2,'0')
-  const fmt = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
-  const now = new Date()
-  document.getElementById('book-start').value = fmt(new Date(now.getTime()+60000))
-  document.getElementById('book-end').value   = fmt(new Date(now.getTime()+3600000))
+function prefillDatetimes(){
+  const pad=n=>String(n).padStart(2,'0')
+  const fmt=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
+  // Leave blank (both are optional now — blank = now / auto)
+  document.getElementById('book-start').value=''
+  document.getElementById('book-end').value=''
 }
 
 // ── Init ───────────────────────────────────────────────────────────────────
@@ -951,14 +1288,23 @@ updateAuthUI()
 prefillDatetimes()
 updateBookAuthWarn()
 
-async function init() { await fetchBookings(); renderCalendar(); pollStatus() }
+async function init(){
+  await fetchBookings()
+  renderCalendar()
+  pollStatus()
+  // Load idle config for sidebar settings
+  try{
+    const r=await fetch('/api/idle-config')
+    if(r.ok){idleConfig=await r.json();populateApplySettings(idleConfig)}
+  }catch(e){}
+}
 init()
 
-setInterval(pollStatus, 5000)
-setInterval(refreshPreview, 15000)
-setInterval(async () => { await fetchBookings(); renderCalendar() }, 30000)
+setInterval(pollStatus,5000)
+setInterval(refreshPreview,15000)
+setInterval(async()=>{await fetchBookings();renderCalendar()},30000)
 
-document.getElementById('preview-img').src = '/api/preview?t=' + Date.now()
+document.getElementById('preview-img').src='/api/preview?t='+Date.now()
 </script>
 </body>
 </html>
