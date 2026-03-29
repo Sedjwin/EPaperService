@@ -1,0 +1,38 @@
+{
+  "mode": "auto",
+  "auto_widgets": [
+    "quote"
+  ],
+  "weather_location": "Abingdon, UK",
+  "custom_text": "",
+  "quote_index": 33,
+  "services_to_check": [
+    {
+      "name": "Dashboard",
+      "url": "http://localhost:8000/health"
+    },
+    {
+      "name": "AIGateway",
+      "url": "http://localhost:8001/health"
+    },
+    {
+      "name": "VoiceService",
+      "url": "http://localhost:8002/health"
+    },
+    {
+      "name": "AgentManager",
+      "url": "http://localhost:8003/health"
+    },
+    {
+      "name": "UserManager",
+      "url": "http://localhost:8005/health"
+    }
+  ],
+  "content_type": "markdown",
+  "content": "",
+  "image_b64": "",
+  "apply_now_mode": "snap",
+  "apply_now_fixed_mins": 30,
+  "apply_now_snap_mins": 20,
+  "idle_interval_mins": 20
+}

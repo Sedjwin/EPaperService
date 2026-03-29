@@ -1,4 +1,6 @@
 data/*.png
 data/history.json
+data/*.db
 __pycache__/
 .venv/
+.env
